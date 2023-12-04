@@ -12,13 +12,10 @@ include(external/CMakeLists.txt)
 add_library(${PROJECT_NAME} SHARED
     src/Window.cpp
 )
-# glob_recurse from pwd ./include/RTypeEngine
-file(GLOB_RECURSE RTYPE_HEADERS include/RTypeEngine/*.hpp)
 
 set_target_properties(
     ${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION}
     SOVERSION 1
-    PUBLIC_HEADER "${RTYPE_HEADERS}"
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
