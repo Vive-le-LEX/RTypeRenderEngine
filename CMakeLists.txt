@@ -13,29 +13,28 @@ add_library(${PROJECT_NAME} SHARED
     src/Window.cpp
 )
 
-# Fetch root headers
 file(GLOB RTYPE_PUBLIC_HEADERS RELATIVE ${PROJECT_SOURCE_DIR} "include/RTypeEngine/*.h*")
 
-
-set_target_properties(
-    ${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION}
-    SOVERSION 1
-    PUBLIC_HEADER "${RTYPE_PUBLIC_HEADERS}"
+target_include_directories(${PROJECT_NAME} PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/RTypeEngine>
+    $<INSTALL_INTERFACE:include>
+    PRIVATE src
 )
 
-target_include_directories(${PROJECT_NAME} PRIVATE
-    include/RTypeEngine
-    src
-    ${glad_SOURCE_DIR}/include
-    ${glfw_SOURCE_DIR}/include
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    VERSION ${PROJECT_VERSION}
+    SOVERSION 1
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw glad glm)
 
-install(TARGETS ${PROJECT_NAME}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/RTypeEngine
-)
-install(DIRECTORY include/RTypeEngine/Window
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/RTypeEngine
-)
+install(TARGETS ${PROJECT_NAME} EXPORT rtype-engine
+    ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    LIBRARY  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+install(EXPORT rtype-engine DESTINATION share/rtype-engine/cmake)
+
+export(TARGETS ${PROJECT_NAME} FILE rtype-engine.cmake)
