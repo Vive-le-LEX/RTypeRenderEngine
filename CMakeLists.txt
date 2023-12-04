@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(rtype-render-engine VERSION 1.0.0 DESCRIPTION "RTypeRenderEngine")
+project(rtype-engine VERSION 1.0.0 DESCRIPTION "RTypeEngine")
 
 include(GNUInstallDirs)
 
@@ -13,12 +13,13 @@ add_library(${PROJECT_NAME} SHARED
     src/Window.cpp
 )
 
+file(GLOB_RECURSE RTYPE_HEADERS include/RTypeEngine/*.hpp)
+
 set_target_properties(
     ${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION}
     SOVERSION 1
-    PUBLIC_HEADER RTypeRenderEngine.hpp
+    PUBLIC_HEADER "${RTYPE_HEADERS}"
 )
-
 
 target_include_directories(${PROJECT_NAME} PRIVATE
     include/RTypeEngine
@@ -31,5 +32,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE glfw glad glm)
 
 install(TARGETS ${PROJECT_NAME}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/RTypeEngine
 )

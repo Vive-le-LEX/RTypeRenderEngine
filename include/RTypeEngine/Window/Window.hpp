@@ -8,6 +8,8 @@
 #ifndef WINDOW_HPP_
     #define WINDOW_HPP_
 
+    #include <thread>
+    #include <chrono>
     #include <iostream>
     #include <stdexcept>
     #include <glm/glm.hpp>
@@ -33,7 +35,7 @@ namespace RTypeEngine
                 return _window;
             }
 
-            bool shouldClose(void) const;
+            const bool &isOpen(void) const;
             void close(void);
 
             const glm::ivec4 &getViewport(void) const;
@@ -41,12 +43,22 @@ namespace RTypeEngine
 
             void clear(const glm::vec4 &c = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)) const;
 
+            void display(void);
+
+            const int getFramerate(void) const;
+            void setFramerateLimit(const int &limit);
+            const double &getDeltaTime(void) const;
+
         private:
             GLFWwindow *_window = NULL;
             static bool _wasInit;
-            bool _shouldClose;
+            bool _isOpen;
 
             glm::ivec4 _viewport;
+
+            double _deltaTime = 0.0f;
+
+            int _frameRateLimit = 60;
     };
 } // namespace RTypeEngine
 

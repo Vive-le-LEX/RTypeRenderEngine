@@ -24,7 +24,7 @@ void Window::initOpenGL() {
     _wasInit = true;
 }
 
-Window::Window(int width, int height, const char *title, GLFWmonitor *monitor, GLFWwindow *share) : _shouldClose(false) {
+Window::Window(int width, int height, const char *title, GLFWmonitor *monitor, GLFWwindow *share) : _isOpen(true) {
     if (!_wasInit)
         throw std::runtime_error("RTypeEngine::Window::initGlfw() must be called before creating a window");
     _window = glfwCreateWindow(width, height, title, monitor, share);
@@ -49,30 +49,60 @@ Window::Window(int width, int height, const char *title, GLFWmonitor *monitor, G
     glfwSetInputMode(glfwGetCurrentContext(), GLFW_STICKY_KEYS, 1);
     glfwSwapInterval(0);
     glEnable(GL_DEPTH_TEST);
+    // std::cout << "OpenGL " << glGetString(GL_VERSION) << std::endl;
 }
 
 Window::~Window() {
     glfwDestroyWindow(_window);
+    glfwTerminate();
 }
 
-// bool Window::shouldClose(void) const {
-//     return glfwWindowShouldClose(_window) || _shouldClose;
-// }
+const bool &Window::isOpen(void) const {
+    return _isOpen;
+}
 
-// void Window::close(void) {
-//     _shouldClose = true;
-// }
+void Window::close(void) {
+    _isOpen = false;
+}
 
-// const glm::ivec4 &Window::getViewport(void) const {
-//     return _viewport;
-// }
+const glm::ivec4 &Window::getViewport(void) const {
+    return _viewport;
+}
 
-// void Window::setViewport(const glm::ivec4 &viewport) {
-//     _viewport = viewport;
-//     glViewport(_viewport.x, _viewport.y, _viewport.z, _viewport.w);
-// }
+void Window::setViewport(const glm::ivec4 &viewport) {
+    _viewport = viewport;
+    glViewport(_viewport.x, _viewport.y, _viewport.z, _viewport.w);
+}
 
-// void Window::clear(const glm::vec4 &c) const {
-//     glClearColor(c.r, c.g, c.b, c.a);
-//     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-// }
+void Window::clear(const glm::vec4 &c) const {
+    glClearColor(c.r, c.g, c.b, c.a);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void Window::display(void) {
+    static auto lastTime = std::chrono::high_resolution_clock::now();
+    glfwSwapBuffers(_window);
+    auto currentTime = std::chrono::high_resolution_clock::now();
+    auto usSpent = std::chrono::duration_cast<std::chrono::microseconds>(currentTime - lastTime);
+    if (_frameRateLimit > 0) {
+        auto usPerFrame = std::chrono::microseconds(1000000 / _frameRateLimit);
+        if (usSpent < usPerFrame) {
+            std::this_thread::sleep_for(usPerFrame - usSpent);
+            currentTime = std::chrono::high_resolution_clock::now();
+        }
+    }
+    _deltaTime = std::chrono::duration_cast<std::chrono::duration<double>>(currentTime - lastTime).count();
+    lastTime = currentTime;
+}
+
+void Window::setFramerateLimit(const int &limit) {
+    _frameRateLimit = limit;
+}
+
+const int Window::getFramerate(void) const {
+    return 1 / _deltaTime;
+}
+
+const double &Window::getDeltaTime(void) const {
+    return _deltaTime;
+}
