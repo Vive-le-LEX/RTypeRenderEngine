@@ -12,7 +12,7 @@ include(external/CMakeLists.txt)
 add_library(${PROJECT_NAME} SHARED
     src/Window.cpp
 )
-
+# glob_recurse from pwd ./include/RTypeEngine
 file(GLOB_RECURSE RTYPE_HEADERS include/RTypeEngine/*.hpp)
 
 set_target_properties(
@@ -30,7 +30,11 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw glad glm)
 
+message(STATUS "${RTYPE_HEADERS}")
+
 install(TARGETS ${PROJECT_NAME}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/RTypeEngine
+)
+install(DIRECTORY include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
