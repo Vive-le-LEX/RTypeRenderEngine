@@ -23,7 +23,7 @@ jobs:
         steps:
         - name: Install Linux Dependencies
           if: runner.os == 'Linux'
-          run: sudo apt-get update && sudo apt-get install libXcursor-dev libXi-dev libXinerama-dev libXrandr-dev
+          run: sudo apt-get update && sudo apt-get install libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev
 
         - uses: actions/checkout@v3
 
