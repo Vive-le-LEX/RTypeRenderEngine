@@ -11,6 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
 
+
 include(external/CMakeLists.txt)
 
 set(SRC_MAIN
@@ -26,7 +27,7 @@ add_library(${PROJECT_NAME} SHARED
     src/Window.cpp
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE glad glfw glm)
+target_link_libraries(${PROJECT_NAME} PRIVATE glfw glad glm)
 
 file(GLOB RTYPE_PUBLIC_HEADERS RELATIVE ${PROJECT_SOURCE_DIR} "include/RTypeEngine/*.h*")
 
@@ -65,7 +66,7 @@ if (IS_TESTING)
     )
     add_executable(${TEST_PROJECT_NAME} ${SRC_TEST} ${SRC})
 
-    target_link_libraries(${TEST_PROJECT_NAME} PRIVATE GTest::gtest_main rtype-engine)
+    target_link_libraries(${TEST_PROJECT_NAME} PRIVATE GTest::gtest_main rtype-engine glad glfw glm)
 
     target_include_directories(${TEST_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/RTypeEngine)
 

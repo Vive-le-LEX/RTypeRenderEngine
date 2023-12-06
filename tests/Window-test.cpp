@@ -21,8 +21,3 @@ TEST(add, test2)
 {
     EXPECT_EQ(add(1, 2), 3);
 }
-
-TEST(badadd, badtest3)
-{
-    EXPECT_EQ(add(69, 69), 4);
-}
