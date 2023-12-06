@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
-set(build_dir ${CMAKE_CURRENT_LIST_DIR}/build)
+message(STATUS "Going to search for tests in : ${CMAKE_SOURCE_DIR}/build")
+set(build_dir ${CMAKE_CURRENT_SOURCE_DIR}/build)
 
 if (NOT EXISTS ${build_dir})
     file(MAKE_DIRECTORY ${build_dir})

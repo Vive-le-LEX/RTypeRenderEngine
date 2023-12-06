@@ -21,6 +21,10 @@ jobs:
                 - { name: Static, flags: -DBUILD_SHARED_LIBS=FALSE }
 
         steps:
+        - name: Install Linux Dependencies
+          if: runner.os == 'Linux'
+          run: sudo apt-get update && sudo apt-get install libxrandr-dev
+
         - uses: actions/checkout@v3
 
         - name: Create build directory
