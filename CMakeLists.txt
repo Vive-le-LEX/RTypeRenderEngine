@@ -54,7 +54,7 @@ install(EXPORT rtype-engine DESTINATION share/rtype-engine/cmake)
 export(TARGETS ${PROJECT_NAME} glad glfw glm FILE rtype-engine.cmake)
 
 
-if (IS_TESTING)
+if (IS_TESTING AND NOT WIN32)
     include(CTest)
 
     message(STATUS "Building tests")
