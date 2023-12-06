@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.10)
 
+# Print content of current working directory
+execute_process(
+    COMMAND ls -la
+)
+
 message(STATUS "Going to search for tests in : ${CMAKE_SOURCE_DIR}/build")
 set(build_dir ${CMAKE_CURRENT_SOURCE_DIR}/build)
 
