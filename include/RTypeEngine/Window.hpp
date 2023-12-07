@@ -9,5 +9,6 @@
     #define WINDOW_ALL_HPP_
 
     #include "Window/Window.hpp"
+    #include "RTypeECS/Types.hpp"
 
 #endif /* !WINDOW_ALL_HPP_ */

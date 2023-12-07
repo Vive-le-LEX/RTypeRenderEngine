@@ -11,6 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
 
+option(BUILD_TESTS_FOR_FETCHED_CONTENT "Build tests for fetched content" OFF)
 
 include(external/CMakeLists.txt)
 
@@ -27,7 +28,7 @@ add_library(${PROJECT_NAME} SHARED
     src/Window.cpp
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE glfw glad glm)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${ALL_LIBRARIES})
 
 file(GLOB RTYPE_PUBLIC_HEADERS RELATIVE ${PROJECT_SOURCE_DIR} "include/RTypeEngine/*.h*")
 
@@ -42,7 +43,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     SOVERSION 1
 )
 
-install(TARGETS ${PROJECT_NAME} glad glfw glm EXPORT rtype-engine
+install(TARGETS ${PROJECT_NAME} ${ALL_LIBRARIES} EXPORT rtype-engine
     ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY  DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -51,7 +52,7 @@ install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 install(EXPORT rtype-engine DESTINATION share/rtype-engine/cmake)
 
-export(TARGETS ${PROJECT_NAME} glad glfw glm FILE rtype-engine.cmake)
+export(TARGETS ${PROJECT_NAME} ${ALL_LIBRARIES} FILE rtype-engine.cmake)
 
 
 if (IS_TESTING AND NOT WIN32)
@@ -69,6 +70,9 @@ if (IS_TESTING AND NOT WIN32)
     target_link_libraries(${TEST_PROJECT_NAME} PRIVATE GTest::gtest_main rtype-engine glad glfw glm)
 
     target_include_directories(${TEST_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/RTypeEngine)
+
+    target_link_libraries(${TEST_PROJECT_NAME} PRIVATE rtype-ecs)
+    target_include_directories(${TEST_PROJECT_NAME} PRIVATE ${rtype-ecs_SOURCE_DIR}/include)
 
     include(GoogleTest)
     gtest_discover_tests(${TEST_PROJECT_NAME})

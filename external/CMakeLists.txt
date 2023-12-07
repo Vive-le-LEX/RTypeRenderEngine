@@ -44,10 +44,19 @@ FetchContent_Declare(
 
 message(STATUS "Finished fetching glm dependencies")
 
-# FetchContent_Declare(
-#   rtype-ecs
-#   GIT_REPOSITORY https://github.com/Vive-le-LEX/RTypeECS
-#   GIT_TAG main
-#   )
+FetchContent_Declare(
+  rtype-ecs
+  GIT_REPOSITORY https://github.com/Vive-le-LEX/RTypeECS
+  GIT_TAG main
+)
 
-FetchContent_MakeAvailable(glad glfw glm)
+set(ALL_LIBRARIES glad glfw glm rtype-ecs)
+
+foreach(lib IN LISTS ALL_LIBRARIES)
+    if(BUILD_TESTS_FOR_FETCHED_CONTENT)
+        FetchContent_MakeAvailable(${lib})
+    else()
+        FetchContent_Populate(${lib})
+        add_subdirectory(${${lib}_SOURCE_DIR} EXCLUDE_FROM_ALL)
+    endif()
+endforeach()
