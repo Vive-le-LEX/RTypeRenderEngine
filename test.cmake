@@ -19,7 +19,7 @@ execute_process(
 
 set(ENV{GTEST_COLOR} 1)
 execute_process(
-    COMMAND ctest -VV
+    COMMAND ctest -E "[\\w -]*NOT_BUILT($|\n)"
     WORKING_DIRECTORY ${build_dir}
     RESULT_VARIABLE test_result
 )
