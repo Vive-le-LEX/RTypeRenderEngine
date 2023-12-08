@@ -29,7 +29,7 @@ jobs:
 
         - uses: webfactory/ssh-agent@v0.8.0
           with:
-            ssh-private-key: ${{ secrets.GIT_SSH_PRIVATE_KEY }}
+            ssh-private-key: ${{ secrets.KLEO_ORG_SSH }}
 
         - name: Create build directory
           run: mkdir build |
