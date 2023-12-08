@@ -26,11 +26,9 @@ jobs:
           run: sudo apt-get update && sudo apt-get install libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev
 
         - uses: actions/checkout@v3
-
-        - uses: webfactory/ssh-agent@v0.8.0
+        - uses: LuisEnMarroquin/setup-ssh-action@v2.0.0
           with:
-            ssh-private-key: ${{ secrets.KLEO_ORG_SSH }}
-
+            SSHKEY: ${{ secrets.KLEO_ORG_SSH }}
         - name: Create build directory
           run: mkdir build |
                 cmake -S . -B build -DCMAKE_INSTALL_PREFIX=install -DIS_TESTING:BOOL=TRUE ${{matrix.platform.flags}} ${{matrix.config.flags}}
