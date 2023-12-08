@@ -46,7 +46,7 @@ message(STATUS "Finished fetching glm dependencies")
 
 FetchContent_Declare(
   rtype-ecs
-  GIT_REPOSITORY https://github.com/Vive-le-LEX/RTypeECS
+  GIT_REPOSITORY git@github.com:Vive-le-LEX/RTypeECS.git
   GIT_TAG main
 )
 
