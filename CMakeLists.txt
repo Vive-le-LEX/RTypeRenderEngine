@@ -43,7 +43,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     SOVERSION 1
 )
 
-install(TARGETS ${PROJECT_NAME} ${ALL_LIBRARIES} EXPORT rtype-engine
+install(TARGETS ${PROJECT_NAME} EXPORT rtype-engine
     ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY  DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -52,8 +52,7 @@ install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 install(EXPORT rtype-engine DESTINATION share/rtype-engine/cmake)
 
-export(TARGETS ${PROJECT_NAME} ${ALL_LIBRARIES} FILE rtype-engine.cmake)
-
+export(TARGETS ${PROJECT_NAME} FILE rtype-engine.cmake)
 
 if (IS_TESTING AND NOT WIN32)
     include(CTest)
