@@ -66,11 +66,9 @@ if (IS_TESTING AND NOT WIN32)
     )
     add_executable(${TEST_PROJECT_NAME} ${SRC_TEST} ${SRC})
 
-    target_link_libraries(${TEST_PROJECT_NAME} PRIVATE GTest::gtest_main rtype-engine glad glfw glm)
+    target_link_libraries(${TEST_PROJECT_NAME} PRIVATE GTest::gtest_main ${ALL_LIBRARIES})
 
     target_include_directories(${TEST_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/RTypeEngine)
-
-    target_link_libraries(${TEST_PROJECT_NAME} PRIVATE rtype-ecs)
     target_include_directories(${TEST_PROJECT_NAME} PRIVATE ${rtype-ecs_SOURCE_DIR}/include)
 
     include(GoogleTest)
