@@ -5,7 +5,7 @@
 ** main
 */
 
-#include "Window.hpp"
+#include "RTypeEngine/Window.hpp"
 
 using namespace RTypeEngine;
 

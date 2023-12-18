@@ -1,0 +1,15 @@
+find_library(GLM_LIB glad)
+
+if(NOT GLM_LIB)
+    message(STATUS "Fetching GLM...")
+
+    FetchContent_Declare(
+        glm
+        GIT_REPOSITORY https://github.com/g-truc/glm.git
+        GIT_TAG master
+    )
+
+    FetchContent_MakeAvailable(glm)
+else()
+    message(STATUS "GLM library found at ${GLM_LIB}")
+endif()

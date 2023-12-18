@@ -4,7 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/build/_deps/glad-build/"
+                "${workspaceFolder}/external/*/include",
+                "${workspaceFolder}/build/_deps/*/include"
             ],
             "defines": [],
             "compilerPath": "/usr/lib64/ccache/gcc",
