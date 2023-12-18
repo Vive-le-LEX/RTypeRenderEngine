@@ -11,7 +11,8 @@ set(SRC_TEST
 
 add_executable(${TEST_PROJECT_NAME} ${SRC_TEST} ${SRC})
 
-target_link_libraries(${TEST_PROJECT_NAME} PRIVATE GTest::gtest_main ${ALL_LIBRARIES})
+target_link_libraries(${TEST_PROJECT_NAME} PRIVATE GTest::gtest_main rtype-ecs glad glfw glm)
+target_include_directories(${TEST_PROJECT_NAME} PRIVATE include)
 
 include(GoogleTest)
 gtest_discover_tests(${TEST_PROJECT_NAME})
