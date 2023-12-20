@@ -14,16 +14,16 @@ jobs:
                 - { name: Windows VS2019, os: windows-2019  }
                 - { name: Windows VS2022, os: windows-2022  }
                 - { name: Linux GCC,      os: ubuntu-latest }
-                - { name: Linux Clang,    os: ubuntu-latest, flags: -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DIS_BUILDING_DOC=TRUE }
+                - { name: Linux Clang,    os: ubuntu-latest, flags: -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ }
                 - { name: macOS,          os: macos-latest  }
                 config:
-                - { name: Shared, flags: -DBUILD_SHARED_LIBS=TRUE }
+                - { name: Shared, flags: -DBUILD_SHARED_LIBS=TRUE -DIS_BUILDING_DOC=TRUE }
                 - { name: Static, flags: -DBUILD_SHARED_LIBS=FALSE }
 
         steps:
         - name: Install Linux Dependencies
           if: runner.os == 'Linux'
-          run: sudo apt-get update && sudo apt-get install libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev
+          run: sudo apt-get update && sudo apt-get install libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev doxygen graphviz -y
 
         - uses: actions/checkout@v3
 
@@ -48,7 +48,7 @@ jobs:
           run: cmake -P tests/LaunchTests.cmake
 
         - name: Push documentation to GitHub Pages
-          if: matrix.platform.os == 'ubuntu-latest' && matrix.platform.name == 'Linux Clang' && github.ref == 'refs/heads/main'
+          if: matrix.platform.os == 'ubuntu-latest' && matrix.platform.name == 'Linux Clang' && github.ref == 'refs/heads/main' && matrix.config.name == 'Shared'
           uses: peaceiris/actions-gh-pages@v3
           with:
               deploy_key: ${{ secrets.DEPLOY_KEY }}
