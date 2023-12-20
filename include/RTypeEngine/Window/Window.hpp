@@ -15,11 +15,15 @@
     #include <glm/glm.hpp>
     #include <glad/glad.h>
     #include <GLFW/glfw3.h>
+    #include "../Graphics.hpp"
 
 namespace RTypeEngine
 {
-    // void onNativeResizeCallback(GLFWwindow *window, int width, int height);
-
+    /**
+     * @brief Window class
+     * @details This class is used to create and delete windows
+     * @details It is also used to set the viewport, clear the window and display the window
+     */
     class Window {
         public:
             static void initOpenGL();
@@ -31,6 +35,10 @@ namespace RTypeEngine
             Window(int width, int height, const char *title, GLFWmonitor *monitor = NULL, GLFWwindow *share = NULL);
             ~Window();
 
+            /**
+             * @brief Get the native window
+             * @return GLFWwindow *
+             */
             GLFWwindow *getNativeWindow(void) const {
                 return _window;
             }
@@ -49,6 +57,7 @@ namespace RTypeEngine
             void setFramerateLimit(const int &limit);
             const double &getDeltaTime(void) const;
 
+
         private:
             GLFWwindow *_window = NULL;
             static bool _wasInit;
@@ -59,6 +68,8 @@ namespace RTypeEngine
             double _deltaTime = 0.0f;
 
             int _frameRateLimit = 60;
+
+            unsigned int _lastTexture = 0;
     };
 } // namespace RTypeEngine
 
