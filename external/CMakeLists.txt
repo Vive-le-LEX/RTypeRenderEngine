@@ -53,9 +53,5 @@ FetchContent_Declare(
 set(ALL_LIBRARIES glad glfw glm rtype-ecs)
 
 foreach(lib IN LISTS ALL_LIBRARIES)
-    if(BUILD_TESTS_FOR_FETCHED_CONTENT)
-        FetchContent_MakeAvailable(${lib})
-    else()
-        FetchContent_Populate(${lib})
-    endif()
+  FetchContent_MakeAvailable(${lib})
 endforeach()

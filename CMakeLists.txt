@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(rtype-engine
-    VERSION 1.0.0
-    DESCRIPTION "RTypeEngine"
-    LANGUAGES CXX)
+        VERSION 1.0.0
+        DESCRIPTION "RTypeEngine"
+        LANGUAGES CXX)
 
 include(GNUInstallDirs)
 
@@ -20,39 +20,40 @@ set(SRC_MAIN
 )
 
 set(SRC
-    src/Window.cpp
+        src/Window.cpp
 )
-
 
 add_library(${PROJECT_NAME} SHARED
-    src/Window.cpp
+        src/Window.cpp
+        include/RTypeEngine/Graphics/Texture.inl
+        include/RTypeEngine/Graphics/Shader.inl
+        include/RTypeEngine/Graphics/Transform.inl
+        include/RTypeEngine/Graphics/Rect.inl
+        include/RTypeEngine/Graphics/Mesh.inl
+        include/RTypeEngine/Graphics/Sprite.inl
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE ${ALL_LIBRARIES})
-
-file(GLOB RTYPE_PUBLIC_HEADERS RELATIVE ${PROJECT_SOURCE_DIR} "include/RTypeEngine/*.h*")
+file(GLOB . RELATIVE ${PROJECT_SOURCE_DIR} "include/RTypeEngine/*.h*")
+target_link_libraries(${PROJECT_NAME} PRIVATE ${ALL_LIBRARIES} glad)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/RTypeEngine>
-    $<INSTALL_INTERFACE:include>
-    PRIVATE src
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/RTypeEngine>
+        $<INSTALL_INTERFACE:include>
+        PRIVATE src
+        ${GLAD_INCLUDE_DIRS}
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
-    VERSION ${PROJECT_VERSION}
-    SOVERSION 1
+        VERSION ${PROJECT_VERSION}
+        SOVERSION 1
 )
 
-install(TARGETS ${PROJECT_NAME} EXPORT rtype-engine
-    ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    LIBRARY  DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS ${ALL_LIBRARIES} ${PROJECT_NAME} ${ALL_LIBRARIES} EXPORT rtype-engine
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-
-install(EXPORT rtype-engine DESTINATION share/rtype-engine/cmake)
-
-export(TARGETS ${PROJECT_NAME} FILE rtype-engine.cmake)
 
 if (IS_TESTING AND NOT WIN32)
     include(CTest)
@@ -62,17 +63,15 @@ if (IS_TESTING AND NOT WIN32)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fprofile-arcs -ftest-coverage")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
     set(SRC_TEST
-        tests/Window-test.cpp
+            tests/Window-test.cpp
     )
     add_executable(${TEST_PROJECT_NAME} ${SRC_TEST} ${SRC})
 
-    target_link_libraries(${TEST_PROJECT_NAME} PRIVATE GTest::gtest_main rtype-engine glad glfw glm)
+    target_link_libraries(${TEST_PROJECT_NAME} PRIVATE GTest::gtest_main ${ALL_LIBRARIES})
 
     target_include_directories(${TEST_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/RTypeEngine)
-
-    target_link_libraries(${TEST_PROJECT_NAME} PRIVATE rtype-ecs)
     target_include_directories(${TEST_PROJECT_NAME} PRIVATE ${rtype-ecs_SOURCE_DIR}/include)
 
     include(GoogleTest)
     gtest_discover_tests(${TEST_PROJECT_NAME})
-endif()
+endif ()
