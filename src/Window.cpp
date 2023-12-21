@@ -14,8 +14,14 @@ using namespace RTypeEngine;
 /**
  * @brief Initialize GLFW
  */
+/**
+ * @brief Initialize GLFW
+ */
 bool Window::_wasInit = false;
 
+/**
+ * @brief Initialize GLFW
+ */
 /**
  * @brief Initialize GLFW
  */
@@ -27,6 +33,7 @@ void Window::initOpenGL() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(
+            GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE
             GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE
     );
     _wasInit = true;
@@ -42,7 +49,19 @@ void Window::initOpenGL() {
  */
 Window::Window(int width, int height, const char *title, GLFWmonitor *monitor,
                GLFWwindow *share) : _isOpen(true) {
+/**
+ * @brief Create a window
+ * @param width Window width
+ * @param height Window height
+ * @param title Window title
+ * @param monitor Monitor
+ * @param share Share
+ */
+Window::Window(int width, int height, const char *title, GLFWmonitor *monitor,
+               GLFWwindow *share) : _isOpen(true) {
     if (!_wasInit)
+        throw std::runtime_error(
+                "RTypeEngine::Window::initGlfw() must be called before creating a window");
         throw std::runtime_error(
                 "RTypeEngine::Window::initGlfw() must be called before creating a window");
     _window = glfwCreateWindow(width, height, title, monitor, share);
@@ -53,10 +72,13 @@ Window::Window(int width, int height, const char *title, GLFWmonitor *monitor,
     glfwMakeContextCurrent(_window);
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
+    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
         throw std::runtime_error("Failed to initialize GLAD");
     }
     _viewport = glm::ivec4(0, 0, width, height);
     glfwSetErrorCallback([](int error, const char *description) {
+        std::cerr << "Internal GLFW Error " << error << ": " << description
+                  << std::endl;
         std::cerr << "Internal GLFW Error " << error << ": " << description
                   << std::endl;
     });
@@ -66,12 +88,17 @@ Window::Window(int width, int height, const char *title, GLFWmonitor *monitor,
 
     glfwSetInputMode(glfwGetCurrentContext(), GLFW_STICKY_MOUSE_BUTTONS,
                      GLFW_TRUE);
+    glfwSetInputMode(glfwGetCurrentContext(), GLFW_STICKY_MOUSE_BUTTONS,
+                     GLFW_TRUE);
     glfwSetInputMode(glfwGetCurrentContext(), GLFW_STICKY_KEYS, 1);
     glfwSwapInterval(0);
     glEnable(GL_DEPTH_TEST);
     // std::cout << "OpenGL " << glGetString(GL_VERSION) << std::endl;
 }
 
+/**
+ * @brief Destroy a window
+ */
 /**
  * @brief Destroy a window
  */
@@ -85,9 +112,18 @@ Window::~Window() {
  * @return true if open, false otherwise
  */
 const bool &Window::isOpen() const {
+/**
+ * @brief Check if the window is open
+ * @return true if open, false otherwise
+ */
+const bool &Window::isOpen() const {
     return _isOpen;
 }
 
+/**
+ * @brief Close the window
+ */
+void Window::close() {
 /**
  * @brief Close the window
  */
@@ -100,9 +136,18 @@ void Window::close() {
  * @return glm::ivec4
  */
 const glm::ivec4 &Window::getViewport() const {
+/**
+ * @brief Get the viewport
+ * @return glm::ivec4
+ */
+const glm::ivec4 &Window::getViewport() const {
     return _viewport;
 }
 
+/**
+ * @brief Set the viewport
+ * @param viewport Viewport
+ */
 /**
  * @brief Set the viewport
  * @param viewport Viewport
@@ -116,11 +161,19 @@ void Window::setViewport(const glm::ivec4 &viewport) {
  * @brief Clear the window
  * @param c Color
  */
+/**
+ * @brief Clear the window
+ * @param c Color
+ */
 void Window::clear(const glm::vec4 &c) const {
     glClearColor(c.r, c.g, c.b, c.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+/**
+ * @brief Display the window
+ */
+void Window::display() {
 /**
  * @brief Display the window
  */
@@ -139,9 +192,15 @@ void Window::display() {
     }
     _deltaTime = std::chrono::duration_cast<std::chrono::duration<double>>(
             currentTime - lastTime).count();
+    _deltaTime = std::chrono::duration_cast<std::chrono::duration<double>>(
+            currentTime - lastTime).count();
     lastTime = currentTime;
 }
 
+/**
+ * @brief Set the framerate limit
+ * @param limit Framerate limit
+ */
 /**
  * @brief Set the framerate limit
  * @param limit Framerate limit
@@ -155,9 +214,19 @@ void Window::setFramerateLimit(const int &limit) {
  * @return int
  */
 const int Window::getFramerate() const {
+/**
+ * @brief Get the framerate
+ * @return int
+ */
+const int Window::getFramerate() const {
     return 1 / _deltaTime;
 }
 
+/**
+ * @brief Get the delta time
+ * @return double
+ */
+const double &Window::getDeltaTime() const {
 /**
  * @brief Get the delta time
  * @return double

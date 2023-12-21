@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(rtype-engine
-    VERSION 1.0.0
-    DESCRIPTION "RTypeEngine"
-    LANGUAGES CXX)
+        VERSION 1.0.0
+        DESCRIPTION "RTypeEngine"
+        LANGUAGES CXX)
 
 option(IS_TESTING "Enable testing" OFF)
 option(IS_BUILDING_DOC "Enable documentation" OFF)
@@ -16,6 +16,7 @@ include(GNUInstallDirs)
 include(external/FindDependencies.cmake)
 
 set(SRC
+        src/Window.cpp
         src/Window.cpp
 )
 
