@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(rtype-engine
-    VERSION 1.0.0
-    DESCRIPTION "RTypeEngine"
-    LANGUAGES CXX C)
+        VERSION 1.0.0
+        DESCRIPTION "RTypeEngine"
+        LANGUAGES CXX)
 
 option(IS_TESTING "Enable testing" OFF)
 option(IS_BUILDING_DOC "Enable documentation" OFF)
@@ -16,15 +16,21 @@ include(GNUInstallDirs)
 include(external/FindDependencies.cmake)
 
 set(SRC
-    src/Window.cpp
+        src/Window.cpp
+        src/Window.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED
-    ${SRC}
+        src/Window.cpp
+        include/RTypeEngine/Graphics/Texture.inl
+        include/RTypeEngine/Graphics/Shader.inl
+        include/RTypeEngine/Graphics/Transform.inl
+        include/RTypeEngine/Graphics/Rect.inl
+        include/RTypeEngine/Graphics/Mesh.inl
+        include/RTypeEngine/Graphics/Sprite.inl
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
-
 target_link_libraries(${PROJECT_NAME} PRIVATE rtype-ecs glad glfw glm)
 
 if (IS_TESTING AND NOT WIN32)
