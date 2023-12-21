@@ -47,4 +47,4 @@ namespace RTypeEngine {
         static void bindMesh(MeshComponent &mesh) noexcept;
         static void unbindMesh() noexcept;
     };
-}
+} // namespace RTypeEngine

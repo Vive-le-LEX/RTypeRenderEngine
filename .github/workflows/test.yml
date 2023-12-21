@@ -1,6 +1,11 @@
-name: Main CI
+name: Testing
 
-on: [push, pull_request]
+on:
+  workflow_run:
+    workflows: ["Linting"]
+    types:
+      - completed
+  workflow_dispatch:
 
 jobs:
     build:
@@ -17,13 +22,13 @@ jobs:
                 - { name: Linux Clang,    os: ubuntu-latest, flags: -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ }
                 - { name: macOS,          os: macos-latest  }
                 config:
-                - { name: Shared, flags: -DBUILD_SHARED_LIBS=TRUE -DIS_BUILDING_DOC=TRUE }
+                - { name: Shared, flags: -DBUILD_SHARED_LIBS=TRUE }
                 - { name: Static, flags: -DBUILD_SHARED_LIBS=FALSE }
 
         steps:
         - name: Install Linux Dependencies
           if: runner.os == 'Linux'
-          run: sudo apt-get update && sudo apt-get install libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev doxygen graphviz -y
+          run: sudo apt-get update && sudo apt-get install libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev -y
 
         - uses: actions/checkout@v3
 
@@ -33,23 +38,12 @@ jobs:
 
         - name: Create build directory
           run: mkdir build |
-                cmake -S . -B build -DCMAKE_INSTALL_PREFIX=install -DIS_TESTING:BOOL=TRUE ${{matrix.platform.flags}} ${{matrix.config.flags}}
+                cmake -S . -B build -DIS_TESTING:BOOL=TRUE ${{matrix.platform.flags}} ${{matrix.config.flags}}
 
         - name: Build
           shell: bash
           run: cmake --build build --config Release
 
-        - name: Install
-          shell: bash
-          run: cmake --install build --config Release
-
         - name: Test
           shell: bash
           run: cmake -P tests/LaunchTests.cmake
-
-        - name: Push documentation to GitHub Pages
-          if: matrix.platform.os == 'ubuntu-latest' && matrix.platform.name == 'Linux Clang' && github.ref == 'refs/heads/main' && matrix.config.name == 'Shared'
-          uses: peaceiris/actions-gh-pages@v3
-          with:
-              deploy_key: ${{ secrets.DEPLOY_KEY }}
-              publish_dir: ./build/docs/html

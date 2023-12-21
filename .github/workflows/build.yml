@@ -1,0 +1,62 @@
+name: Building
+
+on:
+    push:
+        branches: [main]
+    workflow_run:
+      workflows: ["Testing"]
+      branches: [main]
+      types:
+        - completed
+    workflow_dispatch:
+
+jobs:
+    buildDocumentation:
+        name: Build Documentation
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v3
+        - uses: webfactory/ssh-agent@v0.7.0
+          with:
+              ssh-private-key: ${{secrets.KLEO_ORG_SSH}}
+        - name: Build Documentation
+          run: |
+                cmake . -B build/ -DIS_TESTING:BOOL=TRUE -DIS_BUILDING_DOC=TRUE
+                cmake --build build/ --config Release
+        - uses: actions/download-artifact@v4
+          with:
+            name: lint-report.md
+            path: docs/html
+        - name: Push documentation to GitHub Pages
+          uses: peaceiris/actions-gh-pages@v3
+          with:
+              deploy_key: ${{ secrets.DEPLOY_KEY }}
+              publish_dir: ./build/docs/html
+              user_name: 'github-actions[bot]'
+              user_email: 'github-actions[bot]@users.noreply.github.com'
+
+    build:
+        name: ${{ matrix.platform.name }} ${{ matrix.config.name }}
+        runs-on: ${{ matrix.platform.os }}
+
+        strategy:
+            fail-fast: false
+            matrix:
+                platform:
+                - { name: Windows VS2019, os: windows-2019  }
+                - { name: Windows VS2022, os: windows-2022  }
+                - { name: Linux GCC,      os: ubuntu-latest }
+                - { name: Linux Clang,    os: ubuntu-latest, flags: -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ }
+                - { name: macOS,          os: macos-latest  }
+                config:
+                - { name: Shared, flags: -DBUILD_SHARED_LIBS=TRUE }
+                - { name: Static, flags: -DBUILD_SHARED_LIBS=FALSE }
+
+        steps:
+            - uses: actions/checkout@v3
+            - uses: webfactory/ssh-agent@v0.7.0
+              with:
+                ssh-private-key: ${{secrets.KLEO_ORG_SSH}}
+            - name: Build
+              shell: bash
+              run: cmake --build build --config Release
