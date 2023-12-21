@@ -67,17 +67,17 @@ error_levels = {
 def print_final(files):
     for file in files:
         line_number, message, error_level = files[file].values()
-        readme_file.write(f'  * [{error_levels[error_level]} In {file} at line {line_number}]({file})\n')
-        readme_file.write(f'    * {message}\n')
+        readme_file.write(f'  - [{error_levels[error_level]} In {file} at line {line_number}]({file})\n')
+        readme_file.write(f'    - {message}\n')
 
 def treat_category(dict, key):
     for sub in dict[key]:
-        subcat = f'* {sub.replace("_", " ").capitalize()}\n'
-        readme_file.write(subcat)
+        readme_file.write(f"[{sub.replace('_', ' ').capitalize()}](#table-of-contents)\n")
         if type(sub) != str:
             treat_category(dict[key], sub)
         else:
             print_final(dict[key][sub])
+        readme_file.write('\n')
 
 for key in errors.keys():
     category_hey = f'## {category_emojis.get(key, "!")} {key.capitalize()}\n'
