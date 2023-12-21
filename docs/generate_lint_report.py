@@ -13,6 +13,8 @@ import re
 import sys
 import subprocess
 
+shouldFail = '--fail-on-exit' in sys.argv
+
 result = subprocess.run(['cpplint --filter=-legal,-build/header_guard --output=emacs --exclude="gameExample" --exclude="tests/*" --exclude=build/_deps --exclude=include/RTypeEngine/Graphics/stb_image.h --exclude=build/CMakeFiles --recursive .'], shell=True, capture_output=True, text=True)
 errors = {}
 
@@ -84,4 +86,7 @@ for key in errors.keys():
     treat_category(errors, key)
 readme_file.close()
 
-sys.exit(1 if matches > 0 else 0)
+if shouldFail:
+    sys.exit(1 if matches > 0 else 0)
+else:
+    sys.exit(0)

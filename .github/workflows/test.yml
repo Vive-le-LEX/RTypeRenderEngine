@@ -1,9 +1,15 @@
 name: Testing
 
-on: [push, pull_request]
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Linting"]
+    types:
+      - completed
 
 jobs:
     build:
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         name: ${{ matrix.platform.name }} ${{ matrix.config.name }}
         runs-on: ${{ matrix.platform.os }}
 
