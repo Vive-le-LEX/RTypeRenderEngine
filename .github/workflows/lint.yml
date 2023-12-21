@@ -12,7 +12,7 @@ jobs:
           with:
             python-version: '3.10'
         - run: pip install cpplint
-        - run: python docs/generate_lint_reports.py
+        - run: python docs/generate_lint_report.py
 
     lint-report:
         if: always()
