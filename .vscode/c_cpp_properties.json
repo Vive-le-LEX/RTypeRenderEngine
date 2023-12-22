@@ -3,8 +3,7 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**",
-                "${workspaceFolder}/build/_deps/glad-build/"
+                "${workspaceFolder}/**"
             ],
             "defines": [],
             "compilerPath": "/usr/lib64/ccache/gcc",

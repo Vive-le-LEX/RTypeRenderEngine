@@ -5,8 +5,9 @@
 ** main
 */
 
-#include "Window.hpp"
-#include "Window/Window.hpp"
+#include "RTypeEngine/Window.hpp"
+#include "RTypeEngine/Window/Window.hpp"
+
 
 using namespace RTypeEngine;
 
@@ -18,6 +19,11 @@ bool Window::_wasInit = false;
 /**
  * @brief Initialize GLFW
  */
+bool Window::_wasInit = false;
+
+/**
+ * @brief Initialize OpenGL
+ */
 void Window::initOpenGL() {
     if (_wasInit)
         return;
@@ -25,9 +31,7 @@ void Window::initOpenGL() {
         throw std::runtime_error("Failed to initialize GLFW");
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(
-            GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE
-    );
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     _wasInit = true;
 }
 
@@ -41,7 +45,6 @@ void Window::initOpenGL() {
  */
 Window::Window(int width, int height, const char *title, GLFWmonitor *monitor,
                GLFWwindow *share) : _isOpen(true) {
-
     if (!_wasInit)
         Window::initOpenGL();
     _window = glfwCreateWindow(width, height, title, monitor, share);
@@ -56,6 +59,8 @@ Window::Window(int width, int height, const char *title, GLFWmonitor *monitor,
     }
     _viewport = glm::ivec4(0, 0, width, height);
     glfwSetErrorCallback([](int error, const char *description) {
+        std::cerr << "Internal GLFW Error " << error << ": " << description
+                  << std::endl;
         std::cerr << "Internal GLFW Error " << error << ": " << description
                   << std::endl;
     });

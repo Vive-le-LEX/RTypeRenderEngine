@@ -52,4 +52,4 @@ namespace RTypeEngine {
 
         static void unbindMesh() noexcept;
     };
-}
+} // namespace RTypeEngine
