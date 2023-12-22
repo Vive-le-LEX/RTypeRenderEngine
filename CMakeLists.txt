@@ -21,19 +21,23 @@ set(SRC_MAIN
 
 set(SRC
         src/Window.cpp
+        src/Mesh.cpp
+        src/Shader.cpp
+        src/Sprite.cpp
+        src/Texture.cpp
+        src/Transform.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED
         src/Window.cpp
-        include/RTypeEngine/Graphics/Texture.inl
-        include/RTypeEngine/Graphics/Shader.inl
-        include/RTypeEngine/Graphics/Transform.inl
-        include/RTypeEngine/Graphics/Rect.inl
-        include/RTypeEngine/Graphics/Mesh.inl
-        include/RTypeEngine/Graphics/Sprite.inl
+        src/Mesh.cpp
+        src/Shader.cpp
+        src/Sprite.cpp
+        src/Texture.cpp
+        src/Transform.cpp
 )
 
-file(GLOB . RELATIVE ${PROJECT_SOURCE_DIR} "include/RTypeEngine/*.h*")
+file(GLOB . RELATIVE ${PROJECT_SOURCE_DIR} "include/RTypeEngine/*.h*" "include/RTypeEngine/*inl*")
 target_link_libraries(${PROJECT_NAME} PRIVATE ${ALL_LIBRARIES} glad)
 
 target_include_directories(${PROJECT_NAME} PUBLIC

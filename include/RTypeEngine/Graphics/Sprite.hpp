@@ -18,7 +18,6 @@
 #include "Mesh.hpp"
 #include "Shader.hpp"
 
-
 namespace RTypeEngine {
     /**
      * \brief Sprite static class
@@ -32,11 +31,15 @@ namespace RTypeEngine {
 
         static Entity create(Coordinator *coordinator) noexcept;
 
-        static void draw(Entity *entity, Coordinator *coordinator) noexcept;
+        static void draw(Entity &entity, Coordinator *coordinator) noexcept;
 
         static void
-        setTexture(Entity &entity, const std::string &path, Coordinator *coordinator) noexcept;
+        setTexture(Entity &entity, const std::string &path,
+                   Coordinator *coordinator) noexcept;
 
-        static void setTextureRect(Entity &entity, const RectI &rect, Coordinator *coordinator) noexcept;
+        static void setTextureRect(Entity &entity, const RectI &rect,
+                                   Coordinator *coordinator) noexcept;
+
+        static Entity copy(Coordinator *coordinator, Entity &src) noexcept;
     };
 }

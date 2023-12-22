@@ -11,21 +11,16 @@
 
 #pragma once
 
-#include <glm/glm.hpp>
+#include "RTypeECS/Systems/System.hpp"
+#include "RTypeEngine/System.hpp"
 
 namespace RTypeEngine {
-    struct TransformComponent {
-        glm::mat4 transform;
-    };
-
-    /**
-     * @brief Transform class
-     */
-    class Transform {
+    class DrawSystem : public System {
     public:
-        static void update(TransformComponent &transform,
-                           const glm::mat4 &parentTransform) noexcept;
-
-        static void deleteTransform(TransformComponent &transform) noexcept;
+        virtual void update(Coordinator *coord) final {
+            for (auto entity: entities) {
+                RTypeEngine::Sprite::draw(entity, coord);
+            }
+        }
     };
 }

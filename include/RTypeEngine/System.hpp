@@ -9,15 +9,7 @@
  * from Kleo ©.
 */
 
-#include "Transform.hpp"
+#pragma once
 
-using namespace RTypeEngine;
-
-/**
- * @brief Update transform
- * @param transform Transform component
- * @param parentTransform Parent transform
- */
-void Transform::update(TransformComponent &transform, const glm::mat4 &parentTransform) noexcept {
-    transform.transform = parentTransform * transform.transform;
-}
+#include "System/Core.hpp"
+#include "System/Draw.hpp"

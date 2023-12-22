@@ -8,7 +8,6 @@
 #include "Window.hpp"
 #include "Window/Window.hpp"
 
-
 using namespace RTypeEngine;
 
 /**
@@ -42,9 +41,9 @@ void Window::initOpenGL() {
  */
 Window::Window(int width, int height, const char *title, GLFWmonitor *monitor,
                GLFWwindow *share) : _isOpen(true) {
+
     if (!_wasInit)
-        throw std::runtime_error(
-                "RTypeEngine::Window::initGlfw() must be called before creating a window");
+        Window::initOpenGL();
     _window = glfwCreateWindow(width, height, title, monitor, share);
     if (!_window) {
         glfwTerminate();
