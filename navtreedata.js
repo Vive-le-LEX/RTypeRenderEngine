@@ -25,9 +25,14 @@
 var NAVTREE =
 [
   [ "rtype-engine", "index.html", [
+    [ "Welcome", "index.html", null ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
-      [ "Class Index", "classes.html", null ]
+      [ "Class Index", "classes.html", null ],
+      [ "Class Members", "functions.html", [
+        [ "All", "functions.html", null ],
+        [ "Functions", "functions_func.html", null ]
+      ] ]
     ] ],
     [ "Files", "files.html", [
       [ "File List", "files.html", "files_dup" ]
@@ -37,7 +42,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"Window_2Window_8hpp_source.html"
+"Graphics_8hpp_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
