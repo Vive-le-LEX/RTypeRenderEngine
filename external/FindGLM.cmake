@@ -1,4 +1,4 @@
-find_library(GLM_LIB glad)
+find_library(GLM_LIB glm)
 
 if(NOT GLM_LIB)
     message(STATUS "Fetching GLM...")

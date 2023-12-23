@@ -28,5 +28,5 @@ jobs:
         - run: python docs/generate_lint_report.py
         - uses: actions/upload-artifact@v4
           with:
-            name: LINT_REPORT.md
+            name: LINT_REPORT-${{ github.event_name == 'push' && github.ref_type == 'branch' && github.ref }}
             path: docs/
