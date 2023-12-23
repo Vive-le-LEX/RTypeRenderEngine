@@ -12,7 +12,7 @@ jobs:
           with:
             python-version: '3.10'
         - run: pip install cpplint
-        - run: python docs/generate_lint_report.py
+        - run: python docs/generate_lint_report.py _
 
     lint-report:
         if: always()
@@ -31,13 +31,14 @@ jobs:
 
         - run: pip install cpplint
 
-        - run: python docs/generate_lint_report.py
-
         - name: Set Branch Name without Slash
           run: echo "BRANCH_NAME_WITHOUT_SLASHES=${BRANCH_NAME##*/}" >> $GITHUB_ENV
 
+        - run: python docs/generate_lint_report.py ${{ env.BRANCH_NAME_WITHOUT_SLASHES }}
+
         - name: Create Lint Report Artifact
+          if: startsWith(github.event.ref, 'refs/heads/')
           uses: actions/upload-artifact@v4
           with:
-            name: LINT_REPORT--${{ env.BRANCH_NAME_WITHOUT_SLASHES }}
-            path: docs/
+            name: LINT_REPORT-${{ env.BRANCH_NAME_WITHOUT_SLASHES }}
+            path: file-LINT_REPORT-${{ env.BRANCH_NAME_WITHOUT_SLASHES }}.md

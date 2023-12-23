@@ -18,6 +18,8 @@ if (DOXYGEN_FOUND)
     set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
     set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in)
     set(DOXYGEN_AWESOME_CSS_DIR ${doxygen-awesome-css_SOURCE_DIR})
+    file(GLOB ALL_MARKDOWNS ${CMAKE_CURRENT_SOURCE_DIR}/docs/*.md)
+    string(REPLACE ";" " " ALL_MARKDOWNS "${ALL_MARKDOWNS}")
 
     configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
     message("Doxygen build started")

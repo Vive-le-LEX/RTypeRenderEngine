@@ -13,13 +13,17 @@ import re
 import sys
 import subprocess
 
+if len(sys.argv) != 2:
+    print('Usage: python3 generate_lint_report.py name_of_markdown')
+    exit(84)
+
 shouldFail = '--fail-on-exit' in sys.argv
 
 result = subprocess.run(['cpplint --filter=-legal,-build/header_guard --output=emacs --exclude="gameExample" --exclude="tests/*" --exclude=build/_deps --exclude=include/RTypeEngine/Graphics/stb_image.h --exclude=build/CMakeFiles --recursive .'], shell=True, capture_output=True, text=True)
 errors = {}
 
 readme_file = open('docs/LINT_REPORT.md', 'w')
-readme_file.write('# Lint report\n\n')
+readme_file.write(f'# Lint report of {sys.argv[1]}\n\n')
 
 lint_line_reg = r'([^:]*):(\d+):\s+(.*)\[(.*)\]\s\[(.*)\]'
 

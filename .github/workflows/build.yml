@@ -27,11 +27,12 @@ jobs:
               ssh-private-key: ${{secrets.KLEO_ORG_SSH}}
         - uses: actions/download-artifact@v4
           with:
-            name: LINT_REPORT.md
             path: docs/
+            pattern: LINT_REPORT-*
+            merge-multiple: true
         - name: Build Documentation
           run: |
-                cmake . -B build/ -DIS_TESTING:BOOL=TRUE -DIS_BUILDING_DOC=TRUE
+                cmake . -B build/ -DIS_BUILDING_DOC=TRUE
                 cmake --build build/ --config Release
         - name: Push documentation to GitHub Pages
           uses: peaceiris/actions-gh-pages@v3
@@ -64,6 +65,9 @@ jobs:
             - uses: webfactory/ssh-agent@v0.7.0
               with:
                 ssh-private-key: ${{secrets.KLEO_ORG_SSH}}
+            - name: Install linux dependencies
+              if: matrix.platform.os == 'ubuntu-latest'
+              run: sudo apt-get update && sudo apt-get install libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev -y
             - name: Create build directory
               run: mkdir build |
                     cmake -S . -B build ${{matrix.platform.flags}} ${{matrix.config.flags}}
