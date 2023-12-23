@@ -22,7 +22,7 @@ jobs:
             -H "Authorization: Bearer $GITHUB_TOKEN" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             https://api.github.com/repos/Vive-le-LEX/RTypeRenderEngine/actions/artifacts)
-          
+
             allArtifacts=$(echo $allArtifacts | jq '.artifacts')
             hashtable=$(mktemp -d)
             iter=0
@@ -50,7 +50,7 @@ jobs:
                 else
                     echo $parsed_timestamp > "$hashtable/$artifact_id"
                 fi
-            
+
                 if [[ $artifact_name =~ ^\"LINT_REPORT-.*\"$ ]]; then
                     echo "Found: $artifact_name"
                     curl -s -L \
@@ -62,7 +62,7 @@ jobs:
                 fi
                 iter=$((iter+1))
             done
-            rm lint_report.zip
+            rm -f lint_report.zip
 
     lint-report:
         if: always()
