@@ -41,4 +41,4 @@ jobs:
           uses: actions/upload-artifact@v4
           with:
             name: LINT_REPORT-${{ env.BRANCH_NAME_WITHOUT_SLASHES }}
-            path: file-LINT_REPORT-${{ env.BRANCH_NAME_WITHOUT_SLASHES }}.md
+            path: docs/LINT_REPORT-${{ env.BRANCH_NAME_WITHOUT_SLASHES }}.md
