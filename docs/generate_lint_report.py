@@ -19,8 +19,10 @@ if len(sys.argv) != 2:
 
 shouldFail = '--fail-on-exit' in sys.argv
 
-result = subprocess.run(['cpplint --filter=-legal,-build/header_guard --output=emacs --exclude="gameExample" --exclude="tests/*" --exclude=build/_deps --exclude=include/RTypeEngine/Graphics/stb_image.h --exclude=build/CMakeFiles --recursive .'], shell=True, capture_output=True, text=True)
+result = subprocess.run(['cpplint --filter=-legal,-build/header_guard --output=emacs --exclude="gameExample" --exclude="tests/*" --exclude=build/_deps --exclude=include/RTypeEngine/Graphics/stb_image.h --exclude=build/CMakeFiles --exclude=external/* --recursive .'],
+                        shell=True, capture_output=True, text=True)
 errors = {}
+print(result.stdout)
 
 readme_file = open(f'docs/LINT_REPORT-{sys.argv[1]}.md', 'w')
 readme_file.write(f'# Lint report of {sys.argv[1]}\n\n')

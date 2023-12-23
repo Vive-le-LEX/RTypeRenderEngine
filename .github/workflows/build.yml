@@ -33,7 +33,8 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer $GITHUB_TOKEN" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/Vive-le-LEX/RTypeRenderEngine/actions/artifacts | jq '.artifacts')
+            https://api.github.com/repos/Vive-le-LEX/RTypeRenderEngine/actions/artifacts 2> /dev/null | jq '.artifacts')
+            echo Found artifacts: $allArtifacts
             iter=0
             cd docs
             while : ; do
@@ -42,6 +43,7 @@ jobs:
                     break
                 fi
                 artifact_name=$(echo $item | jq '.name')
+                echo "Checking $artifact_name"
                 artifact_id=$(echo $item | jq '.id')
                 if [[ $artifact_name =~ ^\"LINT_REPORT-.*\"$ ]]; then
                     echo "Found: $artifact_name"
