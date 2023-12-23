@@ -6,6 +6,9 @@ on:
     workflows: ["Linting"]
     types:
       - completed
+  pull_request:
+    branches-ignore: [main]
+    types: [review_requested]
 
 jobs:
     build:
