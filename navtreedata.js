@@ -26,6 +26,12 @@ var NAVTREE =
 [
   [ "rtype-engine", "index.html", [
     [ "Welcome", "index.html", null ],
+    [ "Lint report of main", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_main.html", [
+      [ "🛠️ Build", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_main.html#autotoc_md1", null ],
+      [ "🏃 Runtime", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_main.html#autotoc_md2", null ],
+      [ "🌌 Whitespace", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_main.html#autotoc_md3", null ],
+      [ "📕 Readability", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_main.html#autotoc_md4", null ]
+    ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
