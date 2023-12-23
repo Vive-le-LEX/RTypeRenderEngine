@@ -7,7 +7,7 @@ if(NOT GLFW_LIB)
         GIT_REPOSITORY https://github.com/glfw/glfw.git
         GIT_TAG master
     )
-    
+
     set(GLFW_INSTALL OFF)
     set(GLFW_BUILD_EXAMPLES OFF)
     set(GLFW_BUILD_TESTS OFF)

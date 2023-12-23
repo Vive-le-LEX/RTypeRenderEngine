@@ -16,17 +16,28 @@ jobs:
 
     lint-report:
         if: always()
+        env:
+          BRANCH_NAME: ${{ github.ref }}
+          BRANCH_NAME_WITHOUT_SLASHES: ${{ github.ref }}
         name: Lint Report as Artifact
         runs-on: ubuntu-latest
         needs: lint
         steps:
         - uses: actions/checkout@v3
+
         - uses: actions/setup-python@v5
           with:
             python-version: '3.10'
+
         - run: pip install cpplint
+
         - run: python docs/generate_lint_report.py
-        - uses: actions/upload-artifact@v4
+
+        - name: Set Branch Name without Slash
+          run: echo "BRANCH_NAME_WITHOUT_SLASHES=${BRANCH_NAME##*/}" >> $GITHUB_ENV
+
+        - name: Create Lint Report Artifact
+          uses: actions/upload-artifact@v4
           with:
-            name: LINT_REPORT.md
+            name: LINT_REPORT--${{ env.BRANCH_NAME_WITHOUT_SLASHES }}
             path: docs/

@@ -10,7 +10,7 @@ on:
 jobs:
     build:
         if: ${{ github.event.workflow_run.conclusion == 'success' }}
-        name: ${{ matrix.platform.name }} ${{ matrix.config.name }}
+        name: ${{ matrix.platform.name }}
         runs-on: ${{ matrix.platform.os }}
 
         strategy:
@@ -22,9 +22,6 @@ jobs:
                 - { name: Linux GCC,      os: ubuntu-latest }
                 - { name: Linux Clang,    os: ubuntu-latest, flags: -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ }
                 - { name: macOS,          os: macos-latest  }
-                config:
-                - { name: Shared, flags: -DBUILD_SHARED_LIBS=TRUE }
-                - { name: Static, flags: -DBUILD_SHARED_LIBS=FALSE }
 
         steps:
         - name: Install Linux Dependencies
@@ -39,7 +36,7 @@ jobs:
 
         - name: Create build directory
           run: mkdir build |
-                cmake -S . -B build -DIS_TESTING:BOOL=TRUE ${{matrix.platform.flags}} ${{matrix.config.flags}}
+                cmake -S . -B build -DIS_TESTING:BOOL=TRUE ${{matrix.platform.flags}}
 
         - name: Build
           shell: bash
