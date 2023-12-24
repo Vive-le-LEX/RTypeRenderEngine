@@ -17,17 +17,10 @@ include(external/FindDependencies.cmake)
 
 set(SRC
         src/Window.cpp
-        src/Window.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED
-        src/Window.cpp
-        include/RTypeEngine/Graphics/Texture.inl
-        include/RTypeEngine/Graphics/Shader.inl
-        include/RTypeEngine/Graphics/Transform.inl
-        include/RTypeEngine/Graphics/Rect.inl
-        include/RTypeEngine/Graphics/Mesh.inl
-        include/RTypeEngine/Graphics/Sprite.inl
+        ${SRC}
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
@@ -36,7 +29,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE rtype-ecs glad glfw glm)
 if (IS_TESTING AND NOT WIN32)
     include(tests/BuildTests.cmake)
 endif()
-
 if (IS_BUILDING_DOC)
     include(docs/BuildDocs.cmake)
 endif()

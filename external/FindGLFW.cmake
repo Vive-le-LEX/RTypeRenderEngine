@@ -1,6 +1,6 @@
-find_library(GLFW_LIB glfw)
+# find_library(GLFW_LIB glfw)
 
-if(NOT GLFW_LIB)
+# if(NOT GLFW_LIB)
     message(STATUS "Fetching GLFW...")
     FetchContent_Declare(
         glfw
@@ -15,6 +15,6 @@ if(NOT GLFW_LIB)
     set(GLFW_INSTALL OFF)
 
     FetchContent_MakeAvailable(glfw)
-else()
-    message(STATUS "GLFW library found at ${GLFW_LIB}")
-endif()
+# else()
+#     message(STATUS "GLFW library found at ${GLFW_LIB}")
+# endif()

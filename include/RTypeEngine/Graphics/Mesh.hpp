@@ -41,10 +41,15 @@ namespace RTypeEngine {
     class Mesh {
     public:
         Mesh() = delete;
+
         ~Mesh() = delete;
+
         static MeshComponent createMesh(const float *vertices) noexcept;
+
         static void deleteMesh(MeshComponent &mesh) noexcept;
+
         static void bindMesh(MeshComponent &mesh) noexcept;
+
         static void unbindMesh() noexcept;
     };
 } // namespace RTypeEngine

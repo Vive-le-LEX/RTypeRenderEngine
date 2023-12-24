@@ -8,7 +8,6 @@
 #include "RTypeEngine/Window.hpp"
 #include "RTypeEngine/Window/Window.hpp"
 
-
 using namespace RTypeEngine;
 
 /**
@@ -43,9 +42,9 @@ void Window::initOpenGL() {
  */
 Window::Window(int width, int height, const char *title, GLFWmonitor *monitor,
                GLFWwindow *share) : _isOpen(true) {
+
     if (!_wasInit)
-        throw std::runtime_error(
-                "RTypeEngine::Window::initOpenGL() must be called before creating a window");
+        Window::initOpenGL();
     _window = glfwCreateWindow(width, height, title, monitor, share);
     if (!_window) {
         glfwTerminate();
@@ -67,8 +66,6 @@ Window::Window(int width, int height, const char *title, GLFWmonitor *monitor,
     glfwSetWindowUserPointer(_window, this);
     // setCallbacks();
 
-    glfwSetInputMode(glfwGetCurrentContext(), GLFW_STICKY_MOUSE_BUTTONS,
-                     GLFW_TRUE);
     glfwSetInputMode(glfwGetCurrentContext(), GLFW_STICKY_MOUSE_BUTTONS,
                      GLFW_TRUE);
     glfwSetInputMode(glfwGetCurrentContext(), GLFW_STICKY_KEYS, 1);

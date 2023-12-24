@@ -51,8 +51,8 @@ namespace RTypeEngine {
 
         static void use(ShaderComponent &shader);
 
-    private:
         static GLuint _id;
+    private:
     };
 
 }
