@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>rtype-engine: Lint report of main</title>
+<title>rtype-engine: Lint report of Sprites</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -64,7 +64,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_main.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_Sprites.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -84,10 +84,10 @@ $(document).ready(function(){initNavTree('md__home_runner_work_RTypeRenderEngine
 
 <div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title">Lint report of main </div>  </div>
+<div class="title">Lint report of Sprites </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md11"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md6"></a>
 🛠️ Build</h1>
 <p><a href="#table-of-contents">Include order</a></p><ul>
 <li><a href="include/RTypeEngine/Graphics/Mesh.hpp">🔴 In include/RTypeEngine/Graphics/Mesh.hpp at line 20</a><ul>
@@ -105,7 +105,12 @@ $(document).ready(function(){initNavTree('md__home_runner_work_RTypeRenderEngine
 </li>
 </ul>
 </li>
-<li><a href="include/RTypeEngine/Window/Window.hpp">🔴 In include/RTypeEngine/Window/Window.hpp at line 17</a><ul>
+<li><a href="include/RTypeEngine/System/Core.hpp">🔴 In include/RTypeEngine/System/Core.hpp at line 17</a><ul>
+<li>Found C++ system header after other header. Should be: Core.h, c system, c++ system, other. <br  />
+</li>
+</ul>
+</li>
+<li><a href="include/RTypeEngine/Window/Window.hpp">🔴 In include/RTypeEngine/Window/Window.hpp at line 21</a><ul>
 <li>Found C system header after other header. Should be: Window.h, c system, c++ system, other. <br  />
 </li>
 </ul>
@@ -127,6 +132,11 @@ $(document).ready(function(){initNavTree('md__home_runner_work_RTypeRenderEngine
 </li>
 </ul>
 </li>
+<li><a href="include/RTypeEngine/System/Core.hpp">🔴 In include/RTypeEngine/System/Core.hpp at line 16</a><ul>
+<li>Include the directory when naming header files <br  />
+</li>
+</ul>
+</li>
 </ul>
 <p><a href="#table-of-contents">Include what you use</a></p><ul>
 <li><a href="include/RTypeEngine/Graphics/Shader.hpp">🔴 In include/RTypeEngine/Graphics/Shader.hpp at line 47</a><ul>
@@ -134,8 +144,8 @@ $(document).ready(function(){initNavTree('md__home_runner_work_RTypeRenderEngine
 </li>
 </ul>
 </li>
-<li><a href="include/RTypeEngine/Graphics/Sprite.hpp">🔴 In include/RTypeEngine/Graphics/Sprite.hpp at line 38</a><ul>
-<li>Add #include &lt;string&gt; for string <br  />
+<li><a href="include/RTypeEngine/Graphics/Sprite.hpp">🔴 In include/RTypeEngine/Graphics/Sprite.hpp at line 43</a><ul>
+<li>Add #include &lt;algorithm&gt; for copy <br  />
 </li>
 </ul>
 </li>
@@ -146,20 +156,20 @@ $(document).ready(function(){initNavTree('md__home_runner_work_RTypeRenderEngine
 </li>
 </ul>
 <p><a href="#table-of-contents">C++11</a></p><ul>
-<li><a href="include/RTypeEngine/Window/Window.hpp">☢️ In include/RTypeEngine/Window/Window.hpp at line 12</a><ul>
+<li><a href="include/RTypeEngine/Window/Window.hpp">☢️ In include/RTypeEngine/Window/Window.hpp at line 16</a><ul>
 <li>&lt;chrono&gt; is an unapproved C++11 header. <br  />
 </li>
 </ul>
 </li>
 </ul>
 <p><a href="#table-of-contents">Namespaces</a></p><ul>
-<li><a href="src/Window.cpp">☢️ In src/Window.cpp at line 12</a><ul>
+<li><a href="src/Window.cpp">☢️ In src/Window.cpp at line 11</a><ul>
 <li>Do not use namespace using-directives. Use using-declarations instead. <br  />
 </li>
 </ul>
 </li>
 </ul>
-<h1><a class="anchor" id="autotoc_md12"></a>
+<h1><a class="anchor" id="autotoc_md7"></a>
 🏃 Runtime</h1>
 <p><a href="#table-of-contents">Indentation namespace</a></p><ul>
 <li><a href="include/RTypeEngine/Graphics/Mesh.hpp">🔴 In include/RTypeEngine/Graphics/Mesh.hpp at line 41</a><ul>
@@ -167,7 +177,7 @@ $(document).ready(function(){initNavTree('md__home_runner_work_RTypeRenderEngine
 </li>
 </ul>
 </li>
-<li><a href="include/RTypeEngine/Graphics/Rect.hpp">🔴 In include/RTypeEngine/Graphics/Rect.hpp at line 41</a><ul>
+<li><a href="include/RTypeEngine/Graphics/Rect.hpp">🔴 In include/RTypeEngine/Graphics/Rect.hpp at line 42</a><ul>
 <li>Do not indent within a namespace <br  />
 </li>
 </ul>
@@ -177,7 +187,7 @@ $(document).ready(function(){initNavTree('md__home_runner_work_RTypeRenderEngine
 </li>
 </ul>
 </li>
-<li><a href="include/RTypeEngine/Graphics/Sprite.hpp">🔴 In include/RTypeEngine/Graphics/Sprite.hpp at line 27</a><ul>
+<li><a href="include/RTypeEngine/Graphics/Sprite.hpp">🔴 In include/RTypeEngine/Graphics/Sprite.hpp at line 26</a><ul>
 <li>Do not indent within a namespace <br  />
 </li>
 </ul>
@@ -192,15 +202,25 @@ $(document).ready(function(){initNavTree('md__home_runner_work_RTypeRenderEngine
 </li>
 </ul>
 </li>
-<li><a href="include/RTypeEngine/Window/Window.hpp">🔴 In include/RTypeEngine/Window/Window.hpp at line 26</a><ul>
+<li><a href="include/RTypeEngine/System/Draw.hpp">🔴 In include/RTypeEngine/System/Draw.hpp at line 18</a><ul>
+<li>Do not indent within a namespace <br  />
+</li>
+</ul>
+</li>
+<li><a href="include/RTypeEngine/Window/Window.hpp">🔴 In include/RTypeEngine/Window/Window.hpp at line 30</a><ul>
 <li>Do not indent within a namespace <br  />
 </li>
 </ul>
 </li>
 </ul>
 <p><a href="#table-of-contents">References</a></p><ul>
-<li><a href="include/RTypeEngine/Graphics/Mesh.hpp">🟡 In include/RTypeEngine/Graphics/Mesh.hpp at line 47</a><ul>
+<li><a href="include/RTypeEngine/Graphics/Mesh.hpp">🟡 In include/RTypeEngine/Graphics/Mesh.hpp at line 51</a><ul>
 <li>Is this a non-const reference? If so, make const or use a pointer: MeshComponent &amp;mesh <br  />
+</li>
+</ul>
+</li>
+<li><a href="include/RTypeEngine/Graphics/Rect.hpp">🟡 In include/RTypeEngine/Graphics/Rect.hpp at line 44</a><ul>
+<li>Is this a non-const reference? If so, make const or use a pointer: RectComponent&lt;T&gt; &amp;rect <br  />
 </li>
 </ul>
 </li>
@@ -209,8 +229,8 @@ $(document).ready(function(){initNavTree('md__home_runner_work_RTypeRenderEngine
 </li>
 </ul>
 </li>
-<li><a href="include/RTypeEngine/Graphics/Sprite.hpp">🟡 In include/RTypeEngine/Graphics/Sprite.hpp at line 40</a><ul>
-<li>Is this a non-const reference? If so, make const or use a pointer: Entity &amp;entity <br  />
+<li><a href="include/RTypeEngine/Graphics/Sprite.hpp">🟡 In include/RTypeEngine/Graphics/Sprite.hpp at line 43</a><ul>
+<li>Is this a non-const reference? If so, make const or use a pointer: Entity &amp;src <br  />
 </li>
 </ul>
 </li>
@@ -219,13 +239,13 @@ $(document).ready(function(){initNavTree('md__home_runner_work_RTypeRenderEngine
 </li>
 </ul>
 </li>
-<li><a href="include/RTypeEngine/Graphics/Transform.hpp">🟡 In include/RTypeEngine/Graphics/Transform.hpp at line 26</a><ul>
+<li><a href="include/RTypeEngine/Graphics/Transform.hpp">🟡 In include/RTypeEngine/Graphics/Transform.hpp at line 29</a><ul>
 <li>Is this a non-const reference? If so, make const or use a pointer: TransformComponent &amp;transform <br  />
 </li>
 </ul>
 </li>
 </ul>
-<h1><a class="anchor" id="autotoc_md13"></a>
+<h1><a class="anchor" id="autotoc_md8"></a>
 🌌 Whitespace</h1>
 <p><a href="#table-of-contents">Indent</a></p><ul>
 <li><a href="include/RTypeEngine/Graphics/Mesh.hpp">🟠 In include/RTypeEngine/Graphics/Mesh.hpp at line 42</a><ul>
@@ -233,17 +253,17 @@ $(document).ready(function(){initNavTree('md__home_runner_work_RTypeRenderEngine
 </li>
 </ul>
 </li>
-<li><a href="include/RTypeEngine/Graphics/Rect.hpp">🟠 In include/RTypeEngine/Graphics/Rect.hpp at line 42</a><ul>
+<li><a href="include/RTypeEngine/Graphics/Rect.hpp">🟠 In include/RTypeEngine/Graphics/Rect.hpp at line 43</a><ul>
 <li>public: should be indented +1 space inside class Rect <br  />
 </li>
 </ul>
 </li>
-<li><a href="include/RTypeEngine/Graphics/Shader.hpp">🟠 In include/RTypeEngine/Graphics/Shader.hpp at line 54</a><ul>
+<li><a href="include/RTypeEngine/Graphics/Shader.hpp">🟠 In include/RTypeEngine/Graphics/Shader.hpp at line 55</a><ul>
 <li>private: should be indented +1 space inside class Shader <br  />
 </li>
 </ul>
 </li>
-<li><a href="include/RTypeEngine/Graphics/Sprite.hpp">🟠 In include/RTypeEngine/Graphics/Sprite.hpp at line 28</a><ul>
+<li><a href="include/RTypeEngine/Graphics/Sprite.hpp">🟠 In include/RTypeEngine/Graphics/Sprite.hpp at line 27</a><ul>
 <li>public: should be indented +1 space inside class Sprite <br  />
 </li>
 </ul>
@@ -258,69 +278,59 @@ $(document).ready(function(){initNavTree('md__home_runner_work_RTypeRenderEngine
 </li>
 </ul>
 </li>
-<li><a href="include/RTypeEngine/Window/Window.hpp">🟠 In include/RTypeEngine/Window/Window.hpp at line 60</a><ul>
+<li><a href="include/RTypeEngine/System/Draw.hpp">🟠 In include/RTypeEngine/System/Draw.hpp at line 19</a><ul>
+<li>public: should be indented +1 space inside class DrawSystem <br  />
+</li>
+</ul>
+</li>
+<li><a href="include/RTypeEngine/Window/Window.hpp">🟠 In include/RTypeEngine/Window/Window.hpp at line 73</a><ul>
 <li>private: should be indented +1 space inside class Window <br  />
 </li>
 </ul>
 </li>
 </ul>
 <p><a href="#table-of-contents">Comments</a></p><ul>
-<li><a href="include/RTypeEngine/Graphics/Mesh.hpp">🟡 In include/RTypeEngine/Graphics/Mesh.hpp at line 50</a><ul>
+<li><a href="include/RTypeEngine/Graphics/Mesh.hpp">🟡 In include/RTypeEngine/Graphics/Mesh.hpp at line 55</a><ul>
 <li>At least two spaces is best between code and comments <br  />
 </li>
 </ul>
 </li>
-<li><a href="include/RTypeEngine/Window/Window.hpp">🟡 In include/RTypeEngine/Window/Window.hpp at line 73</a><ul>
+<li><a href="include/RTypeEngine/Window/Window.hpp">🟡 In include/RTypeEngine/Window/Window.hpp at line 86</a><ul>
 <li>At least two spaces is best between code and comments <br  />
-</li>
-</ul>
-</li>
-</ul>
-<p><a href="#table-of-contents">Line length</a></p><ul>
-<li><a href="include/RTypeEngine/Graphics/Rect.hpp">🟡 In include/RTypeEngine/Graphics/Rect.hpp at line 51</a><ul>
-<li>Lines should be &lt;= 80 characters long <br  />
-</li>
-</ul>
-</li>
-<li><a href="include/RTypeEngine/Graphics/Sprite.hpp">🟡 In include/RTypeEngine/Graphics/Sprite.hpp at line 40</a><ul>
-<li>Lines should be &lt;= 80 characters long <br  />
-</li>
-</ul>
-</li>
-<li><a href="include/RTypeEngine/Graphics/Transform.hpp">🟡 In include/RTypeEngine/Graphics/Transform.hpp at line 26</a><ul>
-<li>Lines should be &lt;= 80 characters long <br  />
-</li>
-</ul>
-</li>
-<li><a href="include/RTypeEngine/Window/Window.hpp">🟡 In include/RTypeEngine/Window/Window.hpp at line 51</a><ul>
-<li>Lines should be &lt;= 80 characters long <br  />
-</li>
-</ul>
-</li>
-<li><a href="src/Window.cpp">🟡 In src/Window.cpp at line 48</a><ul>
-<li>Lines should be &lt;= 80 characters long <br  />
 </li>
 </ul>
 </li>
 </ul>
 <p><a href="#table-of-contents">Blank line</a></p><ul>
-<li><a href="include/RTypeEngine/Graphics/Transform.hpp">🟠 In include/RTypeEngine/Graphics/Transform.hpp at line 27</a><ul>
+<li><a href="include/RTypeEngine/Graphics/Rect.hpp">🟠 In include/RTypeEngine/Graphics/Rect.hpp at line 78</a><ul>
 <li>Redundant blank line at the end of a code block should be deleted. <br  />
 </li>
 </ul>
 </li>
-</ul>
-<p><a href="#table-of-contents">Braces</a></p><ul>
-<li><a href="include/RTypeEngine/Window/Window.hpp">🔴 In include/RTypeEngine/Window/Window.hpp at line 20</a><ul>
-<li>{ should almost always be at the end of the previous line <br  />
+<li><a href="src/Window.cpp">🟡 In src/Window.cpp at line 47</a><ul>
+<li>Redundant blank line at the start of a code block should be deleted. <br  />
 </li>
 </ul>
 </li>
 </ul>
-<h1><a class="anchor" id="autotoc_md14"></a>
+<p><a href="#table-of-contents">Line length</a></p><ul>
+<li><a href="include/RTypeEngine/System/Core.hpp">🟡 In include/RTypeEngine/System/Core.hpp at line 43</a><ul>
+<li>Lines should be &lt;= 80 characters long <br  />
+</li>
+</ul>
+</li>
+</ul>
+<p><a href="#table-of-contents">Forcolon</a></p><ul>
+<li><a href="include/RTypeEngine/System/Draw.hpp">🟡 In include/RTypeEngine/System/Draw.hpp at line 21</a><ul>
+<li>Missing space around colon in range-based for loop <br  />
+</li>
+</ul>
+</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md9"></a>
 📕 Readability</h1>
 <p><a href="#table-of-contents">Namespace</a></p><ul>
-<li><a href="include/RTypeEngine/Graphics/Rect.hpp">☢️ In include/RTypeEngine/Graphics/Rect.hpp at line 63</a><ul>
+<li><a href="include/RTypeEngine/Graphics/Rect.hpp">☢️ In include/RTypeEngine/Graphics/Rect.hpp at line 85</a><ul>
 <li>Namespace should be terminated with "// namespace RTypeEngine" <br  />
 </li>
 </ul>
@@ -330,7 +340,7 @@ $(document).ready(function(){initNavTree('md__home_runner_work_RTypeRenderEngine
 </li>
 </ul>
 </li>
-<li><a href="include/RTypeEngine/Graphics/Sprite.hpp">☢️ In include/RTypeEngine/Graphics/Sprite.hpp at line 42</a><ul>
+<li><a href="include/RTypeEngine/Graphics/Sprite.hpp">☢️ In include/RTypeEngine/Graphics/Sprite.hpp at line 45</a><ul>
 <li>Namespace should be terminated with "// namespace RTypeEngine" <br  />
 </li>
 </ul>
@@ -340,8 +350,20 @@ $(document).ready(function(){initNavTree('md__home_runner_work_RTypeRenderEngine
 </li>
 </ul>
 </li>
-<li><a href="include/RTypeEngine/Graphics/Transform.hpp">☢️ In include/RTypeEngine/Graphics/Transform.hpp at line 29</a><ul>
+<li><a href="include/RTypeEngine/Graphics/Transform.hpp">☢️ In include/RTypeEngine/Graphics/Transform.hpp at line 31</a><ul>
 <li>Namespace should be terminated with "// namespace RTypeEngine" <br  />
+</li>
+</ul>
+</li>
+<li><a href="include/RTypeEngine/System/Core.hpp">☢️ In include/RTypeEngine/System/Core.hpp at line 48</a><ul>
+<li>Namespace should be terminated with "// namespace RTypeEngine" <br  />
+</li>
+</ul>
+</li>
+</ul>
+<p><a href="#table-of-contents">Inheritance</a></p><ul>
+<li><a href="include/RTypeEngine/System/Draw.hpp">🔴 In include/RTypeEngine/System/Draw.hpp at line 20</a><ul>
+<li>"virtual" is redundant since function is already declared as "final" <br  />
  </li>
 </ul>
 </li>

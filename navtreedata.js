@@ -26,11 +26,23 @@ var NAVTREE =
 [
   [ "rtype-engine", "index.html", [
     [ "Welcome", "index.html", null ],
+    [ "Lint report of EventGestion", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_EventGestion.html", [
+      [ "🛠️ Build", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_EventGestion.html#autotoc_md1", null ],
+      [ "🏃 Runtime", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_EventGestion.html#autotoc_md2", null ],
+      [ "🌌 Whitespace", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_EventGestion.html#autotoc_md3", null ],
+      [ "📕 Readability", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_EventGestion.html#autotoc_md4", null ]
+    ] ],
+    [ "Lint report of Sprites", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_Sprites.html", [
+      [ "🛠️ Build", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_Sprites.html#autotoc_md6", null ],
+      [ "🏃 Runtime", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_Sprites.html#autotoc_md7", null ],
+      [ "🌌 Whitespace", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_Sprites.html#autotoc_md8", null ],
+      [ "📕 Readability", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_Sprites.html#autotoc_md9", null ]
+    ] ],
     [ "Lint report of main", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_main.html", [
-      [ "🛠️ Build", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_main.html#autotoc_md1", null ],
-      [ "🏃 Runtime", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_main.html#autotoc_md2", null ],
-      [ "🌌 Whitespace", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_main.html#autotoc_md3", null ],
-      [ "📕 Readability", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_main.html#autotoc_md4", null ]
+      [ "🛠️ Build", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_main.html#autotoc_md11", null ],
+      [ "🏃 Runtime", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_main.html#autotoc_md12", null ],
+      [ "🌌 Whitespace", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_main.html#autotoc_md13", null ],
+      [ "📕 Readability", "md__home_runner_work_RTypeRenderEngine_RTypeRenderEngine_docs_LINT_REPORT_main.html#autotoc_md14", null ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
