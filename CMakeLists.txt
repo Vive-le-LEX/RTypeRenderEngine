@@ -29,6 +29,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE rtype-ecs glad glfw glm)
 if (IS_TESTING AND NOT WIN32)
     include(tests/BuildTests.cmake)
 endif()
+
 if (IS_BUILDING_DOC)
     include(docs/BuildDocs.cmake)
 endif()

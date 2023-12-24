@@ -13,6 +13,8 @@ using namespace RTypeEngine;
 /**
  * @brief Initialize GLFW
  */
+bool Window::_wasInit = false;
+
 /**
  * @brief Initialize GLFW
  */
@@ -74,9 +76,6 @@ Window::Window(int width, int height, const char *title, GLFWmonitor *monitor,
     // std::cout << "OpenGL " << glGetString(GL_VERSION) << std::endl;
 }
 
-/**
- * @brief Destroy a window
- */
 /**
  * @brief Destroy a window
  */
@@ -142,8 +141,6 @@ void Window::display() {
             currentTime = std::chrono::high_resolution_clock::now();
         }
     }
-    _deltaTime = std::chrono::duration_cast<std::chrono::duration<double>>(
-            currentTime - lastTime).count();
     _deltaTime = std::chrono::duration_cast<std::chrono::duration<double>>(
             currentTime - lastTime).count();
     lastTime = currentTime;
