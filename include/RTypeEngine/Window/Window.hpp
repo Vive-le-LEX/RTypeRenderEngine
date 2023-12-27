@@ -14,12 +14,13 @@
 
 #include <thread>
 #include <chrono>
+#include <memory>
 #include <iostream>
 #include <stdexcept>
-#include <glm/glm.hpp>
 #include <glad/glad.h>
+#include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
-#include "../Graphics.hpp"
+#include "RTypeEngine/Window/EventHandler.hpp"
 
 namespace RTypeEngine {
     /**
@@ -37,6 +38,14 @@ namespace RTypeEngine {
 
         Window &operator=(const Window &src) = delete;
 
+        /**
+         * @brief Create a new window
+         * @param width
+         * @param height
+         * @param title
+         * @param monitor
+         * @param share
+         */
         Window(int width, int height, const char *title,
                GLFWmonitor *monitor = NULL, GLFWwindow *share = NULL);
 
@@ -50,28 +59,78 @@ namespace RTypeEngine {
             return _window;
         }
 
+        /**
+         * @brief Check if the window is open
+         * @return bool
+         */
         const bool &isOpen(void) const;
 
+        /**
+         * @brief Close the window
+         */
         void close(void);
 
+        /**
+         * @brief Set the window title
+         * @param title
+         */
         const glm::ivec4 &getViewport(void) const;
 
+        /**
+         * @brief Set the window viewport
+         * @param viewport
+         */
         void setViewport(const glm::ivec4 &viewport);
 
+        /**
+         * @brief Clear the window with a color
+         * @details The color is black by default
+         * @param color
+         */
         void
         clear(const glm::vec4 &c = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)) const;
 
+        /**
+         * @brief Display the window
+         */
         void display(void);
 
+        /**
+         * @brief Set the window framerate limit
+         * @param limit
+         */
         const int getFramerate(void) const;
 
+        /**
+         * @brief Set the window framerate limit
+         * @details The framerate limit is 60 by default and can be set to 0 to enable uncapped framerate
+         * @param limit
+         */
         void setFramerateLimit(const int &limit);
 
+        /**
+         * @brief Get the window delta time
+         * @return double
+         */
         const double &getDeltaTime(void) const;
 
+        /**
+         * @brief Poll the window events
+         */
+        void pollEvents(void);
+
+        /**
+         * @brief Get the window event handler
+         * @return EventHandler &
+         */
+        EventHandler &getEventHandler(void) {
+            return *_eventHandler;
+        }
 
     private:
+        std::unique_ptr<EventHandler> _eventHandler;
         GLFWwindow *_window = NULL;
+
         static bool _wasInit;
         bool _isOpen;
 

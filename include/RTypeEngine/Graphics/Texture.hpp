@@ -16,7 +16,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include <glm/glm.hpp>
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "Rect.hpp"
 
