@@ -16,11 +16,14 @@ include(GNUInstallDirs)
 include(external/FindDependencies.cmake)
 
 set(SRC
-        src/Window.cpp
+    src/Window/Window.cpp
+    src/Window/EventHandler.cpp
+    src/Window/Events/KeyboardHandler.cpp
+    src/Window/Events/MouseHandler.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED
-        ${SRC}
+    ${SRC}
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
