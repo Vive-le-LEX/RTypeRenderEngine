@@ -63,13 +63,13 @@ namespace RTypeEngine
              * @brief Check if the raw motion is supported
              * @return bool
              */
-            const bool &canUseRawMotion(void) const;
+            [[nodiscard]] const bool &canUseRawMotion(void) const;
 
             /**
              * @brief Check if the raw motion is enabled
              * @return bool
              */
-            const bool &isUsingRawMotion(void) const;
+            [[nodiscard]] const bool &isUsingRawMotion(void) const;
 
             /**
              * @brief Enable or disable the raw motion
@@ -86,7 +86,7 @@ namespace RTypeEngine
              * @brief Get the cursor mode
              * @return CursorMode
              */
-            const CursorMode &getCursorMode(void) const;
+            [[nodiscard]] const CursorMode &getCursorMode(void) const;
 
             /**
              * @brief Set the cursor mode
@@ -109,7 +109,7 @@ namespace RTypeEngine
              * @brief Get the last mouse position
              * @return glm::vec2
              */
-            const glm::vec2 &getLastMousePos(void) const;
+            [[nodiscard]] const glm::vec2 &getLastMousePos(void) const;
 
             /** @name Mouse move callbacks setters & removers
              */
@@ -145,7 +145,7 @@ namespace RTypeEngine
              * @brief Returns True if the mouse is inside the window
              * @return bool
              */
-            const bool &isMouseEntered(void) const {
+            [[nodiscard]] const bool &isMouseEntered(void) const {
                 return _mouseIn;
             }
 
@@ -153,7 +153,7 @@ namespace RTypeEngine
              * @brief Returns the last mouse modifiers
              * @return int
              */
-            const int &getLastMouseModifiers(void) const {
+            [[nodiscard]] const int &getLastMouseModifiers(void) const {
                 return _lastMouseModifiers;
             }
 

@@ -85,9 +85,9 @@ namespace RTypeEngine {
              * @return bool
              */
             ///@{
-            bool isKeyPressed(const int &key) const;
-            bool isKeyReleased(const int &key) const;
-            bool isKeyRepeat(const int &key) const;
+            [[nodiscard]] bool isKeyPressed(const int &key) const;
+            [[nodiscard]] bool isKeyReleased(const int &key) const;
+            [[nodiscard]] bool isKeyRepeat(const int &key) const;
             ///@}
 
             friend class EventHandler;

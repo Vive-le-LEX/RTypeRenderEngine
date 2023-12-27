@@ -26,8 +26,8 @@ namespace RTypeEngine
             void setMouseHandler(MouseHandler &mouseHandler);
             void setKeyboardHandler(KeyboardHandler &keyboardHandler);
 
-            MouseHandler &getMouseHandler();
-            KeyboardHandler &getKeyboardHandler();
+            [[nodiscard]] MouseHandler &getMouseHandler();
+            [[nodiscard]] KeyboardHandler &getKeyboardHandler();
 
             void setCloseCallback(std::function<void(void)> callback) {
                 _closeCallback = callback;
