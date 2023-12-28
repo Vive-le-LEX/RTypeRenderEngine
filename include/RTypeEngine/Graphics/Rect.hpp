@@ -27,10 +27,10 @@ namespace RTypeEngine {
      */
     template<typename T>
     struct RectComponent {
-        T x = 0;
-        T y = 0;
-        T width = 0;
-        T height = 0;
+        T x = 0; /**< The left position of the rect */
+        T y = 0; /**< The bottom position of the rect */
+        T width = 0; /**< The width of the rect */
+        T height = 0; /**< The height of the rect */
     };
 
     /**
@@ -41,10 +41,20 @@ namespace RTypeEngine {
     template<typename T>
     class Rect {
     public:
-        static void deleteRect(RectComponent<T> &rect) noexcept {
+        /**
+         * \brief Resets the values of a RectComponent to 0
+         * \param rect The rect to reset
+         */
+        static void resetRect(RectComponent<T> &rect) noexcept {
             rect.x = rect.y = rect.width = rect.height = 0;
         }
 
+        /**
+         * \brief Checks if two RectComponent are colliding
+         * \param rect1 The first rect
+         * \param rect2 The second rect
+         * \return true if the point is inside the rect, false otherwise
+         */
         static bool isColliding(const RectComponent<T> &rect1,
                                 const RectComponent<T> &rect2) noexcept {
             return rect1.x < rect2.x + rect2.width &&
@@ -52,30 +62,6 @@ namespace RTypeEngine {
                    rect1.y < rect2.y + rect2.height &&
                    rect1.y + rect1.height > rect2.y;
         }
-
-        static bool isColliding(const RectComponent<T> &rect1,
-                                const TransformComponent &transform1,
-                                const RectComponent<T> &rect2,
-                                const TransformComponent &transform2) noexcept {
-            RectComponent<T> rect1Transformed = rect1;
-            rect1Transformed.x += transform1.transform[3][0];
-            rect1Transformed.y += transform1.transform[3][1];
-            RectComponent<T> rect2Transformed = rect2;
-            rect2Transformed.x += transform2.transform[3][0];
-            rect2Transformed.y += transform2.transform[3][1];
-            return isColliding(rect1Transformed, rect2Transformed);
-        }
-
-        static bool isColliding(const RectComponent<T> &rect1,
-                                const TransformComponent &transform1,
-                                const RectComponent<T> &rect2) noexcept {
-            RectComponent<T> rect1Transformed = rect1;
-            rect1Transformed.x += transform1.transform[3][0];
-            rect1Transformed.y += transform1.transform[3][1];
-            return isColliding(rect1Transformed, rect2);
-        }
-
-
     };
 
     typedef RectComponent<float> RectF;

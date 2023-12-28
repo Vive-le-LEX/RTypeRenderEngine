@@ -37,14 +37,13 @@ namespace RTypeEngine
             .isCapsLock = (bool)(mods & GLFW_MOD_CAPS_LOCK),
             .isNumLock = (bool)(mods & GLFW_MOD_NUM_LOCK)
         };
+        _keys[key] = action;
         if (action == GLFW_PRESS && _keyPressedCallbacks[key].has_value()) {
-            _keys[key] = GLFW_PRESS;
             _keyPressedCallbacks[key].value()(currentState);
         } else if (action == GLFW_RELEASE && _keyReleasedCallbacks[key].has_value()) {
-            _keys[key] = GLFW_RELEASE;
             _keyReleasedCallbacks[key].value()(currentState);
-        } else if (action == GLFW_REPEAT && _keyRepeatCallbacks[key].has_value()) {
-            _keys[key] = GLFW_REPEAT;
+        }
+        if (_keys[key] & (GLFW_PRESS | GLFW_REPEAT) && _keyRepeatCallbacks[key].has_value()) {
             _keyRepeatCallbacks[key].value()(currentState);
         }
     }

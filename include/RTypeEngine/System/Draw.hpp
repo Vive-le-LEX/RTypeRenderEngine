@@ -11,15 +11,23 @@
 
 #pragma once
 
+#include "RTypeEngine/Graphics.hpp"
 #include "RTypeECS/Systems/System.hpp"
-#include "RTypeEngine/System.hpp"
 
 namespace RTypeEngine {
+    /**
+     * @brief DrawSystem
+     * @details This class is used to draw all the sprites in the ECS
+     */
     class DrawSystem : public System {
     public:
-        virtual void update(Coordinator *coord) final {
+        /**
+         * @brief Update the system
+         * @details Iterates over all the entities that have all Sprite related components and draws them
+         */
+        virtual void update() final {
             for (auto entity: entities) {
-                RTypeEngine::Sprite::draw(entity, coord);
+                RTypeEngine::Sprite::draw(entity);
             }
         }
     };

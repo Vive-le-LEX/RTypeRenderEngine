@@ -15,9 +15,8 @@
 #include "Graphics/Mesh.hpp"
 #include "Graphics/Rect.hpp"
 #include "Graphics/Shader.hpp"
-#include "Graphics/Sprite.hpp"
 #include "Graphics/Texture.hpp"
 #include "Graphics/Transform.hpp"
-#include "RTypeECS/Types.hpp"
+#include "Graphics/Sprite.hpp"
 
 #endif /* !GRAPHICS_ALL_HPP_ */

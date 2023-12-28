@@ -30,6 +30,10 @@ namespace RTypeEngine {
      */
     class Window {
     public:
+        /**
+         * @brief Initialize OpenGL
+         * @note This function is called automatically when creating a window for the first time
+         */
         static void initOpenGL();
 
         Window() = delete;
@@ -52,7 +56,7 @@ namespace RTypeEngine {
         ~Window();
 
         /**
-         * @brief Get the native window
+         * @brief Get the native window pointer
          * @return GLFWwindow *
          */
         GLFWwindow *getNativeWindow(void) const {
@@ -71,8 +75,8 @@ namespace RTypeEngine {
         void close(void);
 
         /**
-         * @brief Set the window title
-         * @param title
+         * @brief Get the window viewport
+         * @return glm::ivec4
          */
         const glm::ivec4 &getViewport(void) const;
 
@@ -85,7 +89,7 @@ namespace RTypeEngine {
         /**
          * @brief Clear the window with a color
          * @details The color is black by default
-         * @param color
+         * @param c The color to clear the window with. Default to black
          */
         void
         clear(const glm::vec4 &c = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)) const;
@@ -96,8 +100,8 @@ namespace RTypeEngine {
         void display(void);
 
         /**
-         * @brief Set the window framerate limit
-         * @param limit
+         * @brief Get the window framerate limit
+         * @return int The framerate limit
          */
         const int getFramerate(void) const;
 

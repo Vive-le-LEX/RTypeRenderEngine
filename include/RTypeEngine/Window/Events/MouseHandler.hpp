@@ -129,6 +129,7 @@ namespace RTypeEngine
             /** @name Mouse leave callbacks setters & removers
              * @brief Set the callback for when the mouse leaves the window
              */
+            ///@{
             void setMouseLeaveCallback(const std::function<void()> &callback);
             void removeMouseLeaveCallback(void);
             ///@}
