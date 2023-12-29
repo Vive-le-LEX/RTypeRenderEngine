@@ -144,4 +144,5 @@ const double &Window::getDeltaTime() const {
 
 void Window::pollEvents() {
     glfwPollEvents();
+    _eventHandler->getKeyboardHandler().update();
 }

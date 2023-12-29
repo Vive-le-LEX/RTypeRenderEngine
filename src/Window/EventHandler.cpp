@@ -35,10 +35,6 @@ namespace RTypeEngine
             EventHandler *e = static_cast<EventHandler *>(glfwGetWindowUserPointer(window));
             e->_closeCallback();
         });
-        glfwSetKeyCallback(window, [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-            EventHandler *e = static_cast<EventHandler *>(glfwGetWindowUserPointer(window));
-            e->_keyboardHandler._updateKey(window, key, scancode, action, mods);
-        });
     }
 
     void EventHandler::setMouseHandler(MouseHandler &mouseHandler)

@@ -90,17 +90,22 @@ namespace RTypeEngine {
             [[nodiscard]] bool isKeyRepeat(const int &key) const;
             ///@}
 
+
             friend class EventHandler;
+            friend class Window;
             friend void glfwSetKeyCallback(GLFWwindow* window, GLFWkeyfun cbfun);
         protected:
         private:
+            /** @brief Update the KeyboardHandler
+             *
+             * @details Polls all the keys and call the callbacks if needed
+             */
+            void update();
             GLint _keys[GLFW_KEY_LAST];
 
             std::optional<std::function<void(const KeyState&)>> _keyPressedCallbacks[GLFW_KEY_LAST];
             std::optional<std::function<void(const KeyState&)>> _keyReleasedCallbacks[GLFW_KEY_LAST];
             std::optional<std::function<void(const KeyState&)>> _keyRepeatCallbacks[GLFW_KEY_LAST];
-
-            void _updateKey(GLFWwindow* window, const int &key, const int &scancode, const int &action, const int &mods);
     };
 } // namespace RTypeEngine
 
