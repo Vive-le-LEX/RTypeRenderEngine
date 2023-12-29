@@ -6,7 +6,6 @@
 */
 
 #include "RTypeEngine/Window/EventHandler.hpp"
-#include <iostream>
 
 namespace RTypeEngine
 {

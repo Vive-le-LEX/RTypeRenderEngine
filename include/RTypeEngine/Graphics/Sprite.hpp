@@ -44,7 +44,9 @@ namespace RTypeEngine {
                 _coordinator->addComponent(entity, textureComponent);
                 _coordinator->addComponent(entity, RectI{0, 0, textureComponent.width, textureComponent.height});
                 _coordinator->addComponent(entity, shaderComponent);
-                _coordinator->addComponent(entity, Transform::createTransform());
+                auto transform = Transform::createTransform();
+                transform.transform = glm::scale(transform.transform, glm::vec3(textureComponent.width, textureComponent.height, 1.0f));
+                _coordinator->addComponent(entity, transform);
             }
             ~Sprite() = default;
 
@@ -52,7 +54,7 @@ namespace RTypeEngine {
              * @brief Draw the sprite given in parameter
              * @param entity The entity to draw
              */
-            static void draw(const Entity &entity) {
+            static void draw(const Window &window, const Entity &entity) {
                 auto &coord = *_coordinator;
                 auto &mesh = coord.getComponent<MeshComponent>(entity);
                 auto &rect = coord.getComponent<RectI>(entity);
@@ -61,10 +63,13 @@ namespace RTypeEngine {
                 auto &transform = coord.getComponent<TransformComponent>(entity);
 
                 glUseProgram(shader.shaderId);
+                int rectLoc = glGetUniformLocation(shader.shaderId, "rect");
+                int projectionLoc = glGetUniformLocation(shader.shaderId, "projection");
                 int modelLoc = glGetUniformLocation(shader.shaderId, "model");
 
+                glUniform4i(rectLoc, rect.x, rect.y, rect.width, rect.height);
+                glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(window._getProjection()));
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(transform.transform));
-
 
                 glActiveTexture(GL_TEXTURE0);
                 glBindTexture(GL_TEXTURE_2D, texture.textureId);

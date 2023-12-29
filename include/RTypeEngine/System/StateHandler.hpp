@@ -28,7 +28,7 @@ namespace RTypeEngine {
         _coordinator->registerComponent<RTypeEngine::MeshComponent>(
                 RTypeEngine::Mesh::deleteMesh);
         _coordinator->registerComponent<RTypeEngine::RectI>(
-                RTypeEngine::Rect<int>::deleteRect);
+                RTypeEngine::Rect<int>::resetRect);
         _coordinator->registerComponent<RTypeEngine::ShaderComponent>(
                 RTypeEngine::Shader::deleteShader);
         _coordinator->registerComponent<RTypeEngine::TextureComponent>(

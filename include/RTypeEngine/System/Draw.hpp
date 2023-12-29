@@ -25,9 +25,9 @@ namespace RTypeEngine {
          * @brief Update the system
          * @details Iterates over all the entities that have all Sprite related components and draws them
          */
-        virtual void update() final {
+        virtual void update(const Window &window) final {
             for (auto entity: entities) {
-                RTypeEngine::Sprite::draw(entity);
+                RTypeEngine::Sprite::draw(window, entity);
             }
         }
     };

@@ -19,6 +19,7 @@
 #include <stdexcept>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
 #include "RTypeEngine/Window/EventHandler.hpp"
 
@@ -131,6 +132,8 @@ namespace RTypeEngine {
             return *_eventHandler;
         }
 
+        friend class Sprite;
+
     private:
         std::unique_ptr<EventHandler> _eventHandler;
         GLFWwindow *_window = NULL;
@@ -139,12 +142,17 @@ namespace RTypeEngine {
         bool _isOpen;
 
         glm::ivec4 _viewport;
+        glm::mat4 _projection;
 
         double _deltaTime = 0.0f;
 
         int _frameRateLimit = 60;
 
         unsigned int _lastTexture = 0;
+
+        const glm::mat4 &_getProjection(void) const {
+            return _projection;
+        }
     };
 } // namespace RTypeEngine
 

@@ -32,6 +32,7 @@ Window::Window(int width, int height, const char *title, GLFWmonitor *monitor,
         glfwTerminate();
         throw std::runtime_error("Failed to create GLFW window");
     }
+    _projection = glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f, -1.0f, 1.0f);
     glfwMakeContextCurrent(_window);
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
