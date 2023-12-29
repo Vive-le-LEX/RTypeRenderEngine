@@ -7,7 +7,7 @@ project(rtype-engine
 option(IS_TESTING "Enable testing" OFF)
 option(IS_BUILDING_DOC "Enable documentation" OFF)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
@@ -16,22 +16,19 @@ include(GNUInstallDirs)
 include(external/FindDependencies.cmake)
 
 set(SRC
-        src/Window.cpp
-        src/Window.cpp
+    src/Window/Window.cpp
+    src/Window/EventHandler.cpp
+    src/Window/Events/KeyboardHandler.cpp
+    src/Window/Events/MouseHandler.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED
-        src/Window.cpp
-        include/RTypeEngine/Graphics/Texture.inl
-        include/RTypeEngine/Graphics/Shader.inl
-        include/RTypeEngine/Graphics/Transform.inl
-        include/RTypeEngine/Graphics/Rect.inl
-        include/RTypeEngine/Graphics/Mesh.inl
-        include/RTypeEngine/Graphics/Sprite.inl
+    ${SRC}
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
-target_link_libraries(${PROJECT_NAME} PRIVATE rtype-ecs glad glfw glm)
+target_link_libraries(${PROJECT_NAME} INTERFACE rtype-ecs)
+target_link_libraries(${PROJECT_NAME} PRIVATE glad glfw glm)
 
 if (IS_TESTING AND NOT WIN32)
     include(tests/BuildTests.cmake)

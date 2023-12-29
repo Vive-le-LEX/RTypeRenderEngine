@@ -15,44 +15,125 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include <glm/glm.hpp>
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <fstream>
+#include <sstream>
 
 
 namespace RTypeEngine {
 
     /**
-     * \brief ShaderComponent
-     * \details This struct is used to store the shader id and the color of the shader
-     * \param shaderId Shader id
-     * \param color Color of the shader
+     * @brief ShaderComponent
+     * @details This struct is used to store the shader id and the color of the shader
      */
     struct ShaderComponent {
-        GLuint shaderId;
-        glm::vec3 color;
+        GLuint shaderId; /**< The OpenGL shader id */
     };
 
     /**
-     * \brief Shader static class
-     * \details This class is used to create and delete shaders
-     * \details It is also used to set the shader matrix
+     * @brief Shader static class
+     * @details This class is used to create and delete shaders
+     * @details It is also used to set the shader matrix
+     * @code{.cpp}
+     * auto shader = RTypeEngine::Shader::createShaderFromFile("path/to/vertex/shader", "path/to/fragment/shader");
+     * RTypeEngine::Shader::deleteShader(shader);
+     * @endcode
      */
     class Shader {
     public:
-        static ShaderComponent createShader(const std::string &vertexPath,
-                                            const std::string &fragmentPath,
-                                            glm::vec3 &color);
+        Shader() = delete;
+        ~Shader() = delete;
 
+        /**
+         * @brief Create a shader from a file
+         * @param vertexPath Path to the vertex shader
+         * @param fragmentPath Path to the fragment shader
+         * @return ShaderComponent
+         */
+        static ShaderComponent createShaderFromFile(const std::string &vertexPath,
+                                            const std::string &fragmentPath) {
+            ShaderComponent shader;
+            std::string vertexCode;
+            std::string fragmentCode;
+            std::ifstream vShaderFile;
+            std::ifstream fShaderFile;
+
+            vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+            fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+            try {
+                vShaderFile.open(vertexPath);
+                fShaderFile.open(fragmentPath);
+                std::stringstream vShaderStream, fShaderStream;
+                vShaderStream << vShaderFile.rdbuf();
+                fShaderStream << fShaderFile.rdbuf();
+                vShaderFile.close();
+                fShaderFile.close();
+                vertexCode = vShaderStream.str();
+                fragmentCode = fShaderStream.str();
+
+                const char *vShaderCode = vertexCode.c_str();
+                const char *fShaderCode = fragmentCode.c_str();
+
+                GLuint vertex, fragment;
+                GLint success;
+                GLchar infoLog[512];
+
+                vertex = glCreateShader(GL_VERTEX_SHADER);
+                glShaderSource(vertex, 1, &vShaderCode, nullptr);
+                glCompileShader(vertex);
+                glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
+                if (!success) {
+                    glGetShaderInfoLog(vertex, 512, nullptr, infoLog);
+                    std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n"
+                              << infoLog << std::endl;
+                }
+
+                fragment = glCreateShader(GL_FRAGMENT_SHADER);
+                glShaderSource(fragment, 1, &fShaderCode, nullptr);
+                glCompileShader(fragment);
+                glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
+                if (!success) {
+                    glGetShaderInfoLog(fragment, 512, nullptr, infoLog);
+                    std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n"
+                              << infoLog << std::endl;
+                }
+
+                shader.shaderId = glCreateProgram();
+                glAttachShader(shader.shaderId, vertex);
+                glAttachShader(shader.shaderId, fragment);
+                glLinkProgram(shader.shaderId);
+                glGetProgramiv(shader.shaderId, GL_LINK_STATUS, &success);
+                if (!success) {
+                    glGetProgramInfoLog(shader.shaderId, 512, nullptr, infoLog);
+                    std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n"
+                              << infoLog << std::endl;
+                }
+
+                glDeleteShader(vertex);
+                glDeleteShader(fragment);
+            } catch (std::ifstream::failure &e) {
+                std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+            }
+
+            return shader;
+        }
+
+        /**
+         * @brief Set the shader matrix
+         * @param shader The shader to set
+         * @param name The name of the uniform matrix in the shader
+         * @param mat The matrix to set
+         */
         static void setMat4(ShaderComponent &shader, const std::string &name,
                             const glm::mat4 &mat);
 
-        static void deleteShader(ShaderComponent &shader);
-
-        static void use(ShaderComponent &shader);
-
+        /**
+         * @brief Delete a shader
+         * @param shader The shader to delete
+         */
+        static void deleteShader(ShaderComponent &shader) {
+            glDeleteProgram(shader.shaderId);
+        }
     private:
-        static GLuint _id;
     };
-
 }

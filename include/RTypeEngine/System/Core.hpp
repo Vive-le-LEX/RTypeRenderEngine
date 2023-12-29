@@ -9,15 +9,13 @@
  * from Kleo ©.
 */
 
-#include "Transform.hpp"
+#pragma once
 
-using namespace RTypeEngine;
+#include "RTypeECS/Coordinator.hpp"
+#include <memory>
 
-/**
- * @brief Update transform
- * @param transform Transform component
- * @param parentTransform Parent transform
- */
-void Transform::update(TransformComponent &transform, const glm::mat4 &parentTransform) noexcept {
-    transform.transform = parentTransform * transform.transform;
+namespace RTypeEngine {
+    inline std::unique_ptr<Coordinator> _coordinator = std::make_unique<Coordinator>();
+
+    inline bool didSpriteSpawned = false;
 }

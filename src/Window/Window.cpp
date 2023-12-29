@@ -5,23 +5,12 @@
 ** main
 */
 
-#include "RTypeEngine/Window.hpp"
 #include "RTypeEngine/Window/Window.hpp"
-
 
 using namespace RTypeEngine;
 
-/**
- * @brief Initialize GLFW
- */
-/**
- * @brief Initialize GLFW
- */
 bool Window::_wasInit = false;
 
-/**
- * @brief Initialize OpenGL
- */
 void Window::initOpenGL() {
     if (_wasInit)
         return;
@@ -33,30 +22,24 @@ void Window::initOpenGL() {
     _wasInit = true;
 }
 
-/**
- * @brief Create a window
- * @param width Window width
- * @param height Window height
- * @param title Window title
- * @param monitor Monitor
- * @param share Share
- */
 Window::Window(int width, int height, const char *title, GLFWmonitor *monitor,
                GLFWwindow *share) : _isOpen(true) {
+
     if (!_wasInit)
-        throw std::runtime_error(
-                "RTypeEngine::Window::initOpenGL() must be called before creating a window");
+        Window::initOpenGL();
     _window = glfwCreateWindow(width, height, title, monitor, share);
     if (!_window) {
         glfwTerminate();
         throw std::runtime_error("Failed to create GLFW window");
     }
+    _projection = glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f, -1.0f, 1.0f);
     glfwMakeContextCurrent(_window);
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
         throw std::runtime_error("Failed to initialize GLAD");
     }
     _viewport = glm::ivec4(0, 0, width, height);
+
     glfwSetErrorCallback([](int error, const char *description) {
         std::cerr << "Internal GLFW Error " << error << ": " << description
                   << std::endl;
@@ -64,74 +47,71 @@ Window::Window(int width, int height, const char *title, GLFWmonitor *monitor,
                   << std::endl;
     });
     glViewport(_viewport.x, _viewport.y, _viewport.z, _viewport.w);
-    glfwSetWindowUserPointer(_window, this);
-    // setCallbacks();
+    _eventHandler = std::make_unique<EventHandler>(_window);
+    glfwSetWindowUserPointer(_window, _eventHandler.get());
 
     glfwSetInputMode(glfwGetCurrentContext(), GLFW_STICKY_MOUSE_BUTTONS,
                      GLFW_TRUE);
-    glfwSetInputMode(glfwGetCurrentContext(), GLFW_STICKY_MOUSE_BUTTONS,
+    glfwSetInputMode(glfwGetCurrentContext(), GLFW_LOCK_KEY_MODS,
                      GLFW_TRUE);
-    glfwSetInputMode(glfwGetCurrentContext(), GLFW_STICKY_KEYS, 1);
     glfwSwapInterval(0);
     glEnable(GL_DEPTH_TEST);
-    // std::cout << "OpenGL " << glGetString(GL_VERSION) << std::endl;
 }
 
-/**
- * @brief Destroy a window
- */
-/**
- * @brief Destroy a window
- */
+// void Window::setCallbacks(void) {
+//     glfwSetFramebufferSizeCallback(_window, [](GLFWwindow *window, int width, int height) {
+//         Window *w = static_cast<Window *>(glfwGetWindowUserPointer(window));
+//         w->setViewport(glm::ivec4(0, 0, width, height));
+//     });
+//     glfwSetCursorEnterCallback(_window, [](GLFWwindow *window, int entered) {
+//         Window *w = static_cast<Window *>(glfwGetWindowUserPointer(window));
+//         w->getMouseHandler().updateMouseEnter(entered);
+//     });
+//     glfwSetCursorPosCallback(_window, [](GLFWwindow *window, double xpos, double ypos) {
+//         Window *w = static_cast<Window *>(glfwGetWindowUserPointer(window));
+//         w->getMouseHandler().updateMousePos(xpos, ypos);
+//     });
+//     glfwSetMouseButtonCallback(_window, [](GLFWwindow *window, int button, int action, int mods) {
+//         Window *w = static_cast<Window *>(glfwGetWindowUserPointer(window));
+//         w->getMouseHandler().updateMouseClick(button, action, mods);
+//     });
+//     glfwSetScrollCallback(_window, [](GLFWwindow *window, double xoffset, double yoffset) {
+//         Window *w = static_cast<Window *>(glfwGetWindowUserPointer(window));
+//         w->getMouseHandler().updateMouseScroll(xoffset, yoffset);
+//     });
+//     glfwSetWindowCloseCallback(_window, [](GLFWwindow *window) {
+//         Window *w = static_cast<Window *>(glfwGetWindowUserPointer(window));
+//         w->close();
+//     });
+// }
+
 Window::~Window() {
     glfwDestroyWindow(_window);
     glfwTerminate();
 }
 
-/**
- * @brief Check if the window is open
- * @return true if open, false otherwise
- */
 const bool &Window::isOpen() const {
     return _isOpen;
 }
 
-/**
- * @brief Close the window
- */
 void Window::close() {
     _isOpen = false;
 }
 
-/**
- * @brief Get the viewport
- * @return glm::ivec4
- */
 const glm::ivec4 &Window::getViewport() const {
     return _viewport;
 }
 
-/**
- * @brief Set the viewport
- * @param viewport Viewport
- */
 void Window::setViewport(const glm::ivec4 &viewport) {
     _viewport = viewport;
     glViewport(_viewport.x, _viewport.y, _viewport.z, _viewport.w);
 }
 
-/**
- * @brief Clear the window
- * @param c Color
- */
 void Window::clear(const glm::vec4 &c) const {
     glClearColor(c.r, c.g, c.b, c.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-/**
- * @brief Display the window
- */
 void Window::display() {
     static auto lastTime = std::chrono::high_resolution_clock::now();
     glfwSwapBuffers(_window);
@@ -147,31 +127,21 @@ void Window::display() {
     }
     _deltaTime = std::chrono::duration_cast<std::chrono::duration<double>>(
             currentTime - lastTime).count();
-    _deltaTime = std::chrono::duration_cast<std::chrono::duration<double>>(
-            currentTime - lastTime).count();
     lastTime = currentTime;
 }
 
-/**
- * @brief Set the framerate limit
- * @param limit Framerate limit
- */
 void Window::setFramerateLimit(const int &limit) {
     _frameRateLimit = limit;
 }
 
-/**
- * @brief Get the framerate
- * @return int
- */
 const int Window::getFramerate() const {
     return 1 / _deltaTime;
 }
 
-/**
- * @brief Get the delta time
- * @return double
- */
 const double &Window::getDeltaTime() const {
     return _deltaTime;
+}
+
+void Window::pollEvents() {
+    glfwPollEvents();
 }

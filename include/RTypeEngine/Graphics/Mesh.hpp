@@ -11,26 +11,23 @@
 
 #pragma once
 
-#include "glm/glm.hpp"
-#include <iostream>
-#include <vector>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
+#include <vector>
+#include <iostream>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include "RTypeEngine/Window.hpp"
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace RTypeEngine {
 
     /**
      *  @brief Mesh component
-     *  @param VBO Vertex Buffer Object
-     *  @param VAO Vertex Array Object
-     *  @param EBO Element Buffer Object
-     *  @param vertices Vertices of the mesh
      */
     struct MeshComponent {
-        GLuint VBO;
-        GLuint VAO;
+        GLuint VBO; /**< The OpenGL VBO id */
+        GLuint VAO; /**< The OpenGL VAO id */
     };
 
     /**
@@ -41,10 +38,61 @@ namespace RTypeEngine {
     class Mesh {
     public:
         Mesh() = delete;
+
         ~Mesh() = delete;
-        static MeshComponent createMesh(const float *vertices) noexcept;
-        static void deleteMesh(MeshComponent &mesh) noexcept;
-        static void bindMesh(MeshComponent &mesh) noexcept;
-        static void unbindMesh() noexcept;
+
+        /**
+         * @brief Create a basic rectangle mesh to draw a Sprite (2 triangles)
+         * @return MeshComponent
+         */
+        static MeshComponent createMesh() noexcept {
+            MeshComponent mesh;
+
+            float vertices[] = {
+                0.0f, 1.0f, 0.0f, 1.0f,
+                1.0f, 0.0f, 1.0f, 0.0f,
+                0.0f, 0.0f, 0.0f, 0.0f,
+                0.0f, 1.0f, 0.0f, 1.0f,
+                1.0f, 1.0f, 1.0f, 1.0f,
+                1.0f, 0.0f, 1.0f, 0.0f
+            };
+
+            glGenVertexArrays(1, &mesh.VAO);
+            glGenBuffers(1, &mesh.VBO);
+            glBindBuffer(GL_ARRAY_BUFFER, mesh.VBO);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+            glBindVertexArray(mesh.VAO);
+            glEnableVertexAttribArray(0);
+            glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            glBindVertexArray(0);
+            return mesh;
+        }
+
+        /**
+         * @brief Delete a mesh
+         * @param mesh The mesh to delete
+         * @details This function deletes the VAO and the VBO of the mesh
+         */
+        static void deleteMesh(MeshComponent &mesh) noexcept {
+            glDeleteVertexArrays(1, &mesh.VAO);
+            glDeleteBuffers(1, &mesh.VBO);
+        };
+
+        /**
+         * @brief Bind a mesh
+         * @param mesh The mesh to bind
+         */
+        static void bindMesh(MeshComponent &mesh) noexcept {
+            glBindVertexArray(mesh.VAO);
+        }
+
+        /**
+         * @brief Unbind a mesh
+        */
+        static void unbindMesh() noexcept {
+            glBindVertexArray(0);
+        }
     };
 } // namespace RTypeEngine

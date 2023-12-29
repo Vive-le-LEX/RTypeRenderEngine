@@ -27,10 +27,10 @@ namespace RTypeEngine {
      */
     template<typename T>
     struct RectComponent {
-        T x = 0;
-        T y = 0;
-        T width = 0;
-        T height = 0;
+        T x = 0; /**< The left position of the rect */
+        T y = 0; /**< The bottom position of the rect */
+        T width = 0; /**< The width of the rect */
+        T height = 0; /**< The height of the rect */
     };
 
     /**
@@ -38,22 +38,30 @@ namespace RTypeEngine {
      * \details Rect is a static class that contains functions to manipulate RectComponent.
      * \details Rect is used to manipulate RectComponent.
      */
+    template<typename T>
     class Rect {
     public:
-        template<typename T>
-        static bool isColliding(const RectComponent<T> &rect1,
-                                      const RectComponent<T> &rect2) noexcept;
+        /**
+         * \brief Resets the values of a RectComponent to 0
+         * \param rect The rect to reset
+         */
+        static void resetRect(RectComponent<T> &rect) noexcept {
+            rect.x = rect.y = rect.width = rect.height = 0;
+        }
 
-        template<typename T>
+        /**
+         * \brief Checks if two RectComponent are colliding
+         * \param rect1 The first rect
+         * \param rect2 The second rect
+         * \return true if the point is inside the rect, false otherwise
+         */
         static bool isColliding(const RectComponent<T> &rect1,
-                                      const TransformComponent &transform1,
-                                      const RectComponent<T> &rect2,
-                                      const TransformComponent &transform2) noexcept;
-
-        template<typename T>
-        static bool isColliding(const RectComponent<T> &rect1,
-                                      const TransformComponent &transform1,
-                                      const RectComponent<T> &rect2) noexcept;
+                                const RectComponent<T> &rect2) noexcept {
+            return rect1.x < rect2.x + rect2.width &&
+                   rect1.x + rect1.width > rect2.x &&
+                   rect1.y < rect2.y + rect2.height &&
+                   rect1.y + rect1.height > rect2.y;
+        }
     };
 
     typedef RectComponent<float> RectF;

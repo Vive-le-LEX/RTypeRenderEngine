@@ -11,39 +11,36 @@
 
 #pragma once
 
+#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include <glm/glm.hpp>
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "Rect.hpp"
 
 namespace RTypeEngine {
 
     /**
-     * \brief Texture component
-     *  \param texturePath Path to the texture
-     *  \param width Width of the texture
-     *  \param height Height of the texture
-     *  \param nbByteChannels Number of byte channels of the texture
-     *  \param pixels Pixels of the texture
-     *  \param textureId Id of the texture
+     * @brief The ECS Textures data
      */
     struct TextureComponent {
-        std::string texturePath;
-        int width;
-        int height;
-        int nbByteChannels;
-        stbi_uc *pixels;
-        GLuint textureId;
+        std::string texturePath; /**< The path given to create the texture */
+        int width; /**< The width of the texture */
+        int height; /**< The height of the texture */
+        int nbByteChannels; /**< The number of byte channels of the texture (32 for RGBA)*/
+        stbi_uc *pixels; /**< The raw pointer to the pixels of the texture */
+        GLuint textureId; /**< The OpenGL texture id */
     };
 
     /**
-     * \brief Texture static class
-     * \details This class is used to create and delete textures
-     * \details It is also used to set the texture rect
+     * @brief Texture static class
+     * @details This class is used to create and delete textures
+     * @code{.cpp}
+     * auto texture = Texture::createTextureFromFile("path/to/texture.png");
+     * Texture::deleteTexture(texture);
+     * @endcode
      */
     class Texture {
     public:
@@ -51,15 +48,38 @@ namespace RTypeEngine {
 
         ~Texture() = delete;
 
-        static TextureComponent createTextureFromFile(const std::string &path);
+        /**
+         * @brief Create a texture from a file
+         * @param path Path to the texture
+         * @return TextureComponent
+         */
+        static TextureComponent createTextureFromFile(const std::string &path) {
+            TextureComponent texturec;
 
-        static void deleteTexture(TextureComponent &texture);
+            glGenTextures(1, &texturec.textureId);
+            glBindTexture(GL_TEXTURE_2D, texturec.textureId);
 
-        static void
-        setTextureRect(TextureComponent &texture, const RectI &rect) noexcept;
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            texturec.pixels = stbi_load(path.c_str(), &texturec.width, &texturec.height, &texturec.nbByteChannels, 0);
+            if (!texturec.pixels) {
+                std::cerr << "Failed to load texture: " << path << std::endl;
+                exit(1);
+            }
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texturec.width, texturec.height, 0, GL_RGB, GL_UNSIGNED_BYTE, texturec.pixels);
+            glGenerateMipmap(GL_TEXTURE_2D);
+            return texturec;
+        }
 
-
-    private:
-        static GLuint _id;
+        /**
+         * @brief Delete a texture
+         * @param texture The texture to delete
+         */
+        static void deleteTexture(TextureComponent &texture) {
+            stbi_image_free(texture.pixels);
+            glDeleteTextures(1, &texture.textureId);
+        }
     };
 }

@@ -1,74 +1,158 @@
 /*
-** EPITECH PROJECT, 2023
-** RTypeRenderEngine
-** File description:
-** Window
+ * Copyright (c) 2023 - Kleo
+ * Authors:
+ * - LEO VILTARD <leo.viltard@epitech.eu>
+ * NOTICE: All information contained herein is, and remains
+ * the property of Kleo © and its suppliers, if any.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Kleo ©.
 */
 
 #ifndef WINDOW_HPP_
-    #define WINDOW_HPP_
+#define WINDOW_HPP_
 
-    #include <thread>
-    #include <chrono>
-    #include <iostream>
-    #include <stdexcept>
-    #include <glm/glm.hpp>
-    #include <glad/glad.h>
-    #include <GLFW/glfw3.h>
+#include <thread>
+#include <chrono>
+#include <memory>
+#include <iostream>
+#include <stdexcept>
+#include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <GLFW/glfw3.h>
+#include "RTypeEngine/Window/EventHandler.hpp"
 
-namespace RTypeEngine
-{
+namespace RTypeEngine {
     /**
      * @brief Window class
      * @details This class is used to create and delete windows
      * @details It is also used to set the viewport, clear the window and display the window
      */
     class Window {
-        public:
-            static void initOpenGL();
+    public:
+        /**
+         * @brief Initialize OpenGL
+         * @note This function is called automatically when creating a window for the first time
+         */
+        static void initOpenGL();
 
-            Window() = delete;
-            Window(const Window &cpy) = delete;
-            Window &operator=(const Window &src) = delete;
+        Window() = delete;
 
-            Window(int width, int height, const char *title, GLFWmonitor *monitor = NULL, GLFWwindow *share = NULL);
-            ~Window();
+        Window(const Window &cpy) = delete;
 
-            /**
-             * @brief Get the native window
-             * @return GLFWwindow *
-             */
-            GLFWwindow *getNativeWindow(void) const {
-                return _window;
-            }
+        Window &operator=(const Window &src) = delete;
 
-            const bool &isOpen(void) const;
-            void close(void);
+        /**
+         * @brief Create a new window
+         * @param width
+         * @param height
+         * @param title
+         * @param monitor
+         * @param share
+         */
+        Window(int width, int height, const char *title,
+               GLFWmonitor *monitor = NULL, GLFWwindow *share = NULL);
 
-            const glm::ivec4 &getViewport(void) const;
-            void setViewport(const glm::ivec4 &viewport);
+        ~Window();
 
-            void clear(const glm::vec4 &c = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)) const;
+        /**
+         * @brief Get the native window pointer
+         * @return GLFWwindow *
+         */
+        GLFWwindow *getNativeWindow(void) const {
+            return _window;
+        }
 
-            void display(void);
+        /**
+         * @brief Check if the window is open
+         * @return bool
+         */
+        const bool &isOpen(void) const;
 
-            const int getFramerate(void) const;
-            void setFramerateLimit(const int &limit);
-            const double &getDeltaTime(void) const;
+        /**
+         * @brief Close the window
+         */
+        void close(void);
 
+        /**
+         * @brief Get the window viewport
+         * @return glm::ivec4
+         */
+        const glm::ivec4 &getViewport(void) const;
 
-        private:
-            GLFWwindow *_window = NULL;
-            static bool _wasInit;
-            bool _isOpen;
+        /**
+         * @brief Set the window viewport
+         * @param viewport
+         */
+        void setViewport(const glm::ivec4 &viewport);
 
-            glm::ivec4 _viewport;
+        /**
+         * @brief Clear the window with a color
+         * @details The color is black by default
+         * @param c The color to clear the window with. Default to black
+         */
+        void
+        clear(const glm::vec4 &c = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)) const;
 
-            double _deltaTime = 0.0f;
+        /**
+         * @brief Display the window
+         */
+        void display(void);
 
-            int _frameRateLimit = 60;
+        /**
+         * @brief Get the window framerate limit
+         * @return int The framerate limit
+         */
+        const int getFramerate(void) const;
 
-            unsigned int _lastTexture = 0;
+        /**
+         * @brief Set the window framerate limit
+         * @details The framerate limit is 60 by default and can be set to 0 to enable uncapped framerate
+         * @param limit
+         */
+        void setFramerateLimit(const int &limit);
+
+        /**
+         * @brief Get the window delta time
+         * @return double
+         */
+        const double &getDeltaTime(void) const;
+
+        /**
+         * @brief Poll the window events
+         */
+        void pollEvents(void);
+
+        /**
+         * @brief Get the window event handler
+         * @return EventHandler &
+         */
+        EventHandler &getEventHandler(void) {
+            return *_eventHandler;
+        }
+
+        friend class Sprite;
+
+    private:
+        std::unique_ptr<EventHandler> _eventHandler;
+        GLFWwindow *_window = NULL;
+
+        static bool _wasInit;
+        bool _isOpen;
+
+        glm::ivec4 _viewport;
+        glm::mat4 _projection;
+
+        double _deltaTime = 0.0f;
+
+        int _frameRateLimit = 60;
+
+        unsigned int _lastTexture = 0;
+
+        const glm::mat4 &_getProjection(void) const {
+            return _projection;
+        }
     };
 } // namespace RTypeEngine
 
