@@ -27,7 +27,8 @@ add_library(${PROJECT_NAME} SHARED
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
-target_link_libraries(${PROJECT_NAME} PRIVATE rtype-ecs glad glfw glm)
+target_link_libraries(${PROJECT_NAME} PRIVATE glad glfw glm)
+target_link_libraries(${PROJECT_NAME} INTERFACE rtype-ecs)
 
 if (IS_TESTING AND NOT WIN32)
     include(tests/BuildTests.cmake)
