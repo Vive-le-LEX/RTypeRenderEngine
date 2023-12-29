@@ -90,6 +90,8 @@ namespace RTypeEngine {
             [[nodiscard]] bool isKeyRepeat(const int &key) const;
             ///@}
 
+            void update();
+
             friend class EventHandler;
             friend void glfwSetKeyCallback(GLFWwindow* window, GLFWkeyfun cbfun);
         protected:
