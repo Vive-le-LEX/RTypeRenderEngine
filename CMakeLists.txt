@@ -25,7 +25,7 @@ set(SRC
 add_library(${PROJECT_NAME} SHARED
     ${SRC}
 )
-
+target_include_directories(${PROJECT_NAME} PUBLIC external/glad/include/)
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_link_libraries(${PROJECT_NAME} INTERFACE rtype-ecs)
 target_link_libraries(${PROJECT_NAME} PRIVATE glad glfw glm)
