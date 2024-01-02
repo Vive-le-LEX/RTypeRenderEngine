@@ -12,10 +12,9 @@
 #pragma once
 
 #include "RTypeECS/Coordinator.hpp"
+#include "RTypeEngine/Graphics/Mesh.hpp"
 #include <memory>
 
 namespace RTypeEngine {
     inline std::unique_ptr<Coordinator> _coordinator = std::make_unique<Coordinator>();
-
-    inline bool didSpriteSpawned = false;
 }

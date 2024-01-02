@@ -6,6 +6,8 @@
 */
 
 #include "RTypeEngine/Window/Window.hpp"
+#define STB_IMAGE_IMPLEMENTATION
+#include "RTypeEngine/Graphics/stb_image.h"
 
 using namespace RTypeEngine;
 
@@ -16,7 +18,7 @@ void Window::initOpenGL() {
         return;
     if (!glfwInit())
         throw std::runtime_error("Failed to initialize GLFW");
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     _wasInit = true;
@@ -56,6 +58,9 @@ Window::Window(int width, int height, const char *title, GLFWmonitor *monitor,
                      GLFW_TRUE);
     glfwSwapInterval(0);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    std::cout << "OpenGL " << glGetString(GL_VERSION) << std::endl;
 }
 
 // void Window::setCallbacks(void) {

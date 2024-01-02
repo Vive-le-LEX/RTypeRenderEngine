@@ -19,6 +19,7 @@ namespace RTypeEngine {
      */
     struct TransformComponent {
         glm::mat4 transform; /**< The transform matrix */
+        bool isDirty = true; /**< Is the transform dirty ? */
     };
 
     /**
@@ -54,6 +55,21 @@ namespace RTypeEngine {
          */
         static void deleteTransform(TransformComponent &transform) noexcept {
             (void) transform;
+        }
+
+        static glm::vec3 getPosition(const TransformComponent &transform) noexcept {
+            return glm::vec3(transform.transform[3]);
+        }
+
+        static void setPosition(TransformComponent &transform, const glm::vec3 &position) noexcept {
+            transform.isDirty = true;
+            transform.transform[3] = glm::vec4(position, 1.0f);
+        }
+
+        static glm::vec3 getScale(const TransformComponent &transform) noexcept {
+            return glm::vec3(glm::length(glm::vec3(transform.transform[0][0], transform.transform[1][0], transform.transform[2][0])),
+                             glm::length(glm::vec3(transform.transform[0][1], transform.transform[1][1], transform.transform[2][1])),
+                             glm::length(glm::vec3(transform.transform[0][2], transform.transform[1][2], transform.transform[2][2])));
         }
     };
 }

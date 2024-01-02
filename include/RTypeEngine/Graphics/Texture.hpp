@@ -9,16 +9,16 @@
  * from Kleo ©.
 */
 
-#pragma once
+#ifndef TEXTURE_HPP_
+    #define TEXTURE_HPP_
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <iostream>
-#include <glm/glm.hpp>
-#include <GLFW/glfw3.h>
-#include "Rect.hpp"
+    #include <glm/gtc/type_ptr.hpp>
+    #include <glm/gtc/matrix_transform.hpp>
+    #include <iostream>
+    #include <glm/glm.hpp>
+    #include <GLFW/glfw3.h>
+    #include "Rect.hpp"
+    #include "RTypeEngine/Graphics/stb_image.h"
 
 namespace RTypeEngine {
 
@@ -61,14 +61,19 @@ namespace RTypeEngine {
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             texturec.pixels = stbi_load(path.c_str(), &texturec.width, &texturec.height, &texturec.nbByteChannels, 0);
             if (!texturec.pixels) {
                 std::cerr << "Failed to load texture: " << path << std::endl;
                 exit(1);
             }
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texturec.width, texturec.height, 0, GL_RGB, GL_UNSIGNED_BYTE, texturec.pixels);
+            if (texturec.nbByteChannels == 3)
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texturec.width, texturec.height, 0, GL_RGB, GL_UNSIGNED_BYTE, texturec.pixels);
+            else if (texturec.nbByteChannels == 4)
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texturec.width, texturec.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, texturec.pixels);
+            else
+                std::cerr << "No support for " << texturec.nbByteChannels << " channels (" << path << ")" << std::endl;
             glGenerateMipmap(GL_TEXTURE_2D);
             return texturec;
         }
@@ -83,3 +88,5 @@ namespace RTypeEngine {
         }
     };
 }
+
+#endif /* !TEXTURE_HPP_ */

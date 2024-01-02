@@ -35,19 +35,26 @@ namespace RTypeEngine {
              * @param textureComponent The texture component of the sprite
              * @param shaderComponent The shader component of the sprite
              */
-            Sprite(TextureComponent &textureComponent, ShaderComponent &shaderComponent) {
+            Sprite(TextureComponent &textureComponent, ShaderComponent &shaderComponent, Entity parent = -1) {
                 entity = _coordinator->createEntity();
-                if (!didSpriteSpawned) {
+                if (entity) {
+                    _coordinator->copyComponent<MeshComponent>(0, entity);
+                } else {
                     _coordinator->addComponent(entity, Mesh::createMesh());
-                    didSpriteSpawned = true;
                 }
-                _coordinator->addComponent(entity, textureComponent);
-                _coordinator->addComponent(entity, RectI{0, 0, textureComponent.width, textureComponent.height});
-                _coordinator->addComponent(entity, shaderComponent);
+                if (parent != -1) {
+                    _coordinator->copyComponent<TextureComponent>(parent, entity);
+                    _coordinator->copyComponent<ShaderComponent>(parent, entity);
+                } else {
+                    _coordinator->addComponent(entity, textureComponent);
+                    _coordinator->addComponent(entity, shaderComponent);
+                }
+                RectI rect = {0, 0, textureComponent.width, textureComponent.height};
+                _coordinator->addComponent(entity, rect);
                 auto transform = Transform::createTransform();
-                transform.transform = glm::scale(transform.transform, glm::vec3(textureComponent.width, textureComponent.height, 1.0f));
                 _coordinator->addComponent(entity, transform);
             }
+
             ~Sprite() = default;
 
             /**
@@ -55,6 +62,28 @@ namespace RTypeEngine {
              * @param entity The entity to draw
              */
             static void draw(const Window &window, const Entity &entity) {
+                prepareDraw(window, entity);
+                glDrawArrays(GL_TRIANGLES, 0, 6);
+            }
+
+            /**
+             * @brief Draw the multiple times the sprite given in parameter
+             */
+            static void draw(const Window &window, const Entity &entity, const int &count) {
+                prepareDraw(window, entity);
+                glDrawArraysInstanced(GL_TRIANGLES, 0, 6, count);
+            }
+
+            /**
+             * @brief Handles the cast to Entity
+             */
+            operator Entity() const {
+                return entity;
+            }
+        private:
+            Entity entity;
+
+            static void prepareDraw(const Window &window, const Entity &entity) {
                 auto &coord = *_coordinator;
                 auto &mesh = coord.getComponent<MeshComponent>(entity);
                 auto &rect = coord.getComponent<RectI>(entity);
@@ -75,17 +104,7 @@ namespace RTypeEngine {
                 glBindTexture(GL_TEXTURE_2D, texture.textureId);
 
                 glBindVertexArray(mesh.VAO);
-                glDrawArrays(GL_TRIANGLES, 0, 6);
-                glBindVertexArray(0);
+                transform.isDirty = false;
             }
-
-            /**
-             * @brief Handles the cast to Entity
-             */
-            operator Entity() const {
-                return entity;
-            }
-        private:
-            Entity entity;
     };
 }
