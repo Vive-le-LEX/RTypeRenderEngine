@@ -18,5 +18,7 @@
 #include "Graphics/Texture.hpp"
 #include "Graphics/Transform.hpp"
 #include "Graphics/Sprite.hpp"
+#include "Graphics/Text.hpp"
+#include "Graphics/Font.hpp"
 
 #endif /* !GRAPHICS_ALL_HPP_ */

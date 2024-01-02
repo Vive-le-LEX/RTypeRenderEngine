@@ -109,7 +109,9 @@ namespace RTypeEngine
              * @brief Get the last mouse position
              * @return glm::vec2
              */
-            [[nodiscard]] const glm::vec2 &getLastMousePos(void) const;
+            [[nodiscard]] const glm::vec2 &getLastMousePos(void) const {
+                return _lastMousePos;
+            }
 
             /** @name Mouse move callbacks setters & removers
              */

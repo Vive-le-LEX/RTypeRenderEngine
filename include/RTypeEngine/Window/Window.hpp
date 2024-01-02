@@ -133,6 +133,7 @@ namespace RTypeEngine {
         }
 
         friend class Sprite;
+        friend class Text;
 
     private:
         std::unique_ptr<EventHandler> _eventHandler;

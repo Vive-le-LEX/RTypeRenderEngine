@@ -11,13 +11,12 @@
 
 #pragma once
 
-#include <GLFW/glfw3.h>
-
 #include <vector>
 #include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "RTypeEngine/Window.hpp"
+#include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace RTypeEngine {
@@ -45,7 +44,7 @@ namespace RTypeEngine {
          * @brief Create a basic rectangle mesh to draw a Sprite (2 triangles)
          * @return MeshComponent
          */
-        static MeshComponent createMesh() noexcept {
+        static MeshComponent createMesh(int memoryMethod = GL_STATIC_DRAW) noexcept {
             MeshComponent mesh;
 
             float vertices[] = {
@@ -60,7 +59,7 @@ namespace RTypeEngine {
             glGenVertexArrays(1, &mesh.VAO);
             glGenBuffers(1, &mesh.VBO);
             glBindBuffer(GL_ARRAY_BUFFER, mesh.VBO);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, memoryMethod);
 
             glBindVertexArray(mesh.VAO);
             glEnableVertexAttribArray(0);

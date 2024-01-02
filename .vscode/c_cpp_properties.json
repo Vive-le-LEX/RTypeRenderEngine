@@ -5,6 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/include/*",
+                "${workspaceFolder}/build/_deps/**",
                 "${workspaceFolder}/external/glad/include/*"
             ],
             "defines": [],

@@ -26,9 +26,10 @@ add_library(${PROJECT_NAME} SHARED
     ${SRC}
 )
 target_include_directories(${PROJECT_NAME} PUBLIC external/glad/include/)
+target_link_libraries(${PROJECT_NAME} INTERFACE freetype-interface)
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_link_libraries(${PROJECT_NAME} INTERFACE rtype-ecs)
-target_link_libraries(${PROJECT_NAME} PRIVATE glad glfw glm)
+target_link_libraries(${PROJECT_NAME} PRIVATE glad glfw glm freetype)
 
 if (IS_TESTING AND NOT WIN32)
     include(tests/BuildTests.cmake)

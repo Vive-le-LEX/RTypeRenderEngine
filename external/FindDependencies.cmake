@@ -12,6 +12,7 @@ include(external/FindGLM.cmake)
 include(external/FindGLFW.cmake)
 include(external/FindGTest.cmake)
 include(external/FindRTypeECS.cmake)
+include(external/FindFreetype.cmake)
 
 set(IS_TESTING ${IS_TESTING_TMP})
 set(IS_BUILDING_DOC ${IS_BUILDING_DOC_TMP})

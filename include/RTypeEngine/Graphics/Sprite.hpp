@@ -57,6 +57,17 @@ namespace RTypeEngine {
 
             ~Sprite() = default;
 
+            static bool isPointInRect(RTypeEngine::Sprite &entity, const glm::vec2 &point) {
+                auto &transform = _coordinator->getComponent<TransformComponent>(entity);
+                auto &rect = _coordinator->getComponent<RectI>(entity);
+
+                auto pos = RTypeEngine::Transform::getPosition(transform);
+                auto scale = RTypeEngine::Transform::getScale(transform);
+
+                auto maxPos = pos + glm::vec3(rect.width * scale.x, rect.height * scale.y, 0.0f);
+                return (point.x >= pos.x && point.x <= maxPos.x && point.y >= pos.y && point.y <= maxPos.y);
+            }
+
             /**
              * @brief Draw the sprite given in parameter
              * @param entity The entity to draw

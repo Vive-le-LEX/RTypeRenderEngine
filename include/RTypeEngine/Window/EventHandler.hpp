@@ -38,8 +38,8 @@ namespace RTypeEngine
             MouseHandler _mouseHandler;
             KeyboardHandler _keyboardHandler;
 
-            std::function<void(void)> _closeCallback;
-            std::function<void(int, int)> _resizeCallback;
+            std::function<void(void)> _closeCallback = []() {};
+            std::function<void(int, int)> _resizeCallback = [](int, int) {};
     };
 } // namespace RTypeEngine
 

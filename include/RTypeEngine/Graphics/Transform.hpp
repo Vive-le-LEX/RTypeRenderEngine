@@ -66,10 +66,21 @@ namespace RTypeEngine {
             transform.transform[3] = glm::vec4(position, 1.0f);
         }
 
+        static glm::vec3 getRotation(const TransformComponent &transform) noexcept {
+            return glm::vec3(glm::degrees(glm::eulerAngles(glm::quat_cast(transform.transform))));
+        }
+
         static glm::vec3 getScale(const TransformComponent &transform) noexcept {
             return glm::vec3(glm::length(glm::vec3(transform.transform[0][0], transform.transform[1][0], transform.transform[2][0])),
                              glm::length(glm::vec3(transform.transform[0][1], transform.transform[1][1], transform.transform[2][1])),
                              glm::length(glm::vec3(transform.transform[0][2], transform.transform[1][2], transform.transform[2][2])));
+        }
+
+        static void setScale(TransformComponent &transform, const glm::vec3 &scale) noexcept {
+            transform.isDirty = true;
+            transform.transform[0][0] = scale.x;
+            transform.transform[1][1] = scale.y;
+            transform.transform[2][2] = scale.z;
         }
     };
 }

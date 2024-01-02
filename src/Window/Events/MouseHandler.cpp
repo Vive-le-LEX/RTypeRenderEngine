@@ -12,6 +12,10 @@ namespace RTypeEngine {
         for (int y = 0; y < MouseClickType::MOUSE_TYPE_LAST; y++)
             for (int x = 0; x < MouseClick::NB_BUTTONS; x++)
                 _mouseClickEvents[y][x] = std::nullopt;
+
+        double x, y;
+        glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
+        _lastMousePos = glm::vec2(x, y);
     }
     const bool &MouseHandler::canUseRawMotion(void) const {
         return _canUseRawInput;
