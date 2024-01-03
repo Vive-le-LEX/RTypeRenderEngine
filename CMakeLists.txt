@@ -26,7 +26,7 @@ add_library(${PROJECT_NAME} SHARED
     ${SRC}
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC external/glad/include/)
+target_include_directories(${PROJECT_NAME} PUBLIC ${glad_SOURCE_DIR}/glad/include/)
 target_link_libraries(${PROJECT_NAME} INTERFACE freetype-interface glm glfw)
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_link_libraries(${PROJECT_NAME} INTERFACE rtype-ecs)
