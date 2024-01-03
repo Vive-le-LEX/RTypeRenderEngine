@@ -13,6 +13,7 @@
 
 #include "RTypeECS/Types.hpp"
 #include "RTypeECS/Coordinator.hpp"
+#include "RTypeEngine/System/Core.hpp"
 
 namespace RTypeEngine {
     /**
