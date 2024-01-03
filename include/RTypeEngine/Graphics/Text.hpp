@@ -99,8 +99,8 @@ namespace RTypeEngine
             std::string _text;
             std::vector<Glyph> _glyphs;
             Font _font;
-            int _size;
-            int _width;
+            int _size = 0;
+            int _width = 0;
             glm::vec2 _position;
             glm::vec4 _color;
             glm::vec2 _scale = glm::vec2(1.0f, 1.0f);
