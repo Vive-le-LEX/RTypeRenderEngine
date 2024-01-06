@@ -109,7 +109,7 @@ namespace RTypeEngine {
                 int modelLoc = glGetUniformLocation(shader.shaderId, "model");
 
                 glUniform4i(rectLoc, rect.x, rect.y, rect.width, rect.height);
-                glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(window._getProjection()));
+                glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(window.getProjection()));
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(transform.transform));
 
                 glActiveTexture(GL_TEXTURE0);

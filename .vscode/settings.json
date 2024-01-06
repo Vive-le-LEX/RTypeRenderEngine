@@ -72,7 +72,10 @@
         "any": "cpp",
         "forward_list": "cpp",
         "unordered_set": "cpp",
-        "shared_mutex": "cpp"
+        "shared_mutex": "cpp",
+        "codecvt": "cpp",
+        "span": "cpp",
+        "*.ipp": "cpp"
     },
     "cmake.configureOnOpen": false
 }

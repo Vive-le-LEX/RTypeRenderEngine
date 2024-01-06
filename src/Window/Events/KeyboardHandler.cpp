@@ -25,16 +25,13 @@ namespace RTypeEngine
 
     void KeyboardHandler::update()
     {
-        for (int i = 0; i < GLFW_KEY_LAST; i++) {
+        for (int i = GLFW_KEY_SPACE; i < GLFW_KEY_LAST; i++) {
             auto &pressCallback = _keyPressedCallbacks[i];
             auto &releaseCallback = _keyReleasedCallbacks[i];
             auto &repeatCallback = _keyRepeatCallbacks[i];
             bool hasPressCallback = pressCallback.has_value();
             bool hasReleaseCallback = releaseCallback.has_value();
             bool hasRepeatCallback = repeatCallback.has_value();
-
-            if (!hasPressCallback && !hasReleaseCallback && !hasRepeatCallback)
-                continue;
             int newKeyState = glfwGetKey(glfwGetCurrentContext(), i);
             int keycode = glfwGetKeyScancode(i);
             KeyState ks = {
@@ -47,6 +44,19 @@ namespace RTypeEngine
                 .isCapsLock = (bool)(glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_CAPS_LOCK) == GLFW_PRESS),
                 .isNumLock = (bool)(glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_NUM_LOCK) == GLFW_PRESS)
             };
+            if (newKeyState == GLFW_PRESS && _keys[i] == GLFW_RELEASE) {
+                _defaultKeyPressedCallback(ks);
+                _lastRepeat[i] = glfwGetTime();
+            } else if (newKeyState == GLFW_RELEASE && _keys[i] == GLFW_PRESS) {
+                _defaultKeyReleasedCallback(ks);
+            } else if (newKeyState == GLFW_PRESS && _keys[i] == GLFW_REPEAT && glfwGetTime() - _lastRepeat[i] > _repeatDelay) {
+                _defaultKeyRepeatCallback(ks);
+                _lastRepeat[i] = glfwGetTime();
+            }
+            if ((!hasPressCallback && !hasReleaseCallback && !hasRepeatCallback) || shouldFocus) {
+                _keys[i] = _keys[i] == GLFW_PRESS && newKeyState == GLFW_PRESS ? GLFW_REPEAT : newKeyState;
+                continue;
+            }
             if (newKeyState == GLFW_PRESS && _keys[i] == GLFW_REPEAT && hasRepeatCallback) {
                 repeatCallback.value()(ks);
             } else if ((hasPressCallback || hasRepeatCallback) && newKeyState == GLFW_PRESS) {
@@ -106,6 +116,25 @@ namespace RTypeEngine
     bool KeyboardHandler::isKeyRepeat(const int &key) const
     {
         return _keys[key] == GLFW_REPEAT;
+    }
+
+    void KeyboardHandler::setDefaultKeyPressedCallback(std::function<void(const KeyState&)> callback, const bool &override)
+    {
+        if (!override) {
+            _defaultKeyPressedCallback = mergeFunctions(_defaultKeyPressedCallback, callback);
+        } else {
+            _defaultKeyPressedCallback = callback;
+        }
+    }
+
+    void KeyboardHandler::setRepeatDelay(const double &delay)
+    {
+        _repeatDelay = delay;
+    }
+
+    const double &KeyboardHandler::getRepeatDelay() const
+    {
+        return _repeatDelay;
     }
 
     std::ostream &operator<<(std::ostream &os, const KeyState &state)
