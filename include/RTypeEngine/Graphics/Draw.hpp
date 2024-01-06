@@ -31,4 +31,21 @@ namespace RTypeEngine {
             }
         }
     };
+    
+    /**
+     * @brief DrawTextSystem
+     * @details This class is used to draw all the texts in the ECS
+     */
+    class DrawTextSystem : public System {
+    public:
+        /**
+         * @brief Update the system
+         * @details Iterates over all the entities that have all Sprite related components and draws them
+         */
+        virtual void update(const Window &window) final {
+            for (auto entity: entities) {
+                RTypeEngine::Text::draw(window, entity);
+            }
+        }
+    };
 }

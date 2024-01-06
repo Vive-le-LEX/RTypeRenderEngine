@@ -26,6 +26,12 @@ namespace RTypeEngine
         glm::ivec2   bearing;
         unsigned int advance;
     };
+    
+    struct FontComponent {
+        std::string path;
+        FT_Face face;
+        int size;
+    };
 
     class Font {
         public:
