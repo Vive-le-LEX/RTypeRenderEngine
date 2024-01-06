@@ -12,7 +12,7 @@ if (NOT LUACPP_LIB)
     if(NOT luacpp_POPULATED)
         FetchContent_Populate(luacpp)
 
-        add_subdirectory(${luacpp_SOURCE_DIR}/Source EXCLUDE_FROM_ALL)
+        add_subdirectory(${luacpp_SOURCE_DIR}/Source ${luacpp_BINARY_DIR} EXCLUDE_FROM_ALL)
         add_dependencies(luacpp luacpp)
     endif()
 
