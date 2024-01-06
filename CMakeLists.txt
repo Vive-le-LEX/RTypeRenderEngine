@@ -37,17 +37,16 @@ add_library(${PROJECT_NAME}-core SHARED
 include(external/FindDependencies.cmake)
 
 target_include_directories(${PROJECT_NAME}-graphics PUBLIC include)
-target_include_directories(${PROJECT_NAME}-graphics PRIVATE ${LUACPP_INCLUDE_DIR} external/glad/include/)
+target_include_directories(${PROJECT_NAME}-graphics PRIVATE external/glad/include/)
 
 target_link_libraries(${PROJECT_NAME}-graphics INTERFACE freetype-interface rtype-ecs)
-target_link_libraries(${PROJECT_NAME}-graphics PRIVATE glad glfw glm freetype ${LUACPP_LIB})
+target_link_libraries(${PROJECT_NAME}-graphics PRIVATE glad glfw glm freetype luacpp_static)
 
 
 target_include_directories(${PROJECT_NAME}-core PUBLIC include)
-target_include_directories(${PROJECT_NAME}-core INTERFACE ${LUACPP_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME}-core PRIVATE external/glad/include/)
 
-target_link_libraries(${PROJECT_NAME}-core INTERFACE freetype-interface rtype-ecs ${LUACPP_LIB})
+target_link_libraries(${PROJECT_NAME}-core INTERFACE freetype-interface rtype-ecs luacpp_static)
 target_link_libraries(${PROJECT_NAME}-core PRIVATE glfw glm freetype rtype-ecs)
 
 if (IS_TESTING AND NOT WIN32)
