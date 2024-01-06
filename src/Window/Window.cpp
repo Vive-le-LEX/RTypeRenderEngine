@@ -45,8 +45,6 @@ Window::Window(int width, int height, const char *title, GLFWmonitor *monitor,
     glfwSetErrorCallback([](int error, const char *description) {
         std::cerr << "Internal GLFW Error " << error << ": " << description
                   << std::endl;
-        std::cerr << "Internal GLFW Error " << error << ": " << description
-                  << std::endl;
     });
     glViewport(_viewport.x, _viewport.y, _viewport.z, _viewport.w);
     _initMembers();
@@ -157,5 +155,5 @@ const double &Window::getDeltaTime() const {
 
 void Window::pollEvents() {
     glfwPollEvents();
-    _eventHandler->getKeyboardHandler().update();
+    _eventHandler->update();
 }

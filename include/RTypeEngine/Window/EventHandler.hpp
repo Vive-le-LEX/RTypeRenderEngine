@@ -9,6 +9,7 @@
 #define EVENTHANDLER_HPP_
 
 #include "RTypeEngine/Window/Events/MouseHandler.hpp"
+#include "RTypeEngine/Window/Events/GamepadHandler.hpp"
 #include "RTypeEngine/Window/Events/KeyboardHandler.hpp"
 
 namespace RTypeEngine
@@ -33,10 +34,16 @@ namespace RTypeEngine
                 _closeCallback = callback;
             }
 
+            void update() {
+                _keyboardHandler.update();
+                _gamepadHandler.update();
+            }
+
             friend void glfwSetWindowCloseCallback(GLFWwindow *window, GLFWwindowclosefun cbfun);
         private:
             MouseHandler _mouseHandler;
             KeyboardHandler _keyboardHandler;
+            GamepadHandler _gamepadHandler;
 
             std::function<void(void)> _closeCallback = []() {};
             std::function<void(int, int)> _resizeCallback = [](int, int) {};
