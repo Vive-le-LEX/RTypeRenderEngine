@@ -7,6 +7,7 @@ set(IS_BUILDING_DOC_TMP ${IS_BUILDING_DOC})
 set(IS_TESTING OFF)
 set(IS_BUILDING_DOC OFF)
 
+include(external/FindLuacpp.cmake)
 include(external/FindGlad.cmake)
 include(external/FindGLM.cmake)
 include(external/FindGLFW.cmake)
