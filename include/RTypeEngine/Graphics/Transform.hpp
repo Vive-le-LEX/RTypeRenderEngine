@@ -12,6 +12,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <glm/gtx/euler_angles.hpp>
 
 namespace RTypeEngine {
     /**

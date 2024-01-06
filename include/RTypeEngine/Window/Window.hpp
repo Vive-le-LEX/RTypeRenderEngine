@@ -22,6 +22,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include "RTypeEngine/Window/EventHandler.hpp"
+#include "RTypeEngine/Window/WindowConsole.hpp"
 
 namespace RTypeEngine {
     /**
@@ -132,11 +133,24 @@ namespace RTypeEngine {
             return *_eventHandler;
         }
 
+        const glm::mat4 &getProjection(void) const {
+            return _projection;
+        }
+
+        /**
+         * @brief Get the window console
+         * @return WindowConsole &
+         */
+        WindowConsole &getWindowConsole(void) {
+            return *_windowConsole;
+        }
+
         friend class Sprite;
         friend class Text;
 
     private:
         std::unique_ptr<EventHandler> _eventHandler;
+        std::unique_ptr<WindowConsole> _windowConsole;
         GLFWwindow *_window = NULL;
 
         static bool _wasInit;
@@ -151,9 +165,12 @@ namespace RTypeEngine {
 
         unsigned int _lastTexture = 0;
 
-        const glm::mat4 &_getProjection(void) const {
-            return _projection;
+
+        void _setProjection(const glm::mat4 &projection) {
+            _projection = projection;
         }
+
+        void _initMembers(void);
     };
 } // namespace RTypeEngine
 
