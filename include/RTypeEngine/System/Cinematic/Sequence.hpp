@@ -67,6 +67,17 @@ namespace RTypeEngine::Animation {
                     }
                     _frames = _data["frames"];
                     _maxFrame = _frames.size();
+                    if (!_data.contains("triggers")) {
+                        throw std::runtime_error("Invalid sequence file: no triggers");
+                    }
+                    if (!_data["triggers"].is_array()) {
+                        throw std::runtime_error("Invalid sequence file: triggers is not an array");
+                    }
+                    for (auto &trigger : _data["triggers"].items()) {
+                        const std::string name = trigger.value().get<std::string>();
+                        _triggers[name] = nullptr;
+                        _triggersNames.push_back(name);
+                    }
                 } catch (std::exception &e) {
                     std::cerr << "Failed to parse sequence file: " << e.what() << std::endl;
                 }
@@ -95,6 +106,14 @@ namespace RTypeEngine::Animation {
                 registerObjectHelper(name, args...);
             }
 
+            void registerTrigger(const std::string &name, std::function<void(void)> *trigger) {
+                if (_triggersNames.end() == std::find(_triggersNames.begin(), _triggersNames.end(), name)) {
+                    std::cerr << "Failed to register trigger: " << name << " is not explicited in sequence file" << std::endl;
+                    return;
+                }
+                _triggers[name] = trigger;
+            }
+
             void advance(const double &deltaTime) {
                 if (!_isPlaying)
                     return;
@@ -116,6 +135,14 @@ namespace RTypeEngine::Animation {
                                 continue;
                             var.second.keyframe->updatePreviousValue();
                         }
+                    }
+                    const auto &frameTriggers = frame["triggers"];
+                    for (size_t i = 0; i < frameTriggers.size(); i++) {
+                        const std::string &trigger = frameTriggers[i];
+                        if (_triggers.find(trigger) == _triggers.end()) {
+                            continue;
+                        }
+                        _triggers[trigger]->operator()();
                     }
                     if (_currentFrame >= _maxFrame) {
                         for (auto &var : _declaredVariables) {
@@ -191,9 +218,11 @@ namespace RTypeEngine::Animation {
 
                 registerObjectHelper(name, rest...);
             }
-
+            std::vector<std::string> _ownedTriggers;
+            std::vector<std::string> _triggersNames;
             std::map<std::string, VariableInfo> _declaredVariables;
             std::map<std::string, std::map<std::string, VariableInfo>> _declaredObjects;
+            std::map<std::string, std::function<void(void)>*> _triggers;
             json _data;
             json _frames;
 
