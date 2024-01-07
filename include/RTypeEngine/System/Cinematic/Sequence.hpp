@@ -49,7 +49,7 @@ namespace RTypeEngine::Animation {
 
     class Sequence {
         public:
-            Sequence(const std::string &filepath, const bool &loop = false) : _loop(loop), _isPlaying(true), _time(0.0), _prevFrameTime(0.0), _currentFrame(0), _maxFrame(0) {
+            Sequence(const std::string &filepath, const bool &loop = false) : _loop(loop), _isPlaying(false), _time(0.0), _prevFrameTime(0.0), _currentFrame(0), _maxFrame(0) {
                 std::ifstream f(filepath);
                 try {
                     _data = json::parse(f);
@@ -86,6 +86,26 @@ namespace RTypeEngine::Animation {
                 updateInterpolation(_data["frames"].at(_currentFrame)["interpolation"]);
             }
             ~Sequence() = default;
+
+            void play() {
+                _isPlaying = true;
+            }
+
+            void pause() {
+                _isPlaying = false;
+            }
+
+            void stop() {
+                _isPlaying = false;
+                _currentFrame = 0;
+                _prevFrameTime = 0.0;
+                _time = 0.0;
+                _updatePreviousValues();
+            }
+
+            void setLoop(const bool &loop) {
+                _loop = loop;
+            }
 
             template<typename T>
             void registerVariable(const std::string &name, T *value) {
@@ -162,16 +182,18 @@ namespace RTypeEngine::Animation {
                 _updatePreviousValues();
                 _checkTriggers((*frame)["triggers"]);
                 if (_currentFrame >= _maxFrame) {
-                    auto &values = (*frame)["values"];
+                    const auto &values = (*frame)["values"];
                     _updateVariables(values, 1.0);
                     _updateObjects(values, 1.0);
                     _currentFrame = 0;
                     _prevFrameTime = 0.0;
-                    *frame = _frames.at(0);
-                    if (!_loop) {
-                        _isPlaying = false;
-                        return true;
+                    _time = 0.0;
+                    if (_loop) {
+                        const auto &values = _frames.at(_currentFrame)["values"];
+                        _updateVariables(values, 0.0);
+                        _updateObjects(values, 0.0);
                     }
+                    return true;
                 }
                 return false;
             }
