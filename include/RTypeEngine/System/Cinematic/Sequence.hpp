@@ -19,6 +19,7 @@
     using json = nlohmann::json;
 
     #include "RTypeEngine/System/Cinematic/Keyframe.hpp"
+    #include "RTypeEngine/System/Cinematic/AnimationCurve.hpp"
 
 namespace RTypeEngine::Animation {
 
@@ -42,6 +43,7 @@ namespace RTypeEngine::Animation {
 
     struct VariableInfo {
         IKeyframe* keyframe;
+        const AnimationCurve *curve;
         std::string type;
     };
 
@@ -54,11 +56,11 @@ namespace RTypeEngine::Animation {
                     for (auto &var : _data["variables"].items()) {
                         const std::string name = var.key();
                         if (var.value().is_string()) {
-                            _declaredVariables[name] = {nullptr, var.value().get<std::string>()};
+                            _declaredVariables[name] = {nullptr, nullptr, var.value().get<std::string>()};
                         } else if (var.value().is_object()) {
                             _declaredObjects[name] = std::map<std::string, VariableInfo>();
                             for (auto &obj : var.value().items()) {
-                                _declaredObjects[name][obj.key()] = {nullptr, obj.value().get<std::string>()};
+                                _declaredObjects[name][obj.key()] = {nullptr, nullptr, obj.value().get<std::string>()};
                             }
                         }
                     }
@@ -81,6 +83,7 @@ namespace RTypeEngine::Animation {
                 } catch (std::exception &e) {
                     std::cerr << "Failed to parse sequence file: " << e.what() << std::endl;
                 }
+                updateInterpolation(_data["frames"].at(_currentFrame)["interpolation"]);
             }
             ~Sequence() = default;
 
@@ -99,6 +102,7 @@ namespace RTypeEngine::Animation {
                     return;
                 }
                 _declaredVariables[name].keyframe = new Keyframe(value);
+                updateInterpolation(_data["frames"].at(_currentFrame)["interpolation"]);
             }
 
             template<typename... Pairs>
@@ -122,64 +126,57 @@ namespace RTypeEngine::Animation {
                 auto &frame = _frames.at(_currentFrame);
                 const auto &reachTime = frame["time"].get<double>();
                 if (_time >= reachTime) {
-                    _currentFrame++;
-                    _prevFrameTime = reachTime;
-                    for (auto &var : _declaredVariables) {
-                        if (var.second.keyframe == nullptr)
-                            continue;
-                        var.second.keyframe->updatePreviousValue();
-                    }
-                    for (auto &obj : _declaredObjects) {
-                        for (auto &var : obj.second) {
-                            if (var.second.keyframe == nullptr)
-                                continue;
-                            var.second.keyframe->updatePreviousValue();
-                        }
-                    }
-                    const auto &frameTriggers = frame["triggers"];
-                    for (size_t i = 0; i < frameTriggers.size(); i++) {
-                        const std::string &trigger = frameTriggers[i];
-                        if (_triggers.find(trigger) == _triggers.end()) {
-                            continue;
-                        }
-                        _triggers[trigger]->operator()();
-                    }
-                    if (_currentFrame >= _maxFrame) {
-                        for (auto &var : _declaredVariables) {
-                            if (var.second.keyframe == nullptr)
-                                continue;
-                            var.second.keyframe->setTargetValue(frame["values"][var.first], 1.0);
-                        }
-                        for (auto &obj : _declaredObjects) {
-                            int cField = 0;
-                            for (auto &var : obj.second) {
-                                if (var.second.keyframe == nullptr) {
-                                    cField++;
-                                    continue;
-                                }
-                                var.second.keyframe->setTargetValue(frame["values"][obj.first][cField], 1.0);
-                                cField++;
-                            }
-                        }
-                        _currentFrame = 0;
-                        _prevFrameTime = 0.0;
-                        frame = _frames.at(0);
-                        if (!_loop) {
-                            _isPlaying = false;
-                            return;
-                        }
+                    if (_gotoNextFrame(&frame, reachTime)) {
+                        return;
                     }
                 }
                 const auto &frameValues = frame["values"];
+                const auto &frameInterpolation = frame["interpolation"];
                 double percent = 1.0;
                 if (reachTime - _prevFrameTime) {
                     percent = (_time - _prevFrameTime) / (reachTime - _prevFrameTime);
                 }
-                for (auto &var : _declaredVariables) {
-                    if (var.second.keyframe == nullptr)
-                        continue;
-                    var.second.keyframe->setTargetValue(frameValues[var.first], percent);
+                _updateVariables(frameValues, percent);
+                _updateObjects(frameValues, percent);
+            }
+        private:
+            void updateInterpolation(const json &interpolation) {
+                for (auto &var : interpolation.items()) {
+                    const std::string &name = var.key();
+                    if (_declaredVariables.find(name) != _declaredVariables.end()) {
+                        _declaredVariables[name].curve = getTypeFromString(var.value().get<std::string>().c_str());
+                    } else if (_declaredObjects.find(name) != _declaredObjects.end()) {
+                        for (size_t i = 0; i < var.value().size(); i++) {
+                            const std::string &interpolType = var.value()[i];
+                            auto it = _declaredObjects[name].begin();
+                            std::advance(it, i);
+                            _declaredObjects[name][it->first].curve = getTypeFromString(interpolType.c_str());
+                        }
+                    }
                 }
+            }
+
+            bool _gotoNextFrame(json *frame, const double &reachTime) {
+                _currentFrame++;
+                _prevFrameTime = reachTime;
+                _updatePreviousValues();
+                _checkTriggers((*frame)["triggers"]);
+                if (_currentFrame >= _maxFrame) {
+                    auto &values = (*frame)["values"];
+                    _updateVariables(values, 1.0);
+                    _updateObjects(values, 1.0);
+                    _currentFrame = 0;
+                    _prevFrameTime = 0.0;
+                    *frame = _frames.at(0);
+                    if (!_loop) {
+                        _isPlaying = false;
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            void _updateObjects(const json &values, const float &percent) {
                 for (auto &obj : _declaredObjects) {
                     int cField = 0;
                     for (auto &var : obj.second) {
@@ -187,12 +184,45 @@ namespace RTypeEngine::Animation {
                             cField++;
                             continue;
                         }
-                        var.second.keyframe->setTargetValue(frameValues[obj.first][cField], percent);
+                        var.second.keyframe->setTargetValue(values[obj.first][cField], var.second.curve->getValue(percent));
                         cField++;
                     }
                 }
             }
-        private:
+
+            void _updateVariables(const json &values, const float &percent) {
+                for (auto &var : _declaredVariables) {
+                    if (var.second.keyframe == nullptr)
+                        continue;
+                    var.second.keyframe->setTargetValue(values[var.first], percent);
+                }
+            }
+
+            void _updatePreviousValues() {
+                for (auto &var : _declaredVariables) {
+                    if (var.second.keyframe == nullptr)
+                        continue;
+                    var.second.keyframe->updatePreviousValue();
+                }
+                for (auto &obj : _declaredObjects) {
+                    for (auto &var : obj.second) {
+                        if (var.second.keyframe == nullptr)
+                            continue;
+                        var.second.keyframe->updatePreviousValue();
+                    }
+                }
+            }
+
+            void _checkTriggers(const json &frameTriggers) {
+                for (size_t i = 0; i < frameTriggers.size(); i++) {
+                    const std::string &trigger = frameTriggers[i];
+                    if (_triggers.find(trigger) == _triggers.end()) {
+                        continue;
+                    }
+                    _triggers[trigger]->operator()();
+                }
+            }
+
             template <typename T>
             void registerObjectHelper(const char* name, std::pair<const char*, T*> obj) {
                 static_assert(AnimationTypeName<T>::value, "Cannot register variable in sequence: type not supported");
@@ -210,6 +240,7 @@ namespace RTypeEngine::Animation {
                     return;
                 }
                 _declaredObjects[name][obj.first].keyframe = new Keyframe(obj.second);
+                updateInterpolation(_data["frames"].at(_currentFrame)["interpolation"]);
             }
 
             template <typename T, typename... Pairs>
