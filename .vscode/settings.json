@@ -75,7 +75,9 @@
         "shared_mutex": "cpp",
         "codecvt": "cpp",
         "span": "cpp",
-        "*.ipp": "cpp"
+        "*.ipp": "cpp",
+        "regex": "cpp",
+        "ranges": "cpp"
     },
     "cmake.configureOnOpen": false
 }
