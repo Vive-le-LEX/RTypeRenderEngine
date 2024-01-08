@@ -35,6 +35,7 @@ namespace RTypeEngine {
              * @brief Create a sprite
              * @param textureComponent The texture component of the sprite
              * @param shaderComponent The shader component of the sprite
+             * @param parent The parent entity to copy the texture and shader from
              */
             Sprite(TextureComponent &textureComponent, ShaderComponent &shaderComponent, Entity parent = -1) {
                 entity = _coordinator->createEntity();
@@ -58,6 +59,11 @@ namespace RTypeEngine {
 
             ~Sprite() = default;
 
+            /**
+             * @brief Check if the point is in the sprite
+             * @param entity The entity to check
+             * @param point The point to check
+             */
             static bool isPointInRect(RTypeEngine::Sprite &entity, const glm::vec2 &point) {
                 auto &transform = _coordinator->getComponent<TransformComponent>(entity);
                 auto &rect = _coordinator->getComponent<RectI>(entity);
@@ -71,6 +77,7 @@ namespace RTypeEngine {
 
             /**
              * @brief Draw the sprite given in parameter
+             * @param window The window to draw on
              * @param entity The entity to draw
              */
             static void draw(const Window &window, const Entity &entity) {

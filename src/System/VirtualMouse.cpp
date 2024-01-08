@@ -7,14 +7,12 @@
 
 #include "RTypeEngine/System/VirtualMouse.hpp"
 
+namespace RTypeEngine
+{
 VirtualMouse::VirtualMouse(GLFWwindow *window)
 {
     _window = window;
     _position = glm::vec2(0, 0);
-}
-
-VirtualMouse::~VirtualMouse()
-{
 }
 
 void VirtualMouse::click()
@@ -36,3 +34,4 @@ void VirtualMouse::setPosition(const glm::vec2 &position)
     glfwSetCursorPos(_window, position.x, position.y);
     glfwSetCursorPosCallback(_window, oldCallback);
 }
+} // namespace RTypeEngine

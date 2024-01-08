@@ -36,10 +36,6 @@ namespace RTypeEngine
         addLeftPanel();
     }
 
-    WindowDebugger::~WindowDebugger()
-    {
-    }
-
     void WindowDebugger::switchState()
     {
         _isOpen = !_isOpen;

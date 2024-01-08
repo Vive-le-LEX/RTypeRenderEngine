@@ -21,19 +21,55 @@ namespace RTypeEngine
      */
     class EventHandler {
         public:
-            EventHandler(GLFWwindow *window);
+            /**
+             * @brief Construct a new Event Handler object
+             * @details It initializes the mouse and keyboard handlers
+             * @param window The window to handle events on
+             */
+            explicit EventHandler(GLFWwindow *window);
             ~EventHandler() = default;
 
+            /**
+             * @brief Set the mouse handler
+             * @details This function will set the mouse handler
+             * @param mouseHandler The mouse handler to set
+             */
             void setMouseHandler(MouseHandler &mouseHandler);
+
+            /**
+             * @brief Set the keyboard handler
+             * @details This function will set the keyboard handler
+             * @param keyboardHandler The keyboard handler to set
+             */
             void setKeyboardHandler(KeyboardHandler &keyboardHandler);
 
+            /**
+             * @brief Get the mouse handler
+             * @details This function will return the mouse handler
+             * @return The mouse handler
+             */
             [[nodiscard]] MouseHandler &getMouseHandler();
+
+            /**
+             * @brief Get the keyboard handler
+             * @details This function will return the keyboard handler
+             * @return The keyboard handler
+             */
             [[nodiscard]] KeyboardHandler &getKeyboardHandler();
 
+            /**
+             * @brief Set the window close callback
+             * @details This function will set the window close callback
+             * @param callback The callback to set
+             */
             void setCloseCallback(std::function<void(void)> callback) {
                 _closeCallback = callback;
             }
 
+            /**
+             * @brief Update the event handler
+             * @note You should never call this function directly. Use @ref RTypeEngine::Window::pollEvents instead
+             */
             void update() {
                 _keyboardHandler.update();
                 _gamepadHandler.update();

@@ -16,9 +16,22 @@
 
 namespace RTypeEngine
 {
+    /**
+     * @brief Handles all gamepads
+     * @details This class is used to handle all gamepads connected to the computer. It will automatically add and remove gamepads as they are connected or disconnected
+     */
     class GamepadHandler {
         public:
+            /**
+             * @brief Construct a new Gamepad Handler object
+             * @details This constructor initialize all gamepads that are connected
+             */
             GamepadHandler();
+
+            /**
+             * @brief Destroy the Gamepad Handler object
+             * @details This destructor delete all gamepads
+             */
             ~GamepadHandler();
 
             friend class EventHandler;

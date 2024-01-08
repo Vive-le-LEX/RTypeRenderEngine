@@ -23,32 +23,50 @@
 
 namespace RTypeEngine::Animation {
 
+    /// @private
     template <typename T>
     struct AnimationTypeName : std::false_type {};
 
+    /// @private
     template <>
     struct AnimationTypeName<float> : std::true_type {
         static constexpr const char *name() { return "float"; }
     };
 
+    /// @private
     template <>
     struct AnimationTypeName<int> : std::true_type {
         static constexpr const char *name() { return "int"; }
     };
 
+    /// @private
     template <>
     struct AnimationTypeName<bool> : std::true_type {
         static constexpr const char *name() { return "bool"; }
     };
 
+    /**
+     * @brief Informations about an animated variable
+    */
     struct VariableInfo {
-        IKeyframe* keyframe;
-        const AnimationCurve *curve;
-        std::string type;
+        IKeyframe* keyframe; ///< The pointer to the keyframe of the variable
+        const AnimationCurve *curve; ///< The pointer to the AnimationCurve going to be used to interpolate the value
+        std::string type; ///< The type of the variable
     };
 
+
+    /**
+     * @brief Represents an animation sequence
+     * @details This class is used to represent a timeline from a json file. It will interpolate the values between keyframes
+     */
     class Sequence {
         public:
+            /**
+             * @brief Construct a new Sequence object
+             * @details This constructor will parse the json file and initialize the variables and objects
+             * @param filepath The path to the json file
+             * @param loop If the sequence should loop
+             */
             Sequence(const std::string &filepath, const bool &loop = false) : _loop(loop), _isPlaying(false), _time(0.0), _prevFrameTime(0.0), _currentFrame(0), _maxFrame(0) {
                 std::ifstream f(filepath);
                 try {
@@ -85,16 +103,26 @@ namespace RTypeEngine::Animation {
                 }
                 updateInterpolation(_data["frames"].at(_currentFrame)["interpolation"]);
             }
+
             ~Sequence() = default;
 
+            /**
+             * @brief Play the sequence
+             */
             void play() {
                 _isPlaying = true;
             }
 
+            /**
+             * @brief Pause the sequence
+             */
             void pause() {
                 _isPlaying = false;
             }
 
+            /**
+             * @brief Stop the sequence
+             */
             void stop() {
                 _isPlaying = false;
                 _currentFrame = 0;
@@ -103,10 +131,22 @@ namespace RTypeEngine::Animation {
                 _updatePreviousValues();
             }
 
+            /**
+             * @brief Set the loop state
+             * @param loop The new loop state
+             */
             void setLoop(const bool &loop) {
                 _loop = loop;
             }
 
+            /**
+             * @brief Attribute a value (from your code) to a variable name (from the sequence file)
+             * @details This method will check if the type of the variable is the same as the one given in parameter
+             * @param name The name of the variable
+             * @param value The value to attribute
+             * @tparam T The type of the value
+             * @note It will only accept float, int and bool
+            */
             template<typename T>
             void registerVariable(const std::string &name, T *value) {
                 static_assert(AnimationTypeName<T>::value, "Cannot register variable in sequence: type not supported");
@@ -125,11 +165,24 @@ namespace RTypeEngine::Animation {
                 updateInterpolation(_data["frames"].at(_currentFrame)["interpolation"]);
             }
 
+            /**
+             * @brief Attribute values of an object (from your code) to an object variable name (from the sequence file)
+             * @details This method takes a variable number of std::pairs of variable name and value
+             * @param name The name of the object
+             * @param args A variable number of Pairs
+             * @tparam Pair std::pair<const char*, T*> where T is the type of the value
+            */
             template<typename... Pairs>
             void registerObject(const char *name, const Pairs&&... args) {
                 registerObjectHelper(name, args...);
             }
 
+            /**
+             * @brief Register a trigger
+             * @details This method will check if the trigger is declared in the sequence file
+             * @param name The name of the trigger
+             * @param trigger The trigger
+            */
             void registerTrigger(const std::string &name, std::function<void(void)> *trigger) {
                 if (_triggersNames.end() == std::find(_triggersNames.begin(), _triggersNames.end(), name)) {
                     std::cerr << "Failed to register trigger: " << name << " is not explicited in sequence file" << std::endl;
@@ -138,6 +191,12 @@ namespace RTypeEngine::Animation {
                 _triggers[name] = trigger;
             }
 
+            /**
+             * @brief Advance the sequence
+             * @details This method will update the values of the variables and objects
+             * @param deltaTime The time elapsed since the last call
+             * @note This method should be called every frame, it won't update the values if the sequence is not playing nor if the sequence is finished
+            */
             void advance(const double &deltaTime) {
                 if (!_isPlaying)
                     return;

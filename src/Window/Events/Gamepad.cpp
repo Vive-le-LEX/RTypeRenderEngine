@@ -22,9 +22,6 @@ namespace RTypeEngine {
         enableVirtualMouse();
     }
 
-    Gamepad::~Gamepad() {
-    }
-
     void Gamepad::enableVirtualMouse() {
         if (_virtualMouse == nullptr) {
             _virtualMouse = new VirtualMouse(glfwGetCurrentContext());

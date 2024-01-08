@@ -14,11 +14,25 @@
 #include <unordered_map>
 
 namespace RTypeEngine::Animation {
+/**
+ * @brief Remaps a 0-1 value to a new 0-1 value using a function
+ * @details This class is used to define an the behavior of the value between 0 and 1
+ */
 class AnimationCurve {
    public:
-    AnimationCurve(std::function<double(double)> func) : _func(func){};
+   /**
+    * @brief Construct a new Animation Curve object
+    * @details This constructor will initialize the AnimationCurve with the given function
+    * @param func The function to use
+    */
+    explicit AnimationCurve(std::function<double(double)> func) : _func(func){};
     ~AnimationCurve() = default;
 
+    /**
+     * @brief Get the value at the given value
+     * @param value The value to get the value of the curve
+     * @return The value of the curve
+     */
     double getValue(double value) const {
         return _func(value);
     }
@@ -30,7 +44,7 @@ class AnimationCurve {
 // https://easings.net/
 static const AnimationCurve Linear = AnimationCurve([](double value) {
     return value;
-});
+}); //!< @brief Maximum altitude in meters.
 
 static const AnimationCurve EaseIn = AnimationCurve([](double value) {
     return value * value;

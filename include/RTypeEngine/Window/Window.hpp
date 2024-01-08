@@ -134,6 +134,10 @@ namespace RTypeEngine {
             return *_eventHandler;
         }
 
+        /**
+         * @brief Get the window projection
+         * @return glm::mat4
+         */
         const glm::mat4 &getProjection(void) const {
             return _projection;
         }

@@ -14,8 +14,21 @@
 
 namespace RTypeEngine
 {
+    /**
+     * @brief Represents a set of Glyphs
+     * @details This class is used to display a text on the screen
+     */
     class Text {
         public:
+            /**
+             * @brief Construct a new Text object
+             * @details This constructor initialize the text with the given parameters
+             * @param text The text to display
+             * @param font The font to use
+             * @param position The position of the text
+             * @param color The color of the text
+             * @param size The size of the text
+             */
             explicit Text(const std::string &text, const Font &font, const glm::vec2 position, const glm::vec4 color, const int &size) : _font(font), _size(size), _position(position), _color(color) {
                 _text = text;
                 _width = 0;
@@ -26,8 +39,14 @@ namespace RTypeEngine
                     _glyphs.push_back(glyph);
                 }
             }
+
             ~Text() = default;
 
+            /**
+             * @brief Set the text to display
+             * @details This function will set the text to display and update the width and height of the text
+             * @param text The text to display
+             */
             void setText(const std::string &text) {
                 _text = text;
                 _glyphs.clear();
@@ -40,34 +59,67 @@ namespace RTypeEngine
                 }
             }
 
+            /**
+             * @brief Get the current text
+             * @return The current text
+             */
             const std::string &getText() {
                 return _text;
             }
 
+            /**
+             * @brief Set the position of the text
+             * @param position The position of the text
+             */
             void setPosition(const glm::vec2 &position) {
                 _position = position;
             }
 
+            /**
+             * @brief Set the color of the text
+             * @param color The color of the text
+             */
             void setColor(const glm::vec4 &color) {
                 _color = color;
             }
 
+            /**
+             * @brief Set the size of the text
+             * @param scale The size of the text
+             */
             void setScale(const glm::vec2 &scale) {
                 _scale = scale;
             }
 
+            /**
+             * @brief Get the position of the text
+             * @return The position of the text
+             */
             glm::vec2 &getPosition() {
                 return _position;
             }
 
+            /**
+             * @brief Get the color of the text
+             * @return The color of the text
+             */
             glm::vec4 &getColor() {
                 return _color;
             }
 
+            /**
+             * @brief Get the size of the text
+             * @return The size of the text
+             */
             glm::vec2 &getScale() {
                 return _scale;
             }
 
+            /**
+             * @brief Draw the text
+             * @details This function will draw the text on the screen
+             * @param projection The pointer to the first element of the projection matrix
+             */
             void draw(const glm::f32 *projection) {
                 glUseProgram(Font::_shader.shaderId);
                 int projectionLoc = glGetUniformLocation(Font::_shader.shaderId, "projection");
@@ -105,10 +157,18 @@ namespace RTypeEngine
                 }
             }
 
+            /**
+             * @brief Get the width of the text
+             * @return The width of the text
+             */
             int getWidth() {
                 return _width;
             }
 
+            /**
+             * @brief Get the height of the text
+             * @return The height of the text
+             */
             int getHeight() {
                 return _size;
             }

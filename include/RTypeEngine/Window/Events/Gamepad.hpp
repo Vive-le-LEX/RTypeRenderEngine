@@ -19,6 +19,9 @@
 
 namespace RTypeEngine
 {
+    /**
+     * @brief All gamepad buttons
+     */
     enum GamepadButton {
         A = GLFW_GAMEPAD_BUTTON_A,
         B = GLFW_GAMEPAD_BUTTON_B,
@@ -37,6 +40,9 @@ namespace RTypeEngine
         DPAD_LEFT = GLFW_GAMEPAD_BUTTON_DPAD_LEFT,
     };
 
+    /**
+     * @brief All gamepad axis
+     */
     enum GamepadAxis {
         LEFT_X = GLFW_GAMEPAD_AXIS_LEFT_X,
         LEFT_Y = GLFW_GAMEPAD_AXIS_LEFT_Y,
@@ -48,29 +54,77 @@ namespace RTypeEngine
 
     using GamepadButtonCallback = std::function<void(const GamepadButton&)>;
     using GamepadAxisCallback = std::function<void(const GamepadAxis&)>;
+
+    /**
+     * @brief Handles a gamepad
+     */
     class Gamepad {
         public:
+            /**
+             * @brief Construct a new Gamepad object
+             * @param id The id of the gamepad
+             * @note This shouldn't be used directly
+             */
             Gamepad(const int &id);
-            ~Gamepad();
+            ~Gamepad() = default;
 
+            /**
+             * @brief Get the name of the gamepad
+             * @return The name of the gamepad
+             */
             const char *getName() const;
+
+            /**
+             * @brief Get the id of the gamepad
+             * @return The id of the gamepad
+             */
             const int &getId() const;
 
+            /** @name Button callbacks adders
+             * @brief Add a callback to a button event
+             * @param button The GamepadButton affected
+             * @param callback The GamepadButtonCallback to add to it
+             */
+            ///@{
             void addButtonPressCallback(const GamepadButton &button, GamepadButtonCallback *callback);
             void addButtonReleaseCallback(const GamepadButton &button, GamepadButtonCallback *callback);
             void addButtonMaintainCallback(const GamepadButton &button, GamepadButtonCallback *callback);
+            ///@}
 
+            /** @name Axis callbacks adder
+             * @brief Add a callback to an axis event
+             * @param axis The GamepadAxis affected
+             * @param callback The pointer to a GamepadAxisCallback
+             */
             void addAxisMoveCallback(const GamepadAxis &axis, GamepadAxisCallback *callback);
 
+            /** @name Button callbacks removers
+             * @brief Remove a callback from a button event
+             * @param button The GamepadButton affected
+             * @param callback The pointer to a GamepadButtonCallback
+             */
+            ///@{
             void removeButtonPressCallback(const GamepadButton &button, GamepadButtonCallback *callback);
             void removeButtonReleaseCallback(const GamepadButton &button, GamepadButtonCallback *callback);
             void removeButtonMaintainCallback(const GamepadButton &button, GamepadButtonCallback *callback);
+            ///@}
 
+            /** @name Axis callbacks remover
+             * @brief Remove a callback from an axis event
+             * @param axis The GamepadAxis affected
+             * @param callback The pointer to a GamepadAxisCallback
+             */
             void removeAxisMoveCallback(const GamepadAxis &axis, GamepadAxisCallback *callback);
 
+            /**
+             * @brief Enable the virtual mouse
+            */
+            void enableVirtualMouse(void);
+            /**
+             * @brief Disable the virtual mouse
+             */
             void disableVirtualMouse(void);
 
-            void enableVirtualMouse(void);
 
             friend class GamepadHandler;
         protected:
