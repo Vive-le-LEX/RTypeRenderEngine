@@ -53,6 +53,31 @@ class WindowDebugger {
         pos.y += _dynamicValues.size() * (_fontSize + _padding);
         _dynamicTexts[name] = new Text(name + ": " + toString(ptr), _font, pos, glm::vec4(1, 1, 1, 1), _fontSize);
     }
+    template <typename T>
+    void addDebugInfo(const std::string &name, T *ptr) {
+        std::function<std::string (const T *)> toString = [](const T *ptr) {
+            return std::to_string(*ptr);
+        };
+        addDebugInfo(name, ptr, toString);
+    }
+    void addDebugInfo(const std::string &name, glm::vec3 *ptr) {
+        std::function<std::string (const glm::vec3 *)> toString = [](const glm::vec3 *ptr) {
+            return std::to_string(ptr->x) + ", " + std::to_string(ptr->y) + ", " + std::to_string(ptr->z);
+        };
+        addDebugInfo(name, ptr, toString);
+    }
+    void addDebugInfo(const std::string &name, glm::vec2 *ptr) {
+        std::function<std::string (const glm::vec2 *)> toString = [](const glm::vec2 *ptr) {
+            return std::to_string(ptr->x) + ", " + std::to_string(ptr->y);
+        };
+        addDebugInfo(name, ptr, toString);
+    }
+    void addDebugInfo(const std::string &name, glm::vec4 *ptr) {
+        std::function<std::string (const glm::vec4 *)> toString = [](const glm::vec4 *ptr) {
+            return std::to_string(ptr->x) + ", " + std::to_string(ptr->y) + ", " + std::to_string(ptr->z) + ", " + std::to_string(ptr->w);
+        };
+        addDebugInfo(name, ptr, toString);
+    }
 
    protected:
    private:
