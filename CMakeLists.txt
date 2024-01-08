@@ -20,10 +20,13 @@ set(SRC-GRAPHICS
     src/Window/EventHandler.cpp
     src/Window/Events/KeyboardHandler.cpp
     src/Window/Events/MouseHandler.cpp
+    src/Window/Events/GamepadHandler.cpp
+    src/Window/Events/Gamepad.cpp
 )
 
 set(SRC-CORE
     src/System/Core.cpp
+    src/System/VirtualMouse.cpp
 )
 
 add_library(${PROJECT_NAME}-graphics SHARED

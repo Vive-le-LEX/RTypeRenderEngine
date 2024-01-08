@@ -128,9 +128,8 @@ namespace RTypeEngine {
 
 
             friend class EventHandler;
-            friend class Window;
-            friend void glfwSetKeyCallback(GLFWwindow* window, GLFWkeyfun cbfun);
             friend class WindowConsole;
+            friend void glfwSetKeyCallback(GLFWwindow* window, GLFWkeyfun cbfun);
         protected:
         private:
             void toggleFocus(KeyCallback &keyPressedCallback, KeyCallback &keyRepeatCallback, KeyCallback &keyReleasedCallback) {
