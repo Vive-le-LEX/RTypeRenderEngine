@@ -11,10 +11,9 @@
 
 #pragma once
 
-#include "RTypeECS/Coordinator.hpp"
-#include "RTypeEngine/Graphics/Mesh.hpp"
 #include <memory>
+#include "RTypeECS/Coordinator.hpp"
 
 namespace RTypeEngine {
-    inline std::unique_ptr<Coordinator> _coordinator = std::make_unique<Coordinator>();
+    extern std::unique_ptr<Coordinator> _coordinator;
 }

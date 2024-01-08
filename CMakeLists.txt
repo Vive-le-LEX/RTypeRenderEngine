@@ -13,24 +13,46 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
 
 include(GNUInstallDirs)
-include(external/FindDependencies.cmake)
 
-set(SRC
+set(SRC-GRAPHICS
     src/Window/Window.cpp
+    src/Window/WindowConsole.cpp
+    src/Window/WindowDebugger.cpp
     src/Window/EventHandler.cpp
     src/Window/Events/KeyboardHandler.cpp
     src/Window/Events/MouseHandler.cpp
+    src/Window/Events/GamepadHandler.cpp
+    src/Window/Events/Gamepad.cpp
 )
 
-add_library(${PROJECT_NAME} SHARED
-    ${SRC}
+set(SRC-CORE
+    src/System/Core.cpp
+    src/System/VirtualMouse.cpp
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC external/glad/include/)
-target_link_libraries(${PROJECT_NAME} INTERFACE freetype-interface glm glfw)
-target_include_directories(${PROJECT_NAME} PUBLIC include)
-target_link_libraries(${PROJECT_NAME} INTERFACE rtype-ecs)
-target_link_libraries(${PROJECT_NAME} PRIVATE glad glfw glm freetype)
+add_library(${PROJECT_NAME}-graphics SHARED
+    ${SRC-GRAPHICS}
+)
+
+add_library(${PROJECT_NAME}-core SHARED
+    ${SRC-CORE}
+)
+
+include(external/FindDependencies.cmake)
+
+target_include_directories(${PROJECT_NAME}-graphics PUBLIC include)
+target_include_directories(${PROJECT_NAME}-graphics INTERFACE cpu_features)
+target_include_directories(${PROJECT_NAME}-graphics PRIVATE external/glad/include/)
+
+target_link_libraries(${PROJECT_NAME}-graphics INTERFACE freetype-interface rtype-ecs cpu_features glad glfw glm freetype luacpp_static)
+target_link_libraries(${PROJECT_NAME}-graphics PRIVATE glad glfw glm freetype luacpp_static cpu_features)
+
+
+target_include_directories(${PROJECT_NAME}-core PUBLIC include)
+target_include_directories(${PROJECT_NAME}-core PRIVATE external/glad/include/)
+
+target_link_libraries(${PROJECT_NAME}-core INTERFACE freetype-interface rtype-ecs luacpp_static nlohmann_json::nlohmann_json glfw glm freetype)
+target_link_libraries(${PROJECT_NAME}-core PRIVATE glfw glm freetype rtype-ecs)
 
 if (IS_TESTING AND NOT WIN32)
     include(tests/BuildTests.cmake)

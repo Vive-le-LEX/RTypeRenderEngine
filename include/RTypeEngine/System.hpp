@@ -12,6 +12,5 @@
 #pragma once
 
 #include "RTypeEngine/System/Core.hpp"
-#include "RTypeEngine/System/Draw.hpp"
-
-#include "RTypeEngine/System/StateHandler.hpp"
+#include "RTypeEngine/System/Scripting.hpp"
+#include "RTypeEngine/System/Cinematic.hpp"

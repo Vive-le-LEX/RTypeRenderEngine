@@ -32,6 +32,7 @@ namespace RTypeEngine {
         int nbByteChannels; /**< The number of byte channels of the texture (32 for RGBA)*/
         stbi_uc *pixels; /**< The raw pointer to the pixels of the texture */
         GLuint textureId; /**< The OpenGL texture id */
+        bool isFromMemory; /**< True if the texture is from memory, false if it is from a file */
     };
 
     /**
@@ -54,8 +55,32 @@ namespace RTypeEngine {
          * @return TextureComponent
          */
         static TextureComponent createTextureFromFile(const std::string &path) {
-            TextureComponent texturec;
+            int width, height, nbByteChannels;
+            stbi_uc *pixels = stbi_load(path.c_str(), &width, &height, &nbByteChannels, 0);
+            if (!pixels) {
+                std::cerr << "Failed to load texture: " << path << std::endl;
+                exit(1);
+            }
+            auto texturec = createTextureFromMemory(pixels, width, height, nbByteChannels);
+            texturec.isFromMemory = false;
+            return std::move(texturec);
+        }
 
+        /**
+         * @brief Create a texture from a memory buffer
+         * @param pixels The pixels of the texture
+         * @param width The width of the texture
+         * @param height The height of the texture
+         * @param nbByteChannels The number of byte channels of the texture (32 for RGBA)
+         * @return TextureComponent
+         */
+        static TextureComponent createTextureFromMemory(const u_char *pixels, int width, int height, int nbByteChannels) {
+            TextureComponent texturec;
+            texturec.width = width;
+            texturec.height = height;
+            texturec.nbByteChannels = nbByteChannels;
+            texturec.pixels = (stbi_uc *) pixels;
+            texturec.isFromMemory = true;
             glGenTextures(1, &texturec.textureId);
             glBindTexture(GL_TEXTURE_2D, texturec.textureId);
 
@@ -63,20 +88,15 @@ namespace RTypeEngine {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            texturec.pixels = stbi_load(path.c_str(), &texturec.width, &texturec.height, &texturec.nbByteChannels, 0);
-            if (!texturec.pixels) {
-                std::cerr << "Failed to load texture: " << path << std::endl;
-                exit(1);
-            }
             if (texturec.nbByteChannels == 3)
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texturec.width, texturec.height, 0, GL_RGB, GL_UNSIGNED_BYTE, texturec.pixels);
             else if (texturec.nbByteChannels == 4)
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texturec.width, texturec.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, texturec.pixels);
             else
-                std::cerr << "No support for " << texturec.nbByteChannels << " channels (" << path << ")" << std::endl;
+                std::cerr << "No support for " << texturec.nbByteChannels << std::endl;
             glGenerateMipmap(GL_TEXTURE_2D);
             return texturec;
-        }
+        };
 
         /**
          * @brief Delete a texture

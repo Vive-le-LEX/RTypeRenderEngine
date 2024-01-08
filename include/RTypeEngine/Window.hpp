@@ -11,4 +11,6 @@
 #include "RTypeEngine/Window/Window.hpp"
 #include "RTypeEngine/Window/EventHandler.hpp"
 
+#include "RTypeEngine/Window/Events/Mappings.hpp"
+
 #endif /* !WINDOW_ALL_HPP_ */

@@ -45,11 +45,9 @@ Window::Window(int width, int height, const char *title, GLFWmonitor *monitor,
     glfwSetErrorCallback([](int error, const char *description) {
         std::cerr << "Internal GLFW Error " << error << ": " << description
                   << std::endl;
-        std::cerr << "Internal GLFW Error " << error << ": " << description
-                  << std::endl;
     });
     glViewport(_viewport.x, _viewport.y, _viewport.z, _viewport.w);
-    _eventHandler = std::make_unique<EventHandler>(_window);
+    _initMembers();
     glfwSetWindowUserPointer(_window, _eventHandler.get());
 
     glfwSetInputMode(glfwGetCurrentContext(), GLFW_STICKY_MOUSE_BUTTONS,
@@ -57,10 +55,25 @@ Window::Window(int width, int height, const char *title, GLFWmonitor *monitor,
     glfwSetInputMode(glfwGetCurrentContext(), GLFW_LOCK_KEY_MODS,
                      GLFW_TRUE);
     glfwSwapInterval(0);
-    glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    std::cout << "OpenGL " << glGetString(GL_VERSION) << std::endl;
+    int left, top, right, bottom;
+    glfwGetWindowFrameSize(_window, &left, &top, &right, &bottom);
+
+    _topbarHeight = top - bottom;
+    _windowConsole = std::make_unique<WindowConsole>(_window, &_projection, &_deltaTime, _eventHandler->getKeyboardHandler());
+    _windowDebugger = std::make_unique<WindowDebugger>(_window, &_projection, &_deltaTime, &_topbarHeight, _eventHandler->getKeyboardHandler());
+
+}
+
+void Window::_initMembers() {
+    _eventHandler = std::make_unique<EventHandler>(_window);
+    _eventHandler->getKeyboardHandler().setKeyPressedCallback(GLFW_KEY_F10, [this](const KeyState &ks) {
+        this->_windowConsole->switchState();
+    });
+    _eventHandler->getKeyboardHandler().setKeyPressedCallback(GLFW_KEY_F3, [this](const KeyState &ks) {
+        this->_windowDebugger->switchState();
+    });
 }
 
 // void Window::setCallbacks(void) {
@@ -114,10 +127,12 @@ void Window::setViewport(const glm::ivec4 &viewport) {
 
 void Window::clear(const glm::vec4 &c) const {
     glClearColor(c.r, c.g, c.b, c.a);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void Window::display() {
+    _windowConsole->display();
+    _windowDebugger->display();
     static auto lastTime = std::chrono::high_resolution_clock::now();
     glfwSwapBuffers(_window);
     auto currentTime = std::chrono::high_resolution_clock::now();
@@ -149,5 +164,5 @@ const double &Window::getDeltaTime() const {
 
 void Window::pollEvents() {
     glfwPollEvents();
-    _eventHandler->getKeyboardHandler().update();
+    _eventHandler->update();
 }

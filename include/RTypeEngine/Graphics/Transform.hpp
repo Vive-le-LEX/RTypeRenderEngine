@@ -12,6 +12,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <glm/gtx/euler_angles.hpp>
 
 namespace RTypeEngine {
     /**
@@ -57,25 +58,50 @@ namespace RTypeEngine {
             (void) transform;
         }
 
+        /**
+         * @brief Get the position of the transform
+         * @param transform The transform to get the position from
+         * @return The position of the transform
+         */
         static glm::vec3 getPosition(const TransformComponent &transform) noexcept {
             return glm::vec3(transform.transform[3]);
         }
 
+        /**
+         * @brief Set the position of the transform
+         * @param transform The transform to set the position to
+         * @param position The position to set
+         */
         static void setPosition(TransformComponent &transform, const glm::vec3 &position) noexcept {
             transform.isDirty = true;
             transform.transform[3] = glm::vec4(position, 1.0f);
         }
 
+        /**
+         * @brief Get the rotation of the transform
+         * @param transform The transform to get the rotation from
+         * @return The rotation of the transform
+         */
         static glm::vec3 getRotation(const TransformComponent &transform) noexcept {
             return glm::vec3(glm::degrees(glm::eulerAngles(glm::quat_cast(transform.transform))));
         }
 
+        /**
+         * @brief Get the scale of the transform
+         * @param transform The transform to get the scale from
+         * @return The scale of the transform
+         */
         static glm::vec3 getScale(const TransformComponent &transform) noexcept {
             return glm::vec3(glm::length(glm::vec3(transform.transform[0][0], transform.transform[1][0], transform.transform[2][0])),
                              glm::length(glm::vec3(transform.transform[0][1], transform.transform[1][1], transform.transform[2][1])),
                              glm::length(glm::vec3(transform.transform[0][2], transform.transform[1][2], transform.transform[2][2])));
         }
 
+        /**
+         * @brief Set the scale of the transform
+         * @param transform The transform to set the scale to
+         * @param scale The scale to set
+         */
         static void setScale(TransformComponent &transform, const glm::vec3 &scale) noexcept {
             transform.isDirty = true;
             transform.transform[0][0] = scale.x;
