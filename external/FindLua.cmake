@@ -1,5 +1,3 @@
-find_package(Lua)
-
 if (LUA_FOUND)
     message(STATUS "Found local Lua")
 else()
