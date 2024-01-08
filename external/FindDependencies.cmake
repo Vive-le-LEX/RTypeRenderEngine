@@ -8,6 +8,7 @@ set(IS_TESTING OFF)
 set(IS_BUILDING_DOC OFF)
 
 message(STATUS "Fetching external dependencies...")
+include(external/FindCPUFeatures.cmake)
 include(external/FindLua.cmake)
 include(external/FindLuacpp.cmake)
 include(external/FindNlohmannCpp.cmake)

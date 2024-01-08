@@ -57,14 +57,22 @@ Window::Window(int width, int height, const char *title, GLFWmonitor *monitor,
     glfwSwapInterval(0);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    std::cout << "OpenGL " << glGetString(GL_VERSION) << std::endl;
+    int left, top, right, bottom;
+    glfwGetWindowFrameSize(_window, &left, &top, &right, &bottom);
+
+    _topbarHeight = top - bottom;
     _windowConsole = std::make_unique<WindowConsole>(_window, &_projection, &_deltaTime, _eventHandler->getKeyboardHandler());
+    _windowDebugger = std::make_unique<WindowDebugger>(_window, &_projection, &_deltaTime, &_topbarHeight, _eventHandler->getKeyboardHandler());
+
 }
 
 void Window::_initMembers() {
     _eventHandler = std::make_unique<EventHandler>(_window);
     _eventHandler->getKeyboardHandler().setKeyPressedCallback(GLFW_KEY_F10, [this](const KeyState &ks) {
         this->_windowConsole->switchState();
+    });
+    _eventHandler->getKeyboardHandler().setKeyPressedCallback(GLFW_KEY_F3, [this](const KeyState &ks) {
+        this->_windowDebugger->switchState();
     });
 }
 
@@ -124,6 +132,7 @@ void Window::clear(const glm::vec4 &c) const {
 
 void Window::display() {
     _windowConsole->display();
+    _windowDebugger->display();
     static auto lastTime = std::chrono::high_resolution_clock::now();
     glfwSwapBuffers(_window);
     auto currentTime = std::chrono::high_resolution_clock::now();

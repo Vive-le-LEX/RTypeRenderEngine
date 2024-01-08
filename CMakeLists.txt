@@ -17,6 +17,7 @@ include(GNUInstallDirs)
 set(SRC-GRAPHICS
     src/Window/Window.cpp
     src/Window/WindowConsole.cpp
+    src/Window/WindowDebugger.cpp
     src/Window/EventHandler.cpp
     src/Window/Events/KeyboardHandler.cpp
     src/Window/Events/MouseHandler.cpp
@@ -40,10 +41,11 @@ add_library(${PROJECT_NAME}-core SHARED
 include(external/FindDependencies.cmake)
 
 target_include_directories(${PROJECT_NAME}-graphics PUBLIC include)
+target_include_directories(${PROJECT_NAME}-graphics INTERFACE cpu_features)
 target_include_directories(${PROJECT_NAME}-graphics PRIVATE external/glad/include/)
 
-target_link_libraries(${PROJECT_NAME}-graphics INTERFACE freetype-interface rtype-ecs)
-target_link_libraries(${PROJECT_NAME}-graphics PRIVATE glad glfw glm freetype luacpp_static)
+target_link_libraries(${PROJECT_NAME}-graphics INTERFACE freetype-interface rtype-ecs cpu_features)
+target_link_libraries(${PROJECT_NAME}-graphics PRIVATE glad glfw glm freetype luacpp_static cpu_features)
 
 
 target_include_directories(${PROJECT_NAME}-core PUBLIC include)
