@@ -49,7 +49,7 @@ target_link_libraries(${PROJECT_NAME}-graphics PRIVATE glad glfw glm freetype lu
 target_include_directories(${PROJECT_NAME}-core PUBLIC include)
 target_include_directories(${PROJECT_NAME}-core PRIVATE external/glad/include/)
 
-target_link_libraries(${PROJECT_NAME}-core INTERFACE freetype-interface rtype-ecs luacpp_static)
+target_link_libraries(${PROJECT_NAME}-core INTERFACE freetype-interface rtype-ecs luacpp_static nlohmann_json::nlohmann_json)
 target_link_libraries(${PROJECT_NAME}-core PRIVATE glfw glm freetype rtype-ecs)
 
 if (IS_TESTING AND NOT WIN32)
