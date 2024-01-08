@@ -126,9 +126,12 @@ namespace RTypeEngine
         _cpuInfo["arch"] = "loongarch";
         #endif
 
+        GLFWmonitor* primary = glfwGetPrimaryMonitor();
+        const GLFWvidmode* mode = glfwGetVideoMode(primary);
+        std::string resolution = std::to_string(mode->width) + "x" + std::to_string(mode->height);
+
         const char *openGlVersion = (const char *)glGetString(GL_VERSION);
         std::vector<std::string> lines;
-        lines.push_back("OpenGL " + std::string(openGlVersion));
         auto brandNameIt = _cpuInfo.find("brand");
         std::string brandName = "CPU: ";
         if (brandNameIt != _cpuInfo.end())
@@ -136,6 +139,8 @@ namespace RTypeEngine
         else
             brandName += "Unknown";
         lines.push_back(brandName + " " + _cpuInfo["arch"]);
+        lines.push_back("OpenGL " + std::string(openGlVersion));
+        lines.push_back("Display: " + resolution);
         auto y = *_topbarSize + _fontSize + _padding;
         for (auto &line : lines) {
             auto text = Text(line, _font, glm::vec2(_padding, 0.0 + *_topbarSize + _fontSize + _padding), glm::vec4(1, 1, 1, 1), _fontSize);
