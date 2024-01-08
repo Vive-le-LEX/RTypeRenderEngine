@@ -59,7 +59,6 @@ Window::Window(int width, int height, const char *title, GLFWmonitor *monitor,
     glfwSwapInterval(0);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    std::cout << "OpenGL " << glGetString(GL_VERSION) << std::endl;
     int left, top, right, bottom;
     glfwGetWindowFrameSize(_window, &left, &top, &right, &bottom);
 
