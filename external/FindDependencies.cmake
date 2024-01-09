@@ -1,6 +1,5 @@
 
 include(FetchContent)
-Set(FETCHCONTENT_QUIET FALSE) # Needed to print downloading progress
 
 set(IS_TESTING_TMP ${IS_TESTING})
 set(IS_BUILDING_DOC_TMP ${IS_BUILDING_DOC})
@@ -19,7 +18,7 @@ include(external/FindGLFW.cmake)
 include(external/FindGTest.cmake)
 include(external/FindRTypeECS.cmake)
 include(external/FindFreetype.cmake)
-include(external/FindMiniaudio.cmake)
+include(external/FindSoloud.cmake)
 
 set(IS_TESTING ${IS_TESTING_TMP})
 set(IS_BUILDING_DOC ${IS_BUILDING_DOC_TMP})
