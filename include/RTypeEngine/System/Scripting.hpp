@@ -6,6 +6,7 @@
 */
 
 #include <memory>
+#include <iostream>
 #include "LuaCpp.hpp"
 #include <glm/glm.hpp>
 
@@ -16,6 +17,7 @@
 
 namespace RTypeEngine {
 
+    /// @private
     template<typename T>
     struct LuaType {
         typedef
@@ -26,8 +28,18 @@ namespace RTypeEngine {
         > type;
     };
 
+    /**
+     * @brief Wrapper around a Lua program
+     * @details This class is used to create a Lua program and run it. It can also be used to add global variables to the program and get them back after the program has been run
+     */
     class LuaProgram {
         public:
+            /**
+             * @brief Static function to create a LuaProgram from a code snippet
+             * @param name The name of the program
+             * @param snippet The code snippet
+             * @param modifyVariables If the program should modify the variables passed to it
+             */
             static LuaProgram createFromSnippet(const std::string &name, const std::string &snippet, const bool &modifyVariables) {
                 LuaProgram program(name);
                 program._modifyVariables = modifyVariables;
@@ -35,6 +47,12 @@ namespace RTypeEngine {
                 return program;
             }
 
+            /**
+             * @brief Static function to create a LuaProgram from a file
+             * @param name The name of the program
+             * @param path The path to the file
+             * @param modifyVariables If the program should modify the variables passed to it
+             */
             static LuaProgram createFromFile(const std::string &name, const std::string &path, const bool &modifyVariables) {
                 LuaProgram program(name);
                 program._modifyVariables = modifyVariables;
@@ -45,12 +63,29 @@ namespace RTypeEngine {
 
             ~LuaProgram() = default;
 
+            /**
+             * @brief Recompile the program
+             */
             void recompile() {
                 if (!_path)
                     return;
                 _luaContext.CompileFile(_name, *_path);
             }
 
+            /**
+             * @brief Links a variable from your code to the Lua program
+             * @details This function is used to link a variable from your code to the Lua program. It will automatically create a Lua variable with the same name and type as the variable you passed. It will also automatically update the variable if you set modifyVariables to true
+             * @note This function only works with int, std::string, bool, glm::vec2 and glm::vec3
+            */
+            template<typename T>
+            void addGlobalVariable(const std::string &name, T &value) {
+                _globalsData[name] = &value;
+                _globalsType[name] = &typeid(T);
+                _luaGlobals[name] = std::make_shared<typename LuaType<T>::type>(value);
+                _luaContext.AddGlobalVariable(name, _luaGlobals[name]);
+            }
+
+            /// @private
             void addGlobalVariable(const std::string &name, glm::vec2 &value) {
                 auto luaTable = std::make_shared<LuaCpp::Engine::LuaTTable>();
                 _luaGlobals[name] = luaTable;
@@ -63,6 +98,7 @@ namespace RTypeEngine {
                 _globalsData[name] = &value;
             }
 
+            /// @private
             void addGlobalVariable(const std::string &name, glm::vec3 &value) {
                 auto luaTable = std::make_shared<LuaCpp::Engine::LuaTTable>();
                 _luaGlobals[name] = luaTable;
@@ -77,23 +113,9 @@ namespace RTypeEngine {
                 _globalsData[name] = &value;
             }
 
-            template<typename T>
-            void addGlobalVariable(const std::string &name, T &value) {
-                _globalsData[name] = &value;
-                _globalsType[name] = &typeid(T);
-                _luaGlobals[name] = std::make_shared<typename LuaType<T>::type>(value);
-                _luaContext.AddGlobalVariable(name, _luaGlobals[name]);
-            }
-
-            template<typename T>
-            T &getGlobalVariable(const std::string &name) {
-                if (_globalsType[name] == &typeid(T)) {
-                    auto var = _globalsData[name];
-                    return *static_cast<T *>(var);
-                }
-                assert(false);
-            }
-
+            /**
+             * @brief Run the program
+             */
             void run() {
                 try {
                     for (auto & luaGlob : _luaGlobals) {
@@ -165,6 +187,10 @@ namespace RTypeEngine {
                 }
             }
 
+            /**
+             * @brief Get the name of the program
+             * @return The name of the program
+             */
             const std::string &getName() const {
                 return _name;
             }

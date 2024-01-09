@@ -17,13 +17,17 @@ include(GNUInstallDirs)
 set(SRC-GRAPHICS
     src/Window/Window.cpp
     src/Window/WindowConsole.cpp
+    src/Window/WindowDebugger.cpp
     src/Window/EventHandler.cpp
     src/Window/Events/KeyboardHandler.cpp
     src/Window/Events/MouseHandler.cpp
+    src/Window/Events/GamepadHandler.cpp
+    src/Window/Events/Gamepad.cpp
 )
 
 set(SRC-CORE
     src/System/Core.cpp
+    src/System/VirtualMouse.cpp
 )
 
 add_library(${PROJECT_NAME}-graphics SHARED
@@ -37,17 +41,17 @@ add_library(${PROJECT_NAME}-core SHARED
 include(external/FindDependencies.cmake)
 
 target_include_directories(${PROJECT_NAME}-graphics PUBLIC include)
-target_include_directories(${PROJECT_NAME}-graphics PRIVATE ${LUACPP_INCLUDE_DIR} external/glad/include/)
+target_include_directories(${PROJECT_NAME}-graphics INTERFACE cpu_features)
+target_include_directories(${PROJECT_NAME}-graphics PRIVATE external/glad/include/)
 
-target_link_libraries(${PROJECT_NAME}-graphics INTERFACE freetype-interface rtype-ecs)
-target_link_libraries(${PROJECT_NAME}-graphics PRIVATE glad glfw glm freetype ${LUACPP_LIB})
+target_link_libraries(${PROJECT_NAME}-graphics INTERFACE freetype-interface rtype-ecs cpu_features glad glfw glm freetype luacpp_static)
+target_link_libraries(${PROJECT_NAME}-graphics PRIVATE glad glfw glm freetype luacpp_static cpu_features)
 
 
 target_include_directories(${PROJECT_NAME}-core PUBLIC include)
-target_include_directories(${PROJECT_NAME}-core INTERFACE ${LUACPP_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME}-core PRIVATE external/glad/include/)
 
-target_link_libraries(${PROJECT_NAME}-core INTERFACE freetype-interface rtype-ecs ${LUACPP_LIB})
+target_link_libraries(${PROJECT_NAME}-core INTERFACE freetype-interface rtype-ecs luacpp_static nlohmann_json::nlohmann_json glfw glm freetype)
 target_link_libraries(${PROJECT_NAME}-core PRIVATE glfw glm freetype rtype-ecs)
 
 if (IS_TESTING AND NOT WIN32)

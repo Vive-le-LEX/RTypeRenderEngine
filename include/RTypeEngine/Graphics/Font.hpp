@@ -20,11 +20,15 @@
 
 namespace RTypeEngine
 {
+    /**
+     * @brief Glyph struct
+     * @details This struct is used to store all informations about a glyph
+     */
     struct Glyph {
-        unsigned int textureID;
-        glm::ivec2   size;
-        glm::ivec2   bearing;
-        unsigned int advance;
+        unsigned int textureID; ///< OpenGL texture ID
+        glm::ivec2   size;      ///< Pixel size of glyph
+        glm::ivec2   bearing;   ///< Offset from baseline to left/top of glyph (https://fontforge.org/docs/tutorial/editexample5.html)
+        unsigned int advance;   ///< Pixel offset to advance to next glyph
     };
     
     struct FontComponent {
@@ -33,11 +37,20 @@ namespace RTypeEngine
         int size;
     };
 
+    /**
+     * @brief Font class
+     * @details This class is used to load a font and get glyphs from it
+     */
     class Font {
         public:
-            ~Font() {
-            }
+            ~Font() = default;
 
+            /**
+             * @brief Create a font object
+             * @details This function is used to create a font object from a filepath
+             * @param path The path to the font file
+             * @return The font object
+             */
             static Font createFont(const std::string &path) {
                 if (!_ft) {
                     prepareDraw();
@@ -55,6 +68,13 @@ namespace RTypeEngine
                 return Font(newFace);
             }
 
+            /**
+             * @brief Get the corresponding glyph
+             * @details This function is used to get a glyph from a character and a size
+             * @param c The character
+             * @param size The size of the glyph
+             * @return The glyph object
+             */
             const Glyph getGlyph(const char &c, const int &size) {
                 if (_glyphs.find(size) == _glyphs.end()) {
                     _glyphs[size] = std::unordered_map<char, Glyph>();

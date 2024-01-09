@@ -69,6 +69,9 @@ namespace RTypeEngine {
         /**
          * @brief Create a texture from a memory buffer
          * @param pixels The pixels of the texture
+         * @param width The width of the texture
+         * @param height The height of the texture
+         * @param nbByteChannels The number of byte channels of the texture (32 for RGBA)
          * @return TextureComponent
          */
         static TextureComponent createTextureFromMemory(const u_char *pixels, int width, int height, int nbByteChannels) {

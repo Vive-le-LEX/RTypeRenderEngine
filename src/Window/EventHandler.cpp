@@ -41,6 +41,14 @@ namespace RTypeEngine
                 std::cout << paths[i] << std::endl;
             }
         });
+        glfwSetJoystickCallback([](int id, int event) {
+            EventHandler *e = static_cast<EventHandler *>(glfwGetWindowUserPointer(glfwGetCurrentContext()));
+            if (event == GLFW_CONNECTED) {
+                e->_gamepadHandler._addGamepad(id);
+            } else if (event == GLFW_DISCONNECTED) {
+                e->_gamepadHandler._removeGamepad(id);
+            }
+        });
     }
 
     void EventHandler::setMouseHandler(MouseHandler &mouseHandler)

@@ -23,6 +23,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "RTypeEngine/Window/EventHandler.hpp"
 #include "RTypeEngine/Window/WindowConsole.hpp"
+#include "RTypeEngine/Window/WindowDebugger.hpp"
 
 namespace RTypeEngine {
     /**
@@ -133,6 +134,10 @@ namespace RTypeEngine {
             return *_eventHandler;
         }
 
+        /**
+         * @brief Get the window projection
+         * @return glm::mat4
+         */
         const glm::mat4 &getProjection(void) const {
             return _projection;
         }
@@ -145,12 +150,29 @@ namespace RTypeEngine {
             return *_windowConsole;
         }
 
+        /**
+         * @brief Get the window debugger
+         * @return WindowDebugger &
+         */
+        WindowDebugger &getWindowDebugger(void) {
+            return *_windowDebugger;
+        }
+
+        /**
+         * @brief Get the window topbar height
+         * @return int
+         */
+        const int &getTopbarHeight(void) const {
+            return _topbarHeight;
+        }
+
         friend class Sprite;
         friend class Text;
 
     private:
         std::unique_ptr<EventHandler> _eventHandler;
         std::unique_ptr<WindowConsole> _windowConsole;
+        std::unique_ptr<WindowDebugger> _windowDebugger;
         GLFWwindow *_window = NULL;
 
         static bool _wasInit;
@@ -162,6 +184,7 @@ namespace RTypeEngine {
         double _deltaTime = 0.0f;
 
         int _frameRateLimit = 60;
+        int _topbarHeight = 0;
 
         unsigned int _lastTexture = 0;
 

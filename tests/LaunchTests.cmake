@@ -8,7 +8,7 @@ if (NOT EXISTS ${build_dir})
 endif()
 
 execute_process(
-    COMMAND ${CMAKE_COMMAND} ..
+    COMMAND ${CMAKE_COMMAND} .. -DIS_TESTING:BOOL=TRUE
     WORKING_DIRECTORY ${build_dir}
 )
 

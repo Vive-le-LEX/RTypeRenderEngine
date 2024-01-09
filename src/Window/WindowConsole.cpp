@@ -108,15 +108,12 @@ void WindowConsole::add_prev_line(const std::string &line) {
     _prevLines[0] = new Text(line, _font, pos, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), 24);
 }
 
-WindowConsole::~WindowConsole() {
-}
-
 void WindowConsole::switchState() {
     _finishedAnimation = false;
     _isOpen = !_isOpen;
 }
 
-const bool WindowConsole::isOpen() {
+const bool WindowConsole::isOpen() const {
     return _isOpen && _finishedAnimation;
 }
 
