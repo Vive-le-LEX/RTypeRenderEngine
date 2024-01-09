@@ -5,17 +5,15 @@
 ** Text
 */
 
-#ifndef TEXT_HPP_
-#define TEXT_HPP_
+#pragma once
 
 #include <string>
 #include <vector>
 
-#include "Font.hpp"
 #include "RTypeECS/Types.hpp"
-#include "RTypeEngine/System.hpp"
-#include "RTypeEngine/Graphics.hpp"
-#include "RTypeEngine/Window.hpp"
+#include "RTypeECS/Coordinator.hpp"
+#include "RTypeEngine/System/Core.hpp"
+#include "Font.hpp"
 
 namespace RTypeEngine {
     /**
@@ -37,13 +35,13 @@ namespace RTypeEngine {
         int height;
         glm::vec4 color;
     };
-    
+
     /**
      * @brief Handles the creation of a text entity
      */
     class Text {
     public:
-        
+
         /**
          * @brief Creates a text entity
          * @param text The text to display
@@ -86,7 +84,7 @@ namespace RTypeEngine {
         }
 
         ~Text() = default;
-        
+
         /**
          * @brief Draw the text given in parameter
          * @param window The window to draw on
@@ -98,7 +96,7 @@ namespace RTypeEngine {
             auto &transform = _coordinator->getComponent<TransformComponent>(
                     entity);
             prepareDraw(window, entity);
-            
+
             std::string::const_iterator c;
             float x = textComponent.position.x;
             for (c = textComponent.text.begin(); c != textComponent.text.end(); c++) {
@@ -146,7 +144,7 @@ namespace RTypeEngine {
                 textComponent.glyphs.push_back(glyph);
             }
         }
-        
+
         /**
          * @brief Set the font of a text entity
          * @param entity The entity to update
@@ -165,7 +163,7 @@ namespace RTypeEngine {
                 textComponent.glyphs.push_back(glyph);
             }
         }
-        
+
         /**
          * @brief Set the Size of a text entity
          * @param entity The entity to update
@@ -184,7 +182,7 @@ namespace RTypeEngine {
                 textComponent.glyphs.push_back(glyph);
             }
         }
-        
+
         /**
          * @brief Get the text of a text entity
          * @param entity The entity text to get
@@ -205,7 +203,7 @@ namespace RTypeEngine {
                     entity);
             Transform::setPosition(transformComponent, glm::vec3(position, 0.0f));
         }
-        
+
         /**
          * @brief Set the color of a text entity
          * @param entity The entity to update
@@ -236,7 +234,7 @@ namespace RTypeEngine {
                     entity);
             return textComponent.color;
         }
-        
+
         /**
          * @brief Set the scale of a text entity
          * @param entity The entity to update
@@ -247,7 +245,7 @@ namespace RTypeEngine {
                     entity);
             Transform::setScale(transformComponent);
         }
-        
+
         /**
          * @brief Get the scale of a text entity
          * @param entity The entity to get
@@ -257,7 +255,7 @@ namespace RTypeEngine {
                     entity);
             return Transform::getScale(transformComponent);
         }
-        
+
         /**
          * @brief Get the width of a text entity
          * @param entity The entity to get
@@ -267,7 +265,7 @@ namespace RTypeEngine {
                     entity);
             return textComponent.width;
         }
-        
+
         /**
          * @brief Get the height of a text entity
          * @param entity The entity to get
@@ -277,7 +275,7 @@ namespace RTypeEngine {
                     entity);
             return textComponent.height;
         }
-    
+
         /**
          * @brief Handles the cast to Entity
          */
@@ -287,7 +285,7 @@ namespace RTypeEngine {
 
     private:
         Entity entity;
-        
+
         /**
          * @brief Prepare the text to be drawn
          * @param window The window to draw on
@@ -319,6 +317,3 @@ namespace RTypeEngine {
         }
     };
 } // namespace RTypeEngine
-
-
-#endif /* !TEXT_HPP_ */
