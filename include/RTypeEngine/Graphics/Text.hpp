@@ -8,9 +8,10 @@
 #ifndef TEXT_HPP_
 #define TEXT_HPP_
 
-#include "Font.hpp"
 #include <string>
 #include <vector>
+
+#include "Font.hpp"
 #include "RTypeECS/Types.hpp"
 #include "RTypeEngine/System.hpp"
 #include "RTypeEngine/Graphics.hpp"
