@@ -77,7 +77,10 @@
         "span": "cpp",
         "*.ipp": "cpp",
         "regex": "cpp",
-        "ranges": "cpp"
+        "ranges": "cpp",
+        "coroutine": "cpp",
+        "source_location": "cpp",
+        "future": "cpp"
     },
     "cmake.configureOnOpen": false
 }

@@ -30,6 +30,12 @@ set(SRC-CORE
     src/System/VirtualMouse.cpp
 )
 
+set(SRC-AUDIO
+    src/Audio/SoloudEngine.cpp
+    src/Audio/Music.cpp
+    src/Audio/Sound.cpp
+)
+
 add_library(${PROJECT_NAME}-graphics SHARED
     ${SRC-GRAPHICS}
 )
@@ -38,21 +44,34 @@ add_library(${PROJECT_NAME}-core SHARED
     ${SRC-CORE}
 )
 
+add_library(${PROJECT_NAME}-audio SHARED
+    ${SRC-AUDIO}
+)
+
 include(external/FindDependencies.cmake)
 
-target_include_directories(${PROJECT_NAME}-graphics PUBLIC include)
+target_include_directories(${PROJECT_NAME}-graphics PUBLIC include ${SOLOUD_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME}-graphics INTERFACE cpu_features)
-target_include_directories(${PROJECT_NAME}-graphics PRIVATE external/glad/include/)
+target_include_directories(${PROJECT_NAME}-graphics PRIVATE external/glad/include/ ${SOLOUD_INCLUDE_DIR})
 
-target_link_libraries(${PROJECT_NAME}-graphics INTERFACE freetype-interface rtype-ecs cpu_features glad glfw glm freetype luacpp_static)
-target_link_libraries(${PROJECT_NAME}-graphics PRIVATE glad glfw glm freetype luacpp_static cpu_features)
+target_link_libraries(${PROJECT_NAME}-graphics INTERFACE freetype-interface rtype-ecs cpu_features glad glfw glm freetype luacpp_static soloud)
+target_link_libraries(${PROJECT_NAME}-graphics PRIVATE glad glfw glm freetype luacpp_static cpu_features soloud)
 
 
-target_include_directories(${PROJECT_NAME}-core PUBLIC include)
-target_include_directories(${PROJECT_NAME}-core PRIVATE external/glad/include/)
+target_include_directories(${PROJECT_NAME}-core PUBLIC include ${SOLOUD_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME}-core PRIVATE external/glad/include/ ${SOLOUD_INCLUDE_DIR})
 
-target_link_libraries(${PROJECT_NAME}-core INTERFACE freetype-interface rtype-ecs luacpp_static nlohmann_json::nlohmann_json glfw glm freetype)
-target_link_libraries(${PROJECT_NAME}-core PRIVATE glfw glm freetype rtype-ecs)
+target_link_libraries(${PROJECT_NAME}-core INTERFACE freetype-interface rtype-ecs luacpp_static nlohmann_json::nlohmann_json glfw glm freetype soloud)
+target_link_libraries(${PROJECT_NAME}-core PRIVATE glfw glm freetype rtype-ecs soloud)
+
+
+target_include_directories(${PROJECT_NAME}-audio PUBLIC include ${SOLOUD_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME}-audio PRIVATE ${SOLOUD_INCLUDE_DIR})
+
+target_link_libraries(${PROJECT_NAME}-audio INTERFACE soloud)
+target_link_libraries(${PROJECT_NAME}-audio PRIVATE soloud)
+
+
 
 if (IS_TESTING AND NOT WIN32)
     include(tests/BuildTests.cmake)
