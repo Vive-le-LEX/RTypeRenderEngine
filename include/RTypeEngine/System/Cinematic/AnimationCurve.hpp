@@ -319,7 +319,7 @@ static const std::unordered_map<std::string, AnimationCurve> curvesMap = {
     {"EaseInOutCubicQuarter", EaseInOutCubicQuarter},
 };
 
-const AnimationCurve *getTypeFromString(const char* str) {
+inline const AnimationCurve *getTypeFromString(const char* str) {
     return &(curvesMap.find(str)->second);
 }
 

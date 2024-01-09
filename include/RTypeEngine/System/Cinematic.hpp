@@ -8,7 +8,6 @@
 #ifndef CINEMATIC_HPP_
 #define CINEMATIC_HPP_
 
-#include "RTypeEngine/System/Core.hpp"
 #include "RTypeEngine/System/Cinematic/Keyframe.hpp"
 #include "RTypeEngine/System/Cinematic/Sequence.hpp"
 
