@@ -142,6 +142,23 @@ namespace RTypeEngine {
                     entity);
             Transform::setScale(transform, scale);
         }
+        
+        static int getWidth(const Entity &entity) {
+            auto &rect = _coordinator->getComponent<RectI>(entity);
+            return rect.width;
+        }
+        
+        static int getHeight(const Entity &entity) {
+            auto &rect = _coordinator->getComponent<RectI>(entity);
+            return rect.height;
+        }
+        
+        static glm::vec2 getSize(const Entity &entity) {
+            auto &rect = _coordinator->getComponent<RectI>(entity);
+            auto &transform = _coordinator->getComponent<TransformComponent>(entity);
+            auto scale = Transform::getScale(transform);
+            return glm::vec2(rect.width * scale.x, rect.height * scale.y);
+        }
 
         /**
          * @brief Handles the cast to Entity
