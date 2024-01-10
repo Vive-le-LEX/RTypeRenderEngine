@@ -23,11 +23,11 @@ set(SRC-GRAPHICS
     src/Window/Events/MouseHandler.cpp
     src/Window/Events/GamepadHandler.cpp
     src/Window/Events/Gamepad.cpp
+    src/System/VirtualMouse.cpp
 )
 
 set(SRC-CORE
     src/System/Core.cpp
-    src/System/VirtualMouse.cpp
 )
 
 set(SRC-AUDIO

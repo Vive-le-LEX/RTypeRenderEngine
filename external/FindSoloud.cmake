@@ -2,7 +2,7 @@ message(STATUS "Fetching SoLoud...")
 
 FetchContent_Declare(
     SOLOUD
-    GIT_REPOSITORY git@github.com:jarikomppa/soloud.git
+    GIT_REPOSITORY https://github.com/jarikomppa/soloud.git
     GIT_TAG master
 )
 

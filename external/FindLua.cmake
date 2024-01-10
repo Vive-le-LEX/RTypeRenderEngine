@@ -5,7 +5,7 @@ else()
 
     FetchContent_Declare(
         lua
-        GIT_REPOSITORY git@github.com:walterschell/Lua.git
+        GIT_REPOSITORY https://github.com/walterschell/Lua
         GIT_TAG        master
     )
     set(LUA_BUILD_BINARY OFF CACHE BOOL "" FORCE)

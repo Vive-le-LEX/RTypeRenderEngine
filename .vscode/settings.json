@@ -80,7 +80,9 @@
         "ranges": "cpp",
         "coroutine": "cpp",
         "source_location": "cpp",
-        "future": "cpp"
+        "future": "cpp",
+        "filesystem": "cpp",
+        "xstring": "cpp"
     },
     "cmake.configureOnOpen": false
 }
