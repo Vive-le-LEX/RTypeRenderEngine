@@ -55,28 +55,25 @@ target_include_directories(${PROJECT_NAME}-graphics INTERFACE cpu_features)
 target_include_directories(${PROJECT_NAME}-graphics PRIVATE external/glad/include/ ${SOLOUD_INCLUDE_DIR})
 
 target_link_libraries(${PROJECT_NAME}-graphics INTERFACE freetype-interface rtype-ecs cpu_features glad glfw glm freetype luacpp_static soloud)
-target_link_libraries(${PROJECT_NAME}-graphics PRIVATE glad glm freetype luacpp_static cpu_features soloud)
+target_link_libraries(${PROJECT_NAME}-graphics PRIVATE glad glfw glm freetype luacpp_static cpu_features soloud)
 
 
 target_include_directories(${PROJECT_NAME}-core PUBLIC include)
 target_include_directories(${PROJECT_NAME}-core PRIVATE external/glad/include/)
 
 target_link_libraries(${PROJECT_NAME}-core INTERFACE freetype-interface rtype-ecs luacpp_static nlohmann_json::nlohmann_json glfw glm freetype soloud)
-target_link_libraries(${PROJECT_NAME}-core PRIVATE glm freetype rtype-ecs soloud)
+target_link_libraries(${PROJECT_NAME}-core PRIVATE glm glfw freetype rtype-ecs soloud)
 
 
 target_include_directories(${PROJECT_NAME}-audio PUBLIC include ${SOLOUD_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME}-audio PRIVATE ${SOLOUD_INCLUDE_DIR})
 
-target_link_libraries(${PROJECT_NAME}-audio INTERFACE soloud)
-target_link_libraries(${PROJECT_NAME}-audio PRIVATE soloud)
+target_link_libraries(${PROJECT_NAME}-audio INTERFACE soloud glm)
+target_link_libraries(${PROJECT_NAME}-audio PRIVATE soloud glm)
 
 if (APPLE)
-    target_link_libraries(${PROJECT_NAME}-graphics PRIVATE glfw3 "-framework OpenGL" "-framework Cocoa" "-framework IOKit")
-    target_link_libraries(${PROJECT_NAME}-core PRIVATE glfw3 "-framework OpenGL" "-framework Cocoa" "-framework IOKit")
-else()
-    target_link_libraries(${PROJECT_NAME}-graphics PRIVATE glfw)
-    target_link_libraries(${PROJECT_NAME}-core PRIVATE glfw)
+    target_link_libraries(${PROJECT_NAME}-graphics PRIVATE "-framework OpenGL" "-framework Cocoa" "-framework IOKit")
+    target_link_libraries(${PROJECT_NAME}-core PRIVATE "-framework OpenGL" "-framework Cocoa" "-framework IOKit")
 endif()
 
 
