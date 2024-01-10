@@ -4,7 +4,7 @@ if (NOT LUACPP_LIB)
     message(STATUS "Fetching LuaCpp...")
     FetchContent_Declare(
         luacpp
-        GIT_REPOSITORY https://github.com/TechDivers/luacpp.git
+        GIT_REPOSITORY https://github.com/QuentinBriand/luacpp.git
         GIT_TAG        origin/main
         SOURCE_SUBDIR  Source
     )
