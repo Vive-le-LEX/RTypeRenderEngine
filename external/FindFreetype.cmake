@@ -5,8 +5,9 @@ if (NOT FREETYPE_LIB)
         URL https://download.savannah.gnu.org/releases/freetype/freetype-2.13.1.tar.gz
         DOWNLOAD_EXTRACT_TIMESTAMP true
     )
+
+    set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
     FetchContent_MakeAvailable(freetype)
-    set(FREETYPE_LIB freetype)
 else()
     message(STATUS "Found Freetype: ${FREETYPE_LIB}")
 endif()

@@ -8,12 +8,10 @@
         GIT_TAG master
     )
 
-    set(GLFW_INSTALL OFF)
-    set(GLFW_BUILD_EXAMPLES OFF)
-    set(GLFW_BUILD_TESTS OFF)
-    set(GLFW_BUILD_DOCS OFF)
-    set(GLFW_INSTALL OFF)
-
+    set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
     FetchContent_MakeAvailable(glfw)
 # else()
 #     message(STATUS "GLFW library found at ${GLFW_LIB}")

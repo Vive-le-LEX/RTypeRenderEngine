@@ -6,6 +6,7 @@ if (nlohmann_json_FOUND)
     message(STATUS "nlohmann_json found")
 else()
     message(STATUS "nlohmann_json not found, fetching from source...")
+    set(JSON_BuildTests OFF CACHE INTERNAL "")
     FetchContent_Declare(
         nlohmann_json
         GIT_REPOSITORY https://github.com/nlohmann/json.git

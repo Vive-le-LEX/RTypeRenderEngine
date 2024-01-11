@@ -4,15 +4,8 @@ project(rtype-engine
         DESCRIPTION "RTypeEngine"
         LANGUAGES CXX)
 
-option(IS_TESTING "Enable testing" OFF)
-option(IS_BUILDING_DOC "Enable documentation" OFF)
-
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
-
-include(GNUInstallDirs)
 
 set(SRC-GRAPHICS
     src/Window/Window.cpp
@@ -36,40 +29,84 @@ set(SRC-AUDIO
     src/Audio/Sound.cpp
 )
 
-add_library(${PROJECT_NAME}-graphics SHARED
-    ${SRC-GRAPHICS}
+set(SRC-ANIMATION
+    src/Animation/Sequence.cpp
 )
 
-add_library(${PROJECT_NAME}-core SHARED
-    ${SRC-CORE}
-)
+set(OSBiteness 32)
+if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(OSBiteness 64)
+    endif()
 
-add_library(${PROJECT_NAME}-audio SHARED
-    ${SRC-AUDIO}
-)
+set(OutputDir ${CMAKE_SOURCE_DIR}/bin/${CMAKE_SYSTEM_NAME}-x${OSBiteness}/${CMAKE_BUILD_TYPE})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OutputDir})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${OutputDir})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OutputDir}/statics)
+
+include(Configure.cmake)
+list(APPEND CMAKE_MESSAGE_INDENT "${ColourBold}RTypeEngine${ColourReset}: ")
+set(BUILD_SHARED_LIBS OFF)
+
+if (${RTYPE_BUILD_SHARED_LIBS})
+    set(RTYPE_LIB_TYPE SHARED)
+    message(STATUS "Building shared libraries")
+else()
+    set(RTYPE_LIB_TYPE STATIC)
+    message(STATUS "Building static libraries")
+endif()
+
+set(POSITION_INDEPENDENT_CODE ${RTYPE_BUILD_SHARED_LIBS})
+if (MSVC)
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ${RTYPE_BUILD_SHARED_LIBS})
+endif()
 
 include(external/FindDependencies.cmake)
 
-target_include_directories(${PROJECT_NAME}-graphics PUBLIC include ${SOLOUD_INCLUDE_DIR})
-target_include_directories(${PROJECT_NAME}-graphics INTERFACE cpu_features)
-target_include_directories(${PROJECT_NAME}-graphics PRIVATE external/glad/include/ ${SOLOUD_INCLUDE_DIR})
-
-target_link_libraries(${PROJECT_NAME}-graphics INTERFACE freetype-interface rtype-ecs cpu_features glad glfw glm freetype luacpp_static soloud)
-target_link_libraries(${PROJECT_NAME}-graphics PRIVATE glad glfw glm freetype luacpp_static cpu_features soloud)
-
-
+add_library(${PROJECT_NAME}-core ${RTYPE_LIB_TYPE}
+    ${SRC-CORE}
+)
 target_include_directories(${PROJECT_NAME}-core PUBLIC include)
-target_include_directories(${PROJECT_NAME}-core PRIVATE external/glad/include/)
+target_link_libraries(${PROJECT_NAME}-core
+    PUBLIC
+    rtype-ecs
+    luacpp_static
+    glm::glm
+    nlohmann_json::nlohmann_json
+)
 
-target_link_libraries(${PROJECT_NAME}-core INTERFACE freetype-interface rtype-ecs luacpp_static nlohmann_json::nlohmann_json glfw glm freetype soloud)
-target_link_libraries(${PROJECT_NAME}-core PRIVATE glm glfw freetype rtype-ecs soloud)
+add_library(${PROJECT_NAME}-graphics ${RTYPE_LIB_TYPE}
+    ${SRC-GRAPHICS}
+)
+target_include_directories(${PROJECT_NAME}-graphics PUBLIC include)
+target_link_libraries(${PROJECT_NAME}-graphics
+    PUBLIC
+    glad
+    glm::glm
+    glfw
+    luacpp_static
+    freetype
+    cpu_features
+)
 
-
+add_library(${PROJECT_NAME}-audio ${RTYPE_LIB_TYPE}
+    ${SRC-AUDIO}
+)
 target_include_directories(${PROJECT_NAME}-audio PUBLIC include ${SOLOUD_INCLUDE_DIR})
-target_include_directories(${PROJECT_NAME}-audio PRIVATE ${SOLOUD_INCLUDE_DIR})
+target_link_libraries(${PROJECT_NAME}-audio
+    PUBLIC
+    glm::glm
+    soloud
+)
 
-target_link_libraries(${PROJECT_NAME}-audio INTERFACE soloud glm)
-target_link_libraries(${PROJECT_NAME}-audio PRIVATE soloud glm)
+add_library(${PROJECT_NAME}-animation ${RTYPE_LIB_TYPE}
+    ${SRC-ANIMATION}
+)
+set_target_properties(${PROJECT_NAME}-animation PROPERTIES LINKER_LANGUAGE CXX)
+target_include_directories(${PROJECT_NAME}-animation PUBLIC include)
+target_link_libraries(${PROJECT_NAME}-animation
+    PUBLIC
+    nlohmann_json::nlohmann_json
+)
 
 if (APPLE)
     target_link_libraries(${PROJECT_NAME}-graphics PRIVATE "-framework OpenGL" "-framework Cocoa" "-framework IOKit")
@@ -77,10 +114,9 @@ if (APPLE)
 endif()
 
 
-if (IS_TESTING AND NOT WIN32)
+if (RTYPE_BUILD_TESTS AND NOT WIN32)
     include(tests/BuildTests.cmake)
 endif()
-
-if (IS_BUILDING_DOC)
+if (RTYPE_BUILD_DOC)
     include(docs/BuildDocs.cmake)
 endif()

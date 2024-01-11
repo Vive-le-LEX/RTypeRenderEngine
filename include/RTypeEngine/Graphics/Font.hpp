@@ -11,7 +11,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <glm/glm.hpp>
-#include <ft2build.h>
+#include "ft2build.h"
 #include <GLFW/glfw3.h>
 #include FT_FREETYPE_H
 
