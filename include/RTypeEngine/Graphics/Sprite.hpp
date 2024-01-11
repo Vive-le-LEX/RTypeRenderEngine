@@ -12,6 +12,7 @@
 #pragma once
 
 #include "RTypeECS/Types.hpp"
+#include "RTypeEngine/Window.hpp"
 #include "RTypeECS/Coordinator.hpp"
 #include "RTypeEngine/System/Core.hpp"
 

@@ -5,7 +5,7 @@ if(NOT RTYPE-ECS_LIB)
 
     FetchContent_Declare(
         rtype-ecs
-        GIT_REPOSITORY git@github.com:Vive-le-LEX/RTypeECS.git
+        GIT_REPOSITORY https://github.com/Vive-le-LEX/RTypeECS.git
         GIT_TAG main
     )
 

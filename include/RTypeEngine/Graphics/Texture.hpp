@@ -74,7 +74,7 @@ namespace RTypeEngine {
          * @param nbByteChannels The number of byte channels of the texture (32 for RGBA)
          * @return TextureComponent
          */
-        static TextureComponent createTextureFromMemory(const u_char *pixels, int width, int height, int nbByteChannels) {
+        static TextureComponent createTextureFromMemory(const unsigned char *pixels, int width, int height, int nbByteChannels) {
             TextureComponent texturec;
             texturec.width = width;
             texturec.height = height;

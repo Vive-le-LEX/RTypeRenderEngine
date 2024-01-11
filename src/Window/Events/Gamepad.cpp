@@ -52,7 +52,7 @@ namespace RTypeEngine {
     void Gamepad::_update() {
         int res = glfwGetGamepadState(_id, &_state);
         for (int i = 0; i < GLFW_GAMEPAD_BUTTON_LAST + 1; i++) {
-            u_char buttonState = _state.buttons[i];
+            unsigned char buttonState = _state.buttons[i];
             if (buttonState == GLFW_PRESS && _buttons[i] == GLFW_RELEASE) {
                 _buttons[i] = GLFW_PRESS;
                 if (_buttonPressCallbacks.find(static_cast<GamepadButton>(i)) != _buttonPressCallbacks.end()) {
