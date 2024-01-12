@@ -1,1 +1,1 @@
-[![Build Status](https://github.com/Vive-le-LEX/RTypeRenderEngine/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/Vive-le-LEX/RTypeRenderEngine/actions/workflows/main.yml/badge.svg?branch=main)
+docs/GettingStarted.md

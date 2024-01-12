@@ -36,6 +36,18 @@ message(STATUS "Configuration for ${PROJECT_NAME} ${PROJECT_VERSION}:")
 option(RTYPE_BUILD_SHARED_LIBS "Set to ON to build shared libraries" OFF)
 print_option_status (RTYPE_BUILD_SHARED_LIBS "Build shared libraries")
 
+option(RTYPE_CORE "Set to ON to build core module" ON)
+print_option_status (RTYPE_CORE "Build core module")
+
+option(RTYPE_GRAPHICS "Set to ON to build graphics module" ON)
+print_option_status (RTYPE_GRAPHICS "Build graphics module")
+
+option(RTYPE_AUDIO "Set to ON to build audio module" ON)
+print_option_status (RTYPE_AUDIO "Build audio module")
+
+option(RTYPE_ANIMATION "Set to ON to build animation module" ON)
+print_option_status (RTYPE_ANIMATION "Build animation module")
+
 option(RTYPE_BUILD_TESTS "Set to ON to build tests" OFF)
 print_option_status (RTYPE_BUILD_TESTS "Build tests")
 
