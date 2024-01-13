@@ -9,6 +9,8 @@
 #include <iostream>
 #include "LuaCpp.hpp"
 #include <glm/glm.hpp>
+#include "RTypeEngine/System/Core.hpp"
+#include "RTypeEngine/System/AssetsManager.hpp"
 
 #ifndef RTYPEENGINE_SCRIPTING_HPP
     #define RTYPEENGINE_SCRIPTING_HPP
@@ -58,6 +60,14 @@ namespace RTypeEngine {
                 program._modifyVariables = modifyVariables;
                 program._path = new std::string(path);
                 program._luaContext.CompileFile(name, path);
+                return program;
+            }
+
+            static LuaProgram createFromAssets(const std::string &name, const std::string &path, const bool &modifyVariables) {
+                LuaProgram program(name);
+                program._modifyVariables = modifyVariables;
+                program._path = new std::string(path);
+                program._luaContext.CompileString(name, std::string(reinterpret_cast<const char *>(getEmbeddedAsset<char>(path)), getEmbeddedAssetSize(path)));
                 return program;
             }
 

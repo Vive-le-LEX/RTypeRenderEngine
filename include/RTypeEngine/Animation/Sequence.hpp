@@ -18,6 +18,8 @@
     #include <nlohmann/json.hpp>
     using json = nlohmann::json;
 
+    #include "RTypeEngine/System/Core.hpp"
+    #include "RTypeEngine/System/AssetsManager.hpp"
     #include "RTypeEngine/Animation/Keyframe.hpp"
     #include "RTypeEngine/Animation/AnimationCurve.hpp"
 
@@ -68,48 +70,38 @@ namespace Animation {
              * @param filepath The path to the json file
              * @param loop If the sequence should loop
              */
-            explicit Sequence(const std::string &filepath, const bool &loop = false) :
-                _loop(loop),
-                _isPlaying(false),
-                _time(0.0),
-                _prevFrameTime(0.0),
-                _currentFrame(0),
-                _maxFrame(0)
-            {
+            static Sequence createFromFile(const std::string &filepath, const bool &loop = false) {
+                Sequence sequence = Sequence(loop);
                 std::ifstream f(filepath);
                 try {
-                    _data = json::parse(f);
-                    for (auto &var : _data["variables"].items()) {
-                        const std::string name = var.key();
-                        if (var.value().is_string()) {
-                            _declaredVariables[name] = {nullptr, nullptr, var.value().get<std::string>()};
-                        } else if (var.value().is_object()) {
-                            _declaredObjects[name] = std::map<std::string, VariableInfo>();
-                            for (auto &obj : var.value().items()) {
-                                _declaredObjects[name][obj.key()] = {nullptr, nullptr, obj.value().get<std::string>()};
-                            }
-                        }
-                    }
-                    if (!_data["frames"].is_array()) {
-                        throw std::runtime_error("Invalid sequence file: frames is not an array");
-                    }
-                    _frames = _data["frames"];
-                    _maxFrame = _frames.size();
-                    if (!_data.contains("triggers")) {
-                        throw std::runtime_error("Invalid sequence file: no triggers");
-                    }
-                    if (!_data["triggers"].is_array()) {
-                        throw std::runtime_error("Invalid sequence file: triggers is not an array");
-                    }
-                    for (auto &trigger : _data["triggers"].items()) {
-                        const std::string name = trigger.value().get<std::string>();
-                        _triggers[name] = nullptr;
-                        _triggersNames.push_back(name);
-                    }
+                    sequence._data = json::parse(f, nullptr, true, true);
+                    sequence._init();
                 } catch (std::exception &e) {
                     std::cerr << "Failed to parse sequence file: " << e.what() << std::endl;
                 }
-                updateInterpolation(_data["frames"].at(_currentFrame)["interpolation"]);
+            }
+
+            static Sequence createFromAssets(const std::string &path, const bool &loop = false) {
+                Sequence sequence = Sequence(loop);
+                auto *data = getEmbeddedAsset<unsigned char>(path);
+                try {
+                    sequence._data = json::parse(data, data + getEmbeddedAssetSize(path));
+                    sequence._init();
+                } catch (std::exception &e) {
+                    std::cerr << "Failed to parse sequence file: " << e.what() << std::endl;
+                }
+                return sequence;
+            }
+
+            static Sequence createFromMemory(const unsigned char *data, const size_t &size, const bool &loop = false) {
+                Sequence sequence = Sequence(loop);
+                try {
+                    sequence._data = json::parse(data, data + size);
+                    sequence._init();
+                } catch (std::exception &e) {
+                    std::cerr << "Failed to parse sequence file: " << e.what() << std::endl;
+                }
+                return sequence;
             }
 
             ~Sequence() = default;
@@ -227,6 +219,45 @@ namespace Animation {
                 _updateObjects(frameValues, percent);
             }
         private:
+            Sequence(const bool &loop) :
+                _loop(loop),
+                _isPlaying(false),
+                _time(0.0),
+                _prevFrameTime(0.0),
+                _currentFrame(0),
+                _maxFrame(0)
+            {}
+            void _init() {
+                for (auto &var : _data["variables"].items()) {
+                    const std::string name = var.key();
+                    if (var.value().is_string()) {
+                        _declaredVariables[name] = {nullptr, nullptr, var.value().get<std::string>()};
+                    } else if (var.value().is_object()) {
+                        _declaredObjects[name] = std::map<std::string, VariableInfo>();
+                        for (auto &obj : var.value().items()) {
+                            _declaredObjects[name][obj.key()] = {nullptr, nullptr, obj.value().get<std::string>()};
+                        }
+                    }
+                }
+                if (!_data["frames"].is_array()) {
+                    throw std::runtime_error("Invalid sequence file: frames is not an array");
+                }
+                _frames = _data["frames"];
+                _maxFrame = _frames.size();
+                if (!_data.contains("triggers")) {
+                    throw std::runtime_error("Invalid sequence file: no triggers");
+                }
+                if (!_data["triggers"].is_array()) {
+                    throw std::runtime_error("Invalid sequence file: triggers is not an array");
+                }
+                for (auto &trigger : _data["triggers"].items()) {
+                    const std::string name = trigger.value().get<std::string>();
+                    _triggers[name] = nullptr;
+                    _triggersNames.push_back(name);
+                }
+                updateInterpolation(_data["frames"].at(_currentFrame)["interpolation"]);
+            }
+
             void updateInterpolation(const json &interpolation) {
                 for (auto &var : interpolation.items()) {
                     const std::string &name = var.key();

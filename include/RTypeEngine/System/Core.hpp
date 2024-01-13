@@ -16,4 +16,8 @@
 
 namespace RTypeEngine {
     extern std::unique_ptr<Coordinator> _coordinator;
+    #ifdef HAS_EMBEDS
+        extern std::unordered_map<std::string, void*> allEmbedsResources;
+        extern std::unordered_map<std::string, size_t> allEmbedsResourcesSizes;
+    #endif
 }

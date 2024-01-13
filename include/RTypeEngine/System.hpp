@@ -12,4 +12,5 @@
 #pragma once
 
 #include "RTypeEngine/System/Core.hpp"
+#include "RTypeEngine/System/AssetsManager.hpp"
 #include "RTypeEngine/System/Scripting.hpp"
