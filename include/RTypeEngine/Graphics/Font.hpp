@@ -13,7 +13,8 @@
 #include <glm/glm.hpp>
 #include "ft2build.h"
 #include FT_FREETYPE_H
-#include "RTypeEngine/System.hpp"
+#include "RTypeEngine/System/Core.hpp"
+#include "RTypeEngine/System/AssetsManager.hpp"
 #include <GLFW/glfw3.h>
 
 #include "Shader.hpp"

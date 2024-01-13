@@ -20,7 +20,7 @@ namespace RTypeEngine
         _projection(glm::value_ptr(*projection)),
         _keyboardHandler(&keyboardHandler),
         _isOpen(false),
-        _font(Font::createFontFromAssets("./COMIC.TTF"))
+        _font(Font::createFontFromAssets("./INTERNAL_COMIC.TTF"))
     {
         glfwGetWindowSize(window, &_screenWidth, &_screenHeight);
         _padding = 10;

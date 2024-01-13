@@ -73,7 +73,7 @@ namespace RTypeEngine {
         void add_prev_line(const std::string &line);
 
         KeyboardHandler *_keyboardHandler;
-        Font _font = Font::createFontFromAssets("./COMIC.TTF");
+        Font _font = Font::createFontFromAssets("./INTERNAL_COMIC.TTF");
         Text *_text;
 
         bool _isOpen;

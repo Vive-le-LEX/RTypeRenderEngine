@@ -79,6 +79,7 @@ namespace Animation {
                 } catch (std::exception &e) {
                     std::cerr << "Failed to parse sequence file: " << e.what() << std::endl;
                 }
+                return sequence;
             }
 
             static Sequence createFromAssets(const std::string &path, const bool &loop = false) {

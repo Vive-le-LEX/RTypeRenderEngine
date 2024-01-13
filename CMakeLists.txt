@@ -89,6 +89,8 @@ if (EXISTS "${CMAKE_SOURCE_DIR}/.embeds")
         endforeach()
     endforeach()
 
+    list(APPEND FINAL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/INTERNAL_COMIC.TTF")
+
     set(finalEmbeds "")
     foreach(RESOURCE_FILE ${FINAL_FILES})
         AddEmbededResource(${RESOURCE_FILE} outfile)
@@ -105,7 +107,6 @@ include(external/FindDependencies.cmake)
 add_library(${PROJECT_NAME}-core ${RTYPE_LIB_TYPE}
     ${SRC-CORE}
 )
-target_compile_definitions(${PROJECT_NAME}-core PUBLIC HAS_EMBEDS)
 target_include_directories(${PROJECT_NAME}-core PUBLIC include)
 target_link_libraries(${PROJECT_NAME}-core
     PUBLIC
