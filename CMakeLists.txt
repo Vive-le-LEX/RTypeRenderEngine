@@ -60,6 +60,48 @@ if (MSVC)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ${RTYPE_BUILD_SHARED_LIBS})
 endif()
 
+if (EXISTS "${CMAKE_SOURCE_DIR}/.embeds")
+    include(external/BundleResources.cmake)
+
+    SetupResourceEmbed()
+
+    set(RESOURCES_FILES "")
+    file(READ "${CMAKE_SOURCE_DIR}/.embeds" EMBEDS)
+
+    string(REPLACE "\n" ";" EMBEDS ${EMBEDS})
+    list (REMOVE_DUPLICATES EMBEDS)
+    foreach(EMBED ${EMBEDS})
+        string(STRIP ${EMBED} EMBED)
+        if (NOT EMBED STREQUAL "")
+            list(APPEND RESOURCES_FILES ${EMBED})
+        endif()
+    endforeach()
+
+    file(GLOB_RECURSE ALL_FILES *)
+    set(FINAL_FILES "")
+    foreach(FILE ${ALL_FILES})
+        foreach(RESOURCE ${RESOURCES_FILES})
+            set(FILENAME_ONLY ${FILE})
+            get_filename_component(FILENAME_ONLY ${FILENAME_ONLY} NAME)
+            if (FILENAME_ONLY STREQUAL RESOURCE)
+                list(APPEND FINAL_FILES ${FILE})
+            endif()
+        endforeach()
+    endforeach()
+
+    list(APPEND FINAL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/INTERNAL_COMIC.TTF")
+
+    set(finalEmbeds "")
+    foreach(RESOURCE_FILE ${FINAL_FILES})
+        AddEmbededResource(${RESOURCE_FILE} outfile)
+        list(APPEND finalEmbeds ${outfile})
+    endforeach()
+
+    FinishEmbededResources("${finalEmbeds}")
+else()
+    message(STATUS "${BoldRed}No .embeds found${ColourReset}")
+endif()
+
 include(external/FindDependencies.cmake)
 
 add_library(${PROJECT_NAME}-core ${RTYPE_LIB_TYPE}
@@ -72,6 +114,7 @@ target_link_libraries(${PROJECT_NAME}-core
     luacpp_static
     glm::glm
     nlohmann_json::nlohmann_json
+    ResourceEmbeds
 )
 
 add_library(${PROJECT_NAME}-graphics ${RTYPE_LIB_TYPE}
@@ -80,6 +123,7 @@ add_library(${PROJECT_NAME}-graphics ${RTYPE_LIB_TYPE}
 target_include_directories(${PROJECT_NAME}-graphics PUBLIC include)
 target_link_libraries(${PROJECT_NAME}-graphics
     PUBLIC
+    rtype-ecs
     glad
     glm::glm
     glfw
@@ -94,6 +138,7 @@ add_library(${PROJECT_NAME}-audio ${RTYPE_LIB_TYPE}
 target_include_directories(${PROJECT_NAME}-audio PUBLIC include ${SOLOUD_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME}-audio
     PUBLIC
+    rtype-ecs
     glm::glm
     soloud
 )
@@ -105,6 +150,7 @@ set_target_properties(${PROJECT_NAME}-animation PROPERTIES LINKER_LANGUAGE CXX)
 target_include_directories(${PROJECT_NAME}-animation PUBLIC include)
 target_link_libraries(${PROJECT_NAME}-animation
     PUBLIC
+    rtype-ecs
     nlohmann_json::nlohmann_json
 )
 

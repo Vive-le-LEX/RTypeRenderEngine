@@ -155,7 +155,7 @@ namespace RTypeEngine {
          * @brief Get if the window is vertical sync enabled
          * @return bool
          */
-        const bool &isVsyncEnabled(void) const {
+        const bool isVsyncEnabled(void) const {
             return _vsyncEnabled;
         }
 

@@ -135,6 +135,17 @@ namespace RTypeEngine {
             return shader;
         }
 
+        static ShaderComponent createShaderFromAssets(const std::string &vertexPath,
+                                            const std::string &fragmentPath) {
+            auto vertexCode = getEmbeddedAsset<char>(vertexPath);
+            auto fragmentCode = getEmbeddedAsset<char>(fragmentPath);
+            if (!vertexCode || !fragmentCode) {
+                std::cerr << "Failed to load shader: " << vertexPath << " or " << fragmentPath << std::endl;
+                exit(1);
+            }
+            return createShaderFromMemory(vertexCode, fragmentCode);
+        }
+
         /**
          * @brief Set the shader matrix
          * @param shader The shader to set

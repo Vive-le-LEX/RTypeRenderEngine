@@ -7,7 +7,8 @@
                 "${workspaceFolder}/include/*",
                 "${workspaceFolder}/build/_deps/**",
                 "${workspaceFolder}/external/glad/include/*",
-                "${workspaceFolder}/build/_deps/soloud-src/include"
+                "${workspaceFolder}/build/_deps/soloud-src/include",
+                "${workspaceFolder}"
             ],
             "defines": [],
             "compilerPath": "/usr/lib64/ccache/gcc",

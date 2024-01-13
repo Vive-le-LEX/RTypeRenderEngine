@@ -19,6 +19,7 @@
     #include <GLFW/glfw3.h>
     #include "Rect.hpp"
     #include "RTypeEngine/Graphics/stb_image.h"
+    #include "RTypeEngine/System.hpp"
 
 namespace RTypeEngine {
 
@@ -62,6 +63,24 @@ namespace RTypeEngine {
                 exit(1);
             }
             auto texturec = createTextureFromMemory(pixels, width, height, nbByteChannels);
+            texturec.isFromMemory = false;
+            return std::move(texturec);
+        }
+
+        static TextureComponent createTextureFromAssets(const std::string &path) {
+            auto pixels = getEmbeddedAsset<unsigned char>(path);
+            auto size = getEmbeddedAssetSize(path);
+            if (!pixels) {
+                std::cerr << "Failed to load texture: " << path << std::endl;
+                exit(1);
+            }
+            int width, height, nbByteChannels;
+            auto *pixelsData = stbi_load_from_memory(pixels, size, &width, &height, &nbByteChannels, 4);
+            if (!pixelsData) {
+                std::cerr << "Failed to load texture: " << path << std::endl;
+                exit(1);
+            }
+            auto texturec = createTextureFromMemory(pixelsData, width, height, nbByteChannels);
             texturec.isFromMemory = false;
             return std::move(texturec);
         }

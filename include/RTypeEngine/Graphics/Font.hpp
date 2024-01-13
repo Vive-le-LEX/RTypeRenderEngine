@@ -12,8 +12,10 @@
 #include <unordered_map>
 #include <glm/glm.hpp>
 #include "ft2build.h"
-#include <GLFW/glfw3.h>
 #include FT_FREETYPE_H
+#include "RTypeEngine/System/Core.hpp"
+#include "RTypeEngine/System/AssetsManager.hpp"
+#include <GLFW/glfw3.h>
 
 #include "Shader.hpp"
 #include "Mesh.hpp"
@@ -60,6 +62,45 @@ namespace RTypeEngine
                     std::cerr << "Error: FT_New_Face failed (" << error << ")" << std::endl;
                 }
                 return Font(newFace);
+            }
+            /**
+             * @brief Create a font object
+             * @details This function is used to create a font object from a memory buffer
+             * @param data The memory buffer
+             * @param size The size of the memory buffer
+             * @return The font object
+             */
+            static Font createFontFromMemory(const unsigned char *data, const size_t &size) {
+                if (!_ft) {
+                    prepareDraw();
+                    FT_Error error = FT_Init_FreeType(&_ft);
+                    if (error) {
+                        std::cerr << "Error: FT_Init_FreeType failed (" << error << ")" << std::endl;
+                    }
+                }
+
+                FT_Face newFace = nullptr;
+                FT_Error error = FT_New_Memory_Face(_ft, data, size, 0, &newFace);
+                if (error) {
+                    std::cerr << "Error: FT_New_Face failed (" << error << ")" << std::endl;
+                }
+                return Font(newFace);
+            }
+
+            /**
+             * @brief Create a font object
+             * @details This function is used to create a font object from an embedded asset
+             * @param path The path to the embedded asset
+             * @return The font object
+             */
+            static Font createFontFromAssets(const std::string &path) {
+                auto data = getEmbeddedAsset<unsigned char>(path);
+                auto size = getEmbeddedAssetSize(path);
+                if (!data) {
+                    std::cerr << "Failed to load font: " << path << std::endl;
+                    exit(1);
+                }
+                return createFontFromMemory(data, size);
             }
 
             /**
