@@ -143,6 +143,23 @@ namespace RTypeEngine {
         }
 
         /**
+         * @brief Set if the window should be vertical sync enabled
+         * @param enabled
+         */
+        void setVsyncEnabled(const bool &enabled) {
+            _vsyncEnabled = enabled;
+            glfwSwapInterval(_vsyncEnabled);
+        }
+
+        /**
+         * @brief Get if the window is vertical sync enabled
+         * @return bool
+         */
+        const bool &isVsyncEnabled(void) const {
+            return _vsyncEnabled;
+        }
+
+        /**
          * @brief Get the window console
          * @return WindowConsole &
          */
@@ -185,6 +202,7 @@ namespace RTypeEngine {
 
         int _frameRateLimit = 60;
         int _topbarHeight = 0;
+        int _vsyncEnabled = 1;
 
         unsigned int _lastTexture = 0;
 

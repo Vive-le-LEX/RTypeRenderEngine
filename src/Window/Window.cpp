@@ -54,7 +54,6 @@ Window::Window(int width, int height, const char *title, GLFWmonitor *monitor,
                      GLFW_TRUE);
     glfwSetInputMode(glfwGetCurrentContext(), GLFW_LOCK_KEY_MODS,
                      GLFW_TRUE);
-    glfwSwapInterval(0);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     int left, top, right, bottom;
