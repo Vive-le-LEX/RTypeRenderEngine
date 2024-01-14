@@ -67,7 +67,7 @@ namespace RTypeEngine {
             return std::move(texturec);
         }
 
-        static TextureComponent createTextureFromAssets(const std::string &path) {
+        static TextureComponent createTextureFromAssets(const std::string &path, const int &nbChannels) {
             auto pixels = getEmbeddedAsset<unsigned char>(path);
             auto size = getEmbeddedAssetSize(path);
             if (!pixels) {
@@ -75,7 +75,7 @@ namespace RTypeEngine {
                 exit(1);
             }
             int width, height, nbByteChannels;
-            auto *pixelsData = stbi_load_from_memory(pixels, size, &width, &height, &nbByteChannels, 4);
+            auto *pixelsData = stbi_load_from_memory(pixels, size, &width, &height, &nbByteChannels, nbChannels);
             if (!pixelsData) {
                 std::cerr << "Failed to load texture: " << path << std::endl;
                 exit(1);
