@@ -77,7 +77,7 @@ if (EXISTS "${CMAKE_SOURCE_DIR}/.embeds")
         endif()
     endforeach()
 
-    file(GLOB_RECURSE ALL_FILES *)
+    file(GLOB_RECURSE ALL_FILES "${CMAKE_SOURCE_DIR}/*")
     set(FINAL_FILES "")
     foreach(FILE ${ALL_FILES})
         foreach(RESOURCE ${RESOURCES_FILES})
