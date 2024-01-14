@@ -32,7 +32,7 @@ function(GenerateEmbeds file generated_cpp)
     get_filename_component(extension ${file} EXT)
     string(REPLACE "." "_" extension ${extension})
     set(base_filename "${base_filename}${extension}")
-    set(cpp_name "${base_filename}.cpp")
+    set(cpp_name "${base_filename}")
     message(STATUS "Generating embeds in ${cpp_name}")
     file(READ ${file} content HEX)
 
