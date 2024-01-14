@@ -66,7 +66,13 @@ if (EXISTS "${CMAKE_SOURCE_DIR}/.embeds")
     SetupResourceEmbed()
 
     set(RESOURCES_FILES "")
+    if (NOT EXISTS "${CMAKE_SOURCE_DIR}/.embeds")
+        message(STATUS "${BoldRed}No .embeds found${ColourReset}")
+    endif()
     file(READ "${CMAKE_SOURCE_DIR}/.embeds" EMBEDS)
+    if (EMBEDS STREQUAL "")
+        set(EMBEDS "a")
+    endif()
 
     string(REPLACE "\n" ";" EMBEDS ${EMBEDS})
     list (REMOVE_DUPLICATES EMBEDS)
@@ -77,7 +83,7 @@ if (EXISTS "${CMAKE_SOURCE_DIR}/.embeds")
         endif()
     endforeach()
 
-    file(GLOB_RECURSE ALL_FILES "${CMAKE_SOURCE_DIR}/*")
+    file(GLOB_RECURSE ALL_FILES *)
     set(FINAL_FILES "")
     foreach(FILE ${ALL_FILES})
         foreach(RESOURCE ${RESOURCES_FILES})
@@ -104,59 +110,68 @@ endif()
 
 include(external/FindDependencies.cmake)
 
-add_library(${PROJECT_NAME}-core ${RTYPE_LIB_TYPE}
-    ${SRC-CORE}
-)
-target_include_directories(${PROJECT_NAME}-core PUBLIC include)
-target_link_libraries(${PROJECT_NAME}-core
-    PUBLIC
-    rtype-ecs
-    luacpp_static
-    glm::glm
-    nlohmann_json::nlohmann_json
-    ResourceEmbeds
-)
+if (RTYPE_CORE)
+    add_library(${PROJECT_NAME}-core ${RTYPE_LIB_TYPE}
+        ${SRC-CORE}
+    )
+    target_include_directories(${PROJECT_NAME}-core PUBLIC include)
+    target_link_libraries(${PROJECT_NAME}-core
+        PUBLIC
+        rtype-ecs
+        luacpp_static
+        glm::glm
+        nlohmann_json::nlohmann_json
+        ResourceEmbeds
+    )
+    if (APPLE)
+        target_link_libraries(${PROJECT_NAME}-core PRIVATE "-framework OpenGL" "-framework Cocoa" "-framework IOKit")
+    endif()
+endif()
 
-add_library(${PROJECT_NAME}-graphics ${RTYPE_LIB_TYPE}
-    ${SRC-GRAPHICS}
-)
-target_include_directories(${PROJECT_NAME}-graphics PUBLIC include)
-target_link_libraries(${PROJECT_NAME}-graphics
-    PUBLIC
-    rtype-ecs
-    glad
-    glm::glm
-    glfw
-    luacpp_static
-    freetype
-    cpu_features
-)
+if (RTYPE_GRAPHICS)
+    add_library(${PROJECT_NAME}-graphics ${RTYPE_LIB_TYPE}
+        ${SRC-GRAPHICS}
+    )
+    target_include_directories(${PROJECT_NAME}-graphics PUBLIC include)
+    target_link_libraries(${PROJECT_NAME}-graphics
+        PUBLIC
+        rtype-ecs
+        glad
+        glm::glm
+        glfw
+        luacpp_static
+        freetype
+        cpu_features
+    )
+    if (APPLE)
+        target_link_libraries(${PROJECT_NAME}-graphics PRIVATE "-framework OpenGL" "-framework Cocoa" "-framework IOKit")
+    endif()
+endif()
 
-add_library(${PROJECT_NAME}-audio ${RTYPE_LIB_TYPE}
-    ${SRC-AUDIO}
-)
-target_include_directories(${PROJECT_NAME}-audio PUBLIC include ${SOLOUD_INCLUDE_DIR})
-target_link_libraries(${PROJECT_NAME}-audio
-    PUBLIC
-    rtype-ecs
-    glm::glm
-    soloud
-)
+if (RTYPE_AUDIO)
+    add_library(${PROJECT_NAME}-audio ${RTYPE_LIB_TYPE}
+        ${SRC-AUDIO}
+    )
+    target_include_directories(${PROJECT_NAME}-audio PUBLIC include ${SOLOUD_INCLUDE_DIR})
+    target_link_libraries(${PROJECT_NAME}-audio
+        PUBLIC
+        rtype-ecs
+        glm::glm
+        soloud
+    )
+endif()
 
-add_library(${PROJECT_NAME}-animation ${RTYPE_LIB_TYPE}
-    ${SRC-ANIMATION}
-)
-set_target_properties(${PROJECT_NAME}-animation PROPERTIES LINKER_LANGUAGE CXX)
-target_include_directories(${PROJECT_NAME}-animation PUBLIC include)
-target_link_libraries(${PROJECT_NAME}-animation
-    PUBLIC
-    rtype-ecs
-    nlohmann_json::nlohmann_json
-)
-
-if (APPLE)
-    target_link_libraries(${PROJECT_NAME}-graphics PRIVATE "-framework OpenGL" "-framework Cocoa" "-framework IOKit")
-    target_link_libraries(${PROJECT_NAME}-core PRIVATE "-framework OpenGL" "-framework Cocoa" "-framework IOKit")
+if (RTYPE_ANIMATION)
+    add_library(${PROJECT_NAME}-animation ${RTYPE_LIB_TYPE}
+        ${SRC-ANIMATION}
+    )
+    set_target_properties(${PROJECT_NAME}-animation PROPERTIES LINKER_LANGUAGE CXX)
+    target_include_directories(${PROJECT_NAME}-animation PUBLIC include)
+    target_link_libraries(${PROJECT_NAME}-animation
+        PUBLIC
+        rtype-ecs
+        nlohmann_json::nlohmann_json
+    )
 endif()
 
 
