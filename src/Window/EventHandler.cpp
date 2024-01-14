@@ -49,6 +49,10 @@ namespace RTypeEngine
                 e->_gamepadHandler._removeGamepad(id);
             }
         });
+        ::glfwSetWindowPosCallback(window, [](GLFWwindow *window, int xpos, int ypos) {
+            EventHandler *e = static_cast<EventHandler *>(glfwGetWindowUserPointer(window));
+            e->_windowPosCallback(xpos, ypos);
+        });
     }
 
     void EventHandler::setMouseHandler(MouseHandler &mouseHandler)

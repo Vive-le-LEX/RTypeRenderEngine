@@ -67,6 +67,19 @@ namespace RTypeEngine
             }
 
             /**
+             * @brief Set the window move callback
+             * @details This function will set the window move callback
+             * @param callback The callback to set
+             */
+            void setWindowMoveCallback(std::function<void(int, int)> callback) {
+                _windowPosCallback = callback;
+            }
+
+            void removeWindowMoveCallback() {
+                _windowPosCallback = [](int, int) {};
+            }
+
+            /**
              * @brief Update the event handler
              * @note You should never call this function directly. Use @ref RTypeEngine::Window::pollEvents instead
              */
@@ -83,6 +96,7 @@ namespace RTypeEngine
 
             std::function<void(void)> _closeCallback = []() {};
             std::function<void(int, int)> _resizeCallback = [](int, int) {};
+            std::function<void(int, int)> _windowPosCallback = [](int, int) {};
     };
 } // namespace RTypeEngine
 
