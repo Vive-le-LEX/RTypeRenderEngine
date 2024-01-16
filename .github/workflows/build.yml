@@ -25,7 +25,7 @@ jobs:
           with:
               ssh-private-key: ${{secrets.KLEO_ORG_SSH}}
         - name: Install linux dependencies
-          run: sudo apt-get update && sudo apt-get install libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev doxygen graphviz mesa-common-dev alsa-tools -y
+          run: sudo apt-get update && sudo apt-get install libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev doxygen graphviz mesa-common-dev alsa-source alsa-tools -y
         - name: Download all lint reports artifacts
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -79,7 +79,7 @@ jobs:
 
         - name: Build Documentation
           run: |
-                cmake . -B build/ -DIS_BUILDING_DOC=TRUE
+                cmake . -B build/ -DRTYPE_BUILD_DOC=TRUE
                 cmake --build build/ --config Release
         - name: Push documentation to GitHub Pages
           uses: peaceiris/actions-gh-pages@v3
