@@ -18,6 +18,7 @@ namespace RTypeEngine {
      */
     struct Systems {
         std::shared_ptr<DrawSystem> drawSystem; /**< Draws all registered sprites */
+        std::shared_ptr<PhysicsSystem> physicsSystem; /**< Update all the registered rigidbodies*/
     };
 
     /**
@@ -25,32 +26,42 @@ namespace RTypeEngine {
      * @return A Systems struct with all the default ECS systems
      */
     static Systems initECS(void) {
-        _coordinator->registerComponent<RTypeEngine::MeshComponent>(
-                RTypeEngine::Mesh::deleteMesh);
-        _coordinator->registerComponent<RTypeEngine::RectI>(
-                RTypeEngine::Rect<int>::resetRect);
-        _coordinator->registerComponent<RTypeEngine::ShaderComponent>(
-                RTypeEngine::Shader::deleteShader);
-        _coordinator->registerComponent<RTypeEngine::TextureComponent>(
-                RTypeEngine::Texture::deleteTexture);
-        _coordinator->registerComponent<RTypeEngine::TransformComponent>(
-                RTypeEngine::Transform::deleteTransform);
+        _coordinator->registerComponent<MeshComponent>(
+                Mesh::deleteMesh);
+        _coordinator->registerComponent<RectI>(
+                Rect<int>::resetRect);
+        _coordinator->registerComponent<ShaderComponent>(
+                Shader::deleteShader);
+        _coordinator->registerComponent<TextureComponent>(
+                Texture::deleteTexture);
+        _coordinator->registerComponent<TransformComponent>(
+                Transform::deleteTransform);
+        _coordinator->registerComponent<RigigbodyComponent>();
+        _coordinator->registerComponent<ColliderComponent>();
+        _coordinator->registerComponent<ConstraintComponent>();
 
         Signature signature;
         signature.set(
-                _coordinator->getComponentType<RTypeEngine::MeshComponent>());
-        signature.set(_coordinator->getComponentType<RTypeEngine::RectI>());
+                _coordinator->getComponentType<MeshComponent>());
+        signature.set(_coordinator->getComponentType<RectI>());
         signature.set(
-                _coordinator->getComponentType<RTypeEngine::ShaderComponent>());
+                _coordinator->getComponentType<ShaderComponent>());
         signature.set(
-                _coordinator->getComponentType<RTypeEngine::TextureComponent>());
+                _coordinator->getComponentType<TextureComponent>());
         signature.set(
-                _coordinator->getComponentType<RTypeEngine::TransformComponent>());
+                _coordinator->getComponentType<TransformComponent>());
 
         auto drawSystem = _coordinator->registerSystem<DrawSystem>();
         _coordinator->setSystemSignature<DrawSystem>(signature);
 
-        return {drawSystem};
+        Signature physicSign;
+        physicSign.set(_coordinator->getComponentType<RigigbodyComponent>());
+        physicSign.set(_coordinator->getComponentType<Transform>());
+
+        auto physicSystem = _coordinator->registerSystem<PhysicsSystem>();
+        _coordinator->setSystemSignature<PhysicsSystem>(physicSign);
+
+        return {drawSystem, physicSystem};
     }
 }
 

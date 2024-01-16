@@ -211,7 +211,6 @@ namespace Animation {
                     }
                 }
                 const auto &frameValues = frame["values"];
-                const auto &frameInterpolation = frame["interpolation"];
                 double percent = 1.0;
                 if (reachTime - _prevFrameTime) {
                     percent = (_time - _prevFrameTime) / (reachTime - _prevFrameTime);

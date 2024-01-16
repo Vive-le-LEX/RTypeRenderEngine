@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/include/*",
-                "${workspaceFolder}/build/_deps/**",
+                // "${workspaceFolder}/build/_deps/**",
+                "/home/qbriand/delivery/RType/RTypeECS/include",
                 "${workspaceFolder}/external/glad/include/*",
                 "${workspaceFolder}/build/_deps/soloud-src/include",
                 "${workspaceFolder}"

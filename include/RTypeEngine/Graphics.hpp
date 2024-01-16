@@ -22,6 +22,7 @@
 #include "RTypeEngine/Graphics/Font.hpp"
 #include "RTypeEngine/Graphics/Draw.hpp"
 
+#include "RTypeEngine/System/Velvet/PhysicsSystem.hpp"
 #include "RTypeEngine/Graphics/StateHandler.hpp"
 
 #endif /* !GRAPHICS_ALL_HPP_ */
