@@ -57,14 +57,16 @@ endif()
 
 set(POSITION_INDEPENDENT_CODE ${RTYPE_BUILD_SHARED_LIBS})
 if (MSVC)
-    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ${RTYPE_BUILD_SHARED_LIBS})
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ${RTYPE_BUILD_SHARED_LIBS})
 endif()
 
+include(external/BundleResources.cmake)
+set(finalEmbeds "")
+SetupResourceEmbed()
+AddEmbededResource("${CMAKE_CURRENT_SOURCE_DIR}/INTERNAL_COMIC.TTF" outfile)
+list(APPEND finalEmbeds ${outfile})
+
 if (EXISTS "${CMAKE_SOURCE_DIR}/.embeds")
-    include(external/BundleResources.cmake)
-
-    SetupResourceEmbed()
-
     set(RESOURCES_FILES "")
     if (NOT EXISTS "${CMAKE_SOURCE_DIR}/.embeds")
         message(STATUS "${BoldRed}No .embeds found${ColourReset}")
@@ -97,16 +99,15 @@ if (EXISTS "${CMAKE_SOURCE_DIR}/.embeds")
 
     list(APPEND FINAL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/INTERNAL_COMIC.TTF")
 
-    set(finalEmbeds "")
     foreach(RESOURCE_FILE ${FINAL_FILES})
         AddEmbededResource(${RESOURCE_FILE} outfile)
         list(APPEND finalEmbeds ${outfile})
     endforeach()
 
-    FinishEmbededResources("${finalEmbeds}")
 else()
     message(STATUS "${BoldRed}No .embeds found${ColourReset}")
 endif()
+FinishEmbededResources("${finalEmbeds}")
 
 include(external/FindDependencies.cmake)
 

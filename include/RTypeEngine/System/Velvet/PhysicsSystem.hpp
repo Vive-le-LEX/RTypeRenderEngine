@@ -98,8 +98,8 @@ namespace RTypeEngine {
             }
 
             float _boxSdf(const glm::vec3 &pos, const glm::vec3 &center, const glm::vec2 &size) {
-                glm::vec3 d = glm::abs(pos - center) - glm::vec3(size.x, size.y, size.x);
-                return glm::min(glm::max(d.x, glm::max(d.y, d.z)), 0.0f) + glm::length(glm::max(d, glm::vec3(0.0f)));
+                glm::vec3 q = glm::abs(pos - center) - glm::vec3(size.x, size.y, 0.0);
+                return glm::length(glm::max(q, glm::vec3(0.0))) + glm::min(glm::max(q.x, glm::max(q.y, q.z)), 0.0f);
             }
 
             void _updateCircleConstraint(const ConstraintComponent &constraint, RigigbodyComponent &rigidbody, glm::vec3 &actualPos) {
@@ -107,6 +107,15 @@ namespace RTypeEngine {
                 if (dst > 0) {
                     glm::vec3 dir = glm::normalize(actualPos - constraint.circle.center);
                     actualPos = constraint.circle.center + dir * constraint.circle.radius;
+                }
+            }
+
+            void _updateBoxConstraint(const ConstraintComponent &constraint, RigigbodyComponent &rigidbody, glm::vec3 &actualPos) {
+                float dst = _boxSdf(actualPos, constraint.box.center, constraint.box.size);
+                if (dst > 0) {
+                    glm::vec3 dir = glm::normalize(actualPos - constraint.box.center);
+                    dir *= -1 * dst;
+                    actualPos += dir;
                 }
             }
 
@@ -119,6 +128,7 @@ namespace RTypeEngine {
                             _updateCircleConstraint(constraint, rigidbody, actualPos);
                             break;
                         case ConstraintComponent::BOX:
+                            _updateBoxConstraint(constraint, rigidbody, actualPos);
                             break;
                     }
                 }
