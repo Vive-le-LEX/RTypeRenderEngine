@@ -25,7 +25,7 @@ jobs:
           with:
               ssh-private-key: ${{secrets.KLEO_ORG_SSH}}
         - name: Install linux dependencies
-          run: sudo apt-get update && sudo apt-get install libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev doxygen graphviz mesa-common-dev alsa-lib alsa-lib-devel -y
+          run: sudo apt-get update && sudo apt-get install libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev doxygen graphviz mesa-common-dev alsa-tools -y
         - name: Download all lint reports artifacts
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
